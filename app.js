@@ -3,10 +3,11 @@
 var myColors = new Colors();
 var canvasWidth = 400,
     canvas = $('#canvas')[0], // canvas must be defined here for backend functions
-    maxFPS = 5,
+    maxFPS = 30,
     lastFrameTimeMs = 0,
     ctx = undefined,
-    myReq = undefined; // canvas.getContext('2d')
+    myReq = undefined, // canvas.getContext('2d')
+    myArcGroup = undefined;
 
 // see this for html names colors
 // https://www.w3schools.com/colors/colors_shades.asp
@@ -19,7 +20,7 @@ function Colors() {
   this.white = 'rgba(250, 250, 250, 1)';
   this.red = 'rgba(230, 0, 0, 1)';
   this.green = 'rgba(0, 230, 0, 1)';
-  this.blue = 'rgba(0, 0, 230, 0.7)';
+  this.blue = 'rgba(0, 0, 230, 1)';
 }
 
 function TxtBox(x,y,font,color) {
@@ -45,12 +46,78 @@ function drawDisco(rowSize = 4) {
       ctx.fillRect(tx+j*squareSize,ty+i*squareSize,squareSize,squareSize);
     }
   }
-  ctx.fillStyle = myColors.white;
+  ctx.fillStyle = myColors.black;
   ctx.font = '60px Georgia';
   ctx.textAlign = 'center';
   ctx.fillText('Disco',canvas.width/2,50);
 }
 
+function Arc(x,y,r) {
+  this.x = x;
+  this.y = y;
+  this.r = r;
+  this.sAngle = 0;
+  this.eAngle = 2 * Math.PI;
+  this.xVel = getRandomIntInclusive(1,8);
+  this.yVel = 0;
+
+  this.draw = function() {
+    // context.arc(x,y,r,sAngle,eAngle,counterclockwise);
+    // sAngle	The starting angle, in radians (0 is at the 3 o'clock position of the arc's circle)
+    // eAngle	The ending angle, in radians
+    // counterclockwise	Optional. Specifies whether the drawing should be counterclockwise or clockwise. False is default, and indicates clockwise, while true indicates counter-clockwise.
+
+    ctx.beginPath();
+    ctx.fillStyle = myColors.blue;
+    ctx.strokeStyle = myColors.blue;
+    ctx.lineWidth = 1;
+    ctx.arc(this.x,this.y,this.r,this.sAngle,this.eAngle);
+    ctx.fill();
+    ctx.stroke();
+  } // draw
+
+  // this.drawErase = function() {
+  //   ctx.beginPath();
+  //   ctx.fillStyle = 'lightblue';
+  //   ctx.strokeStyle = 'lightblue';
+  //   ctx.lineWidth = 3;
+  //   ctx.arc(this.x - this.xVel,this.y,this.r,this.sAngle,this.eAngle);
+  //   ctx.fill();
+  //   ctx.stroke();
+  // }
+
+  this.update = function() {
+    if ( ((this.x + this.xVel + this.r) > canvas.width) || ((this.x + this.xVel - this.r) < 0) ) {
+      this.xVel *= -1;
+    }
+    this.x += this.xVel;
+  } // update
+} // Arc
+
+function ArcGroup(quantity) {
+  this.arcs = [];
+
+  this.init = function() {
+    for (var i = 0; i < quantity; i++) {
+      //  arc(x,y,radius,startAngle,endAngle);
+      var randRad = getRandomIntInclusive(10, 20);
+      this.arcs.push( new Arc(getRandomIntInclusive(100+randRad, 400-randRad), getRandomIntInclusive(100+randRad, 400-randRad), randRad) );
+    }
+  }
+
+  this.draw = function() {
+    for (var i = 0; i < this.arcs.length; i++) {
+      // this.arcs[i].drawErase();
+      this.arcs[i].draw();
+    }
+  }
+
+  this.update = function() {
+    for (var i = 0; i < this.arcs.length; i++) {
+      this.arcs[i].update();
+    }
+  }
+} // Circles
 
 function randColor(type) {
   // more muted colors example
@@ -86,7 +153,10 @@ function aLoop(timestamp) {
     }
 
     //draw stuff
+    myArcGroup.update();
+    clearCanvas();
     drawDisco(20);
+    myArcGroup.draw();
 
     lastFrameTimeMs = timestamp;
     myReq = requestAnimationFrame(aLoop);
@@ -100,10 +170,12 @@ $(document).ready(function() {
   // canvas is instantiated above to be global
   canvas = $('#canvas')[0];
 
-
   $('#start').click(function() {
     console.log('loop started');
     ctx = canvas.getContext('2d');
+    myArcGroup = new ArcGroup(4);
+    myArcGroup.init();
+    console.log('arc created = ', myArcGroup);
     if (myReq !== undefined) {
       cancelAnimationFrame(myReq);
     }
