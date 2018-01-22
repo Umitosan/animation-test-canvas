@@ -8,10 +8,21 @@ h2 {
 }
 
 .canvas-container {
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
   border-radius: 10px;
   border-color: rgb(137, 183, 36);
   border-width: 2px;
   border-style: solid;
+}
+
+#canvas {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .input-group {

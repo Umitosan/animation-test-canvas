@@ -3,8 +3,10 @@
 var myColors = new Colors();
 var canvasWidth = 400,
     canvas = $('#canvas')[0], // canvas must be defined here for backend functions
-    maxFPS = 60,
-    lastFrameTimeMs = 0;
+    maxFPS = 30,
+    lastFrameTimeMs = 0,
+    ctx = undefined,
+    myReq = undefined; // canvas.getContext('2d')
 
 // see this for html names colors
 // https://www.w3schools.com/colors/colors_shades.asp
@@ -20,6 +22,8 @@ function Colors() {
   this.blue = 'rgba(0, 0, 230, 0.7)';
 }
 
+// randColor = (Gosu.random(0,99999999) + 0x77000000).round
+
 function TxtBox(x,y,font,color) {
   this.x = x;
   this.y = y;
@@ -27,7 +31,6 @@ function TxtBox(x,y,font,color) {
   this.color = color;
 
   this.draw = function() {
-    var ctx = canvas.getContext('2d');
     ctx.font = this.font;
     ctx.fillStyle = this.color;
     ctx.fillText("Sorted!",this.x,this.y);
@@ -57,7 +60,9 @@ function aLoop(timestamp) {
         return;
     }
 
-    console.log("looped");
+    //draw stuff
+    ctx.fillStyle = myColors.red;
+    ctx.fillRect(0,0,canvas.width,canvas.height);
 
     lastFrameTimeMs = timestamp;
     myReq = requestAnimationFrame(aLoop);
@@ -74,6 +79,10 @@ $(document).ready(function() {
 
   $('#start').click(function() {
     console.log('loop started');
+    ctx = canvas.getContext('2d');
+    if (myReq !== undefined) {
+      cancelAnimationFrame(myReq);
+    }
     myReq = requestAnimationFrame(aLoop);
   });
 
@@ -85,6 +94,7 @@ $(document).ready(function() {
   $('#reset').click(function() {
     console.log('loop reset');
     cancelAnimationFrame(myReq);
+    clearCanvas();
   });
 
 });
