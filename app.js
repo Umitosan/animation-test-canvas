@@ -35,23 +35,33 @@ function TxtBox(x,y,font,color) {
   }
 }
 
-function drawDisco(rowSize) {
+function drawDisco(rowSize = 4) {
   var tx = 0;
   var ty = 0;
   var squareSize = canvas.width/rowSize;
   for (var i = 0; i < rowSize; i++) {
     for (var j = 0; j < rowSize; j++) {
-      ctx.fillStyle = randHexColor();
+      ctx.fillStyle = randColor('rgba');
       ctx.fillRect(tx+j*squareSize,ty+i*squareSize,squareSize,squareSize);
     }
   }
+  ctx.fillStyle = myColors.white;
+  ctx.font = '60px Georgia';
+  ctx.textAlign = 'center';
+  ctx.fillText('Disco',canvas.width/2,50);
 }
 
-function randHexColor() {
-  // more muted colors
+
+function randColor(type) {
+  // more muted colors example
   // return ( "#" + Math.round((getRandomIntInclusive(0,99999999) + 0x77000000)).toString(16) );
   // full spectum
-  return ( "#" + Math.round((getRandomIntInclusive(0,0xffffff) )).toString(16) );
+  if (type === 'hex') {
+    return ( "#" + Math.round((getRandomIntInclusive(0,0xffffff))).toString(16) );
+  }
+  if (type === 'rgba') {
+    return ( 'rgba('+ getRandomIntInclusive(0,255) +','+ getRandomIntInclusive(0,255) +','+ getRandomIntInclusive(0,255) +','+1+')' );
+  }
 }
 
 function getRandomIntInclusive(min, max) {
@@ -102,7 +112,6 @@ $(document).ready(function() {
 
   $('#pause').click(function() {
     console.log('loop paused');
-    console.log('random hex color = ', randHexColor() );
   });
 
   $('#reset').click(function() {
