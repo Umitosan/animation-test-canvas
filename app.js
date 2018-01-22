@@ -2,8 +2,8 @@
 
 var myColors = new Colors();
 var canvasWidth = 800,
-    canvas = $('#canvas')[0]; // canvas must be defined here for backend functions
-
+    canvas = $('#canvas')[0], // canvas must be defined here for backend functions
+    maxFPS = 60;
 
 // see this for html names colors
 // https://www.w3schools.com/colors/colors_shades.asp
@@ -70,14 +70,13 @@ $(document).ready(function() {
 
 
   $('.init').click(function() {
+    console.log('init');
     myReq = requestAnimationFrame(animLoop)
   });
 
   $('.reset').click(function() {
-  });
-
-  $('.start').click(function() {
-    loopRunning = true;
+    console.log('reset');
+    requestAnimationFrame(myReq);
   });
 
 });
