@@ -3,6 +3,10 @@ body {
   background-color: lightblue;
 }
 
+h2 {
+  text-align: center;
+}
+
 .canvas-container {
   border-radius: 10px;
   border-color: rgb(137, 183, 36);
@@ -12,7 +16,7 @@ body {
 
 .input-group {
   padding: 8px;
-  width: 130px;
+  width: 196px;
   margin-left: auto;
   margin-right: auto;
   /* outline-color: red;
@@ -29,6 +33,7 @@ body {
   border-style: solid;
   border-color: green;
   border-width: 1px;
+  cursor: pointer
 }
 
 .txt {
@@ -37,15 +42,19 @@ body {
   text-align: center;
 }
 
-#init {
-
+#start {
 }
-#init:hover {
+#start:hover {
+  background-color: rgb(137, 183, 36);
+}
+
+#pause {
+}
+#pause:hover {
   background-color: rgb(137, 183, 36);
 }
 
 #reset {
-
 }
 #reset:hover {
   background-color: rgb(137, 183, 36);

@@ -1,9 +1,10 @@
 
 
 var myColors = new Colors();
-var canvasWidth = 800,
+var canvasWidth = 400,
     canvas = $('#canvas')[0], // canvas must be defined here for backend functions
-    maxFPS = 60;
+    maxFPS = 60,
+    lastFrameTimeMs = 0;
 
 // see this for html names colors
 // https://www.w3schools.com/colors/colors_shades.asp
@@ -49,15 +50,17 @@ function clearCanvas() {
 //////////////////////////////////////////////////////////////////////////////////
 // GAME LOOP
 //////////////////////////////////////////////////////////////////////////////////
-function animLoop(timestamp) {
+function aLoop(timestamp) {
 
     if (timestamp < lastFrameTimeMs + (1000 / maxFPS)) {
-        myReq = requestAnimationFrame(animLoop);
+        myReq = requestAnimationFrame(aLoop);
         return;
     }
 
+    console.log("looped");
+
     lastFrameTimeMs = timestamp;
-    myReq = requestAnimationFrame(animLoop);
+    myReq = requestAnimationFrame(aLoop);
 }
 
 
@@ -69,14 +72,19 @@ $(document).ready(function() {
   canvas = $('#canvas')[0];
 
 
-  $('.init').click(function() {
-    console.log('init');
-    myReq = requestAnimationFrame(animLoop)
+  $('#start').click(function() {
+    console.log('loop started');
+    myReq = requestAnimationFrame(aLoop);
   });
 
-  $('.reset').click(function() {
-    console.log('reset');
-    requestAnimationFrame(myReq);
+  $('#pause').click(function() {
+    console.log('loop paused');
+    // myReq = requestAnimationFrame(aLoop);
+  });
+
+  $('#reset').click(function() {
+    console.log('loop reset');
+    cancelAnimationFrame(myReq);
   });
 
 });
