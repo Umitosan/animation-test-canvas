@@ -3,7 +3,7 @@
 var myColors = new Colors();
 var canvasWidth = 400,
     canvas = $('#canvas')[0], // canvas must be defined here for backend functions
-    maxFPS = 30,
+    maxFPS = 5,
     lastFrameTimeMs = 0,
     ctx = undefined,
     myReq = undefined; // canvas.getContext('2d')
@@ -22,8 +22,6 @@ function Colors() {
   this.blue = 'rgba(0, 0, 230, 0.7)';
 }
 
-// randColor = (Gosu.random(0,99999999) + 0x77000000).round
-
 function TxtBox(x,y,font,color) {
   this.x = x;
   this.y = y;
@@ -37,7 +35,9 @@ function TxtBox(x,y,font,color) {
   }
 }
 
-
+function randHexColor() {
+  return ( "#" + Math.round((getRandomIntInclusive(0,999999) + 0x770000)).toString(16) );
+}
 
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
@@ -61,7 +61,8 @@ function aLoop(timestamp) {
     }
 
     //draw stuff
-    ctx.fillStyle = myColors.red;
+    // ctx.fillStyle = '#773300';
+    ctx.fillStyle = randHexColor();
     ctx.fillRect(0,0,canvas.width,canvas.height);
 
     lastFrameTimeMs = timestamp;
@@ -88,7 +89,7 @@ $(document).ready(function() {
 
   $('#pause').click(function() {
     console.log('loop paused');
-    // myReq = requestAnimationFrame(aLoop);
+    console.log('random hex color = ', randHexColor() );
   });
 
   $('#reset').click(function() {
