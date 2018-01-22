@@ -35,8 +35,23 @@ function TxtBox(x,y,font,color) {
   }
 }
 
+function drawDisco(rowSize) {
+  var tx = 0;
+  var ty = 0;
+  var squareSize = canvas.width/rowSize;
+  for (var i = 0; i < rowSize; i++) {
+    for (var j = 0; j < rowSize; j++) {
+      ctx.fillStyle = randHexColor();
+      ctx.fillRect(tx+j*squareSize,ty+i*squareSize,squareSize,squareSize);
+    }
+  }
+}
+
 function randHexColor() {
-  return ( "#" + Math.round((getRandomIntInclusive(0,999999) + 0x770000)).toString(16) );
+  // more muted colors
+  // return ( "#" + Math.round((getRandomIntInclusive(0,99999999) + 0x77000000)).toString(16) );
+  // full spectum
+  return ( "#" + Math.round((getRandomIntInclusive(0,0xffffff) )).toString(16) );
 }
 
 function getRandomIntInclusive(min, max) {
@@ -61,9 +76,7 @@ function aLoop(timestamp) {
     }
 
     //draw stuff
-    // ctx.fillStyle = '#773300';
-    ctx.fillStyle = randHexColor();
-    ctx.fillRect(0,0,canvas.width,canvas.height);
+    drawDisco(20);
 
     lastFrameTimeMs = timestamp;
     myReq = requestAnimationFrame(aLoop);
