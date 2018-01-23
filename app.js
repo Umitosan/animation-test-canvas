@@ -1,13 +1,14 @@
 
 
 var canvasWidth = 400,
+    canvasHeight = 400,
     canvas = $('#canvas')[0], // canvas must be defined here for backend functions
     maxFPS = 30,
     lastFrameTimeMs = 0,
     ctx = undefined,
     myReq = undefined, // canvas.getContext('2d')
     myArcGroup = undefined,
-    myWipeAnim = undefined;
+    myGradAnim = undefined;
 
 // see this for html names colors
 // https://www.w3schools.com/colors/colors_shades.asp
@@ -36,10 +37,25 @@ function TxtBox(x,y,font,color) {
   }
 }
 
-function WipeAnim(barCount = 4, direction = 'right') {
+function GradAnim(barCount = 4, direction = 'right') {
 
   this.init = function() {
-    console.log('WipeAnim init');
+    console.log('GradAnim init');
+  }
+  this.draw = function() {
+    var gradient1 = ctx.createLinearGradient(0, 0, canvasWidth/2, 0); // ctx.createLinearGradient(x0, y0, x1, y1);
+    gradient1.addColorStop(0, 'white');  // void gradient.addColorStop(offset, color);
+    gradient1.addColorStop(0.9, 'green');
+    ctx.fillStyle = gradient1;
+    ctx.fillRect(0, 0, canvasWidth/2, canvasHeight);
+    var gradient2 = ctx.createLinearGradient(canvasWidth/2, 0, canvasWidth, 0); // ctx.createLinearGradient(x0, y0, x1, y1);
+    gradient2.addColorStop(0.1, 'green');  // void gradient.addColorStop(offset, color);
+    gradient2.addColorStop(1, 'white');
+    ctx.fillStyle = gradient2;
+    ctx.fillRect(canvasWidth/2, 0, canvasWidth, canvasHeight);
+  }
+  this.update = function() {
+
   }
 }
 
@@ -149,7 +165,7 @@ function getRandomIntInclusive(min, max) {
 }
 
 function clearCanvas() {
-  canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 
@@ -165,24 +181,26 @@ function aLoop(timestamp) {
 
     //draw stuff
     clearCanvas();
+    // drawDisco(4);
+    myGradAnim.draw();
+
 
     lastFrameTimeMs = timestamp;
     myReq = requestAnimationFrame(aLoop);
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////
 // FRONT
 //////////////////////////////////////////////////////////////////////////////////
 $(document).ready(function() {
-  // canvas is instantiated above to be global
+
   canvas = $('#canvas')[0];
+  ctx = canvas.getContext('2d');
 
   $('#start').click(function() {
     console.log('loop started');
-    ctx = canvas.getContext('2d');
-    myWipeAnim = new WipeAnim(4,'right');
-    myWipeAnim.init();
+    myGradAnim = new GradAnim(4,'right');
+    myGradAnim.init();
     if (myReq !== undefined) {
       cancelAnimationFrame(myReq);
     }
