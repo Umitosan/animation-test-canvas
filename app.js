@@ -52,7 +52,7 @@ function drawDisco(rowSize = 4) {
   ctx.fillText('Disco',canvas.width/2,50);
 }
 
-function Arc(x,y,r) {
+function Arc(x,y,r,color) {
   this.x = x;
   this.y = y;
   this.r = r;
@@ -60,6 +60,7 @@ function Arc(x,y,r) {
   this.eAngle = 2 * Math.PI;
   this.xVel = getRandomIntInclusive(1,8)*randSign(); // rand speed and direction
   this.yVel = getRandomIntInclusive(1,8)*randSign(); // rand speed and direction
+  this.color = color;
 
   this.draw = function() {
     // context.arc(x,y,r,sAngle,eAngle,counterclockwise);
@@ -68,8 +69,8 @@ function Arc(x,y,r) {
     // counterclockwise	Optional. Specifies whether the drawing should be counterclockwise or clockwise. False is default, and indicates clockwise, while true indicates counter-clockwise.
 
     ctx.beginPath();
-    ctx.fillStyle = myColors.blue;
-    ctx.strokeStyle = myColors.blue;
+    ctx.fillStyle = this.color;
+    ctx.strokeStyle = this.color;
     ctx.lineWidth = 1;
     ctx.arc(this.x,this.y,this.r,this.sAngle,this.eAngle);
     ctx.fill();
@@ -105,7 +106,7 @@ function ArcGroup(quantity) {
     for (var i = 0; i < quantity; i++) {
       //  arc(x,y,radius,startAngle,endAngle);
       var randRad = getRandomIntInclusive(4, 26);
-      this.arcs.push( new Arc(getRandomIntInclusive(100+randRad, 400-randRad), getRandomIntInclusive(100+randRad, 400-randRad), randRad) );
+      this.arcs.push( new Arc(getRandomIntInclusive(100+randRad, 400-randRad), getRandomIntInclusive(100+randRad, 400-randRad), randRad, randColor('hex')) );
     }
   }
 
