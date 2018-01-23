@@ -37,22 +37,44 @@ function TxtBox(x,y,font,color) {
   }
 }
 
-function GradAnim(barCount = 4, direction = 'right') {
+function GradAnim(barCount = 1, direction = 'right', speed = 1) {
+  this.barCount = barCount;
+  this.direction = direction;
+  this.speed = speed;
+  this.bars = [];
 
   this.init = function() {
+    var dir = this.direction;
+    var sp = this.speed;
     console.log('GradAnim init');
+    for (var i = 0 ; i < this.barCount ; i++) {
+      this.bars.push({  grad1: { x0: 0, y0: 0, x1: canvasWidth/2, y1: 0 },
+                        grad1stopA: { offset: 0, color: 'white' },
+                        grad1stopB: { offset: 0.9, color: 'green' },
+                        rect1: { x0: 0, y0: 0, x1: canvasWidth/2, y1: canvasHeight},
+                        grad2: { x0: canvasWidth/2, y0: 0, x1: canvasWidth, y1: 0 },
+                        grad2stopA: { offset: 0.1, color: 'green' },
+                        grad2stopB: { offset: 1, color: 'white' },
+                        rect2: { x0: canvasWidth/2, y0: 0, x1: canvasWidth, y1: canvasHeight},
+                        direction: dir,
+                        speed: sp,
+                    });
+    } // for
+    console.log('this.bars = ', this.bars);
   }
   this.draw = function() {
-    var gradient1 = ctx.createLinearGradient(0, 0, canvasWidth/2, 0); // ctx.createLinearGradient(x0, y0, x1, y1);
-    gradient1.addColorStop(0, 'white');  // void gradient.addColorStop(offset, color);
-    gradient1.addColorStop(0.9, 'green');
+    // left gradient
+    var gradient1 = ctx.createLinearGradient(this.bars[0].grad1.x0, this.bars[0].grad1.y0, this.bars[0].grad1.x1, this.bars[0].grad1.y1); // ctx.createLinearGradient(x0, y0, x1, y1);
+    gradient1.addColorStop(this.bars[0].grad1stopA.offset, this.bars[0].grad1stopA.color);  // void gradient.addColorStop(offset, color);
+    gradient1.addColorStop(this.bars[0].grad1stopB.offset, this.bars[0].grad1stopB.color);
     ctx.fillStyle = gradient1;
-    ctx.fillRect(0, 0, canvasWidth/2, canvasHeight);
-    var gradient2 = ctx.createLinearGradient(canvasWidth/2, 0, canvasWidth, 0); // ctx.createLinearGradient(x0, y0, x1, y1);
-    gradient2.addColorStop(0.1, 'green');  // void gradient.addColorStop(offset, color);
-    gradient2.addColorStop(1, 'white');
+    ctx.fillRect(this.bars[0].rect1.x0, this.bars[0].rect1.y0, this.bars[0].rect1.x1, this.bars[0].rect1.y1);
+    // right gradient
+    var gradient2 = ctx.createLinearGradient(this.bars[0].grad2.x0, this.bars[0].grad2.y0, this.bars[0].grad2.x1, this.bars[0].grad2.y1); // ctx.createLinearGradient(x0, y0, x1, y1);
+    gradient2.addColorStop(this.bars[0].grad2stopA.offset, this.bars[0].grad2stopA.color);  // void gradient.addColorStop(offset, color);
+    gradient2.addColorStop(this.bars[0].grad2stopB.offset, this.bars[0].grad2stopB.color);
     ctx.fillStyle = gradient2;
-    ctx.fillRect(canvasWidth/2, 0, canvasWidth, canvasHeight);
+    ctx.fillRect(this.bars[0].rect2.x0, this.bars[0].rect2.y0, this.bars[0].rect2.x1, this.bars[0].rect2.y1);
   }
   this.update = function() {
 
@@ -168,7 +190,6 @@ function clearCanvas() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////
 // GAME LOOP
 //////////////////////////////////////////////////////////////////////////////////
@@ -184,7 +205,6 @@ function aLoop(timestamp) {
     // drawDisco(4);
     myGradAnim.draw();
 
-
     lastFrameTimeMs = timestamp;
     myReq = requestAnimationFrame(aLoop);
 }
@@ -199,7 +219,7 @@ $(document).ready(function() {
 
   $('#start').click(function() {
     console.log('loop started');
-    myGradAnim = new GradAnim(4,'right');
+    myGradAnim = new GradAnim();
     myGradAnim.init();
     if (myReq !== undefined) {
       cancelAnimationFrame(myReq);
