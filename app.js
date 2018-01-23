@@ -37,37 +37,38 @@ function TxtBox(x,y,font,color) {
   }
 }
 
-function GradAnim(barCount = 10, direction = 'right', speed = 5) {
+function GradAnim(barCount = 20, maxSpeed = 20, color1 = 'lightblue', color2 = 'green') {
   this.barCount = barCount;
-  this.direction = direction;
-  this.speed = speed;
+  this.maxSpeed = maxSpeed;
+  this.color1 = color1;
+  this.color2 = color2;
   this.bars = [];
 
   this.init = function() {
     var dir = this.direction;
-    var sp = this.speed;
+    var c1 = this.color1;
+    var c2 = this.color2;
     console.log('GradAnim init');
     for (var i = 0 ; i < this.barCount ; i++) {
       var randCenter = getRandomIntInclusive(10,canvasWidth-10);
+      var sp = getRandomIntInclusive(1,this.maxSpeed);
       var topY = (canvasHeight/barCount)*(i);
       var botY = (canvasHeight/barCount)*(1+i);
       // REF: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createLinearGradient
       this.bars.push({  grad1: { x0: 0, y0: 0, x1: randCenter, y1: 0 },  // ctx.createLinearGradient(x0, y0, x1, y1);
-                        grad1stopA: { offset: 0, color: 'white' },  // void gradient.addColorStop(offset, color);
-                        grad1stopB: { offset: 1, color: 'green' },
+                        grad1stopA: { offset: 0, color: c1 },  // void gradient.addColorStop(offset, color);
+                        grad1stopB: { offset: 1, color: c2 },
                         rect1: { x0: 0, y0: topY, x1: randCenter, y1: botY},
-
                         grad2: { x0: randCenter, y0: 0, x1: canvasWidth, y1: 0 },
-                        grad2stopA: { offset: 0, color: 'green' },
-                        grad2stopB: { offset: 1, color: 'white' },
+                        grad2stopA: { offset: 0, color: c2 },
+                        grad2stopB: { offset: 1, color: c1 },
                         rect2: { x0: randCenter, y0: topY, x1: canvasWidth, y1: botY},
-
                         direction: dir,
                         speed: sp,
                         center: randCenter,
                     });
     } // for
-    console.log('this.bars = ', this.bars);
+    // console.log('this.bars = ', this.bars);
   }
   this.draw = function() {
     for (var i = 0 ; i < this.bars.length ; i++) {
@@ -86,8 +87,19 @@ function GradAnim(barCount = 10, direction = 'right', speed = 5) {
     } // for
   } // draw
   this.update = function() {
-    // update postions
-  }
+    for (var i = 0 ; i < this.bars.length ; i++) {  // update postions for each bar
+      if (  ((this.bars[i].center+this.bars[i].speed-10) < 0) || ((this.bars[i].center+this.bars[i].speed+10) > canvasWidth) ) {  // test bound collision
+        this.bars[i].speed *= -1; // change direction
+      } else { // update the new location
+        this.bars[i].center += this.bars[i].speed;
+        var c = this.bars[i].center;
+        this.bars[i].grad1.x1 = c;
+        this.bars[i].rect1.x1 = c;
+        this.bars[i].grad2.x0 = c;
+        this.bars[i].rect2.x0 = c;
+      } // if
+    } // for
+  } // update
 }
 
 function drawDisco(rowSize = 4) {
@@ -212,6 +224,7 @@ function aLoop(timestamp) {
     //draw stuff
     clearCanvas();
     // drawDisco(4);
+    myGradAnim.update();
     myGradAnim.draw();
 
     lastFrameTimeMs = timestamp;
@@ -228,6 +241,8 @@ $(document).ready(function() {
 
   $('#start').click(function() {
     console.log('loop started');
+    // GradAnim(barCount = 20, maxSpeed = 20, color1 = 'lightblue', color2 = 'green')
+    // myGradAnim = new GradAnim(10,14,'black', 'red');
     myGradAnim = new GradAnim();
     myGradAnim.init();
     if (myReq !== undefined) {
