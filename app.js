@@ -1,26 +1,26 @@
 
 
-var myColors = new Colors();
 var canvasWidth = 400,
     canvas = $('#canvas')[0], // canvas must be defined here for backend functions
     maxFPS = 30,
     lastFrameTimeMs = 0,
     ctx = undefined,
     myReq = undefined, // canvas.getContext('2d')
-    myArcGroup = undefined;
+    myArcGroup = undefined,
+    myWipeAnim = undefined;
 
 // see this for html names colors
 // https://www.w3schools.com/colors/colors_shades.asp
-function Colors() {
-  this.black = 'rgba(0, 0, 0, 1)';
-  this.darkGrey = 'rgba(50, 50, 50, 1)';
-  this.lightGreyTrans = 'rgba(50, 50, 50, 0.3)';
-  this.greyReset = 'rgb(211,211,211)';
-  this.lighterGreyReset = 'rgb(240,240,240)';
-  this.white = 'rgba(250, 250, 250, 1)';
-  this.red = 'rgba(230, 0, 0, 1)';
-  this.green = 'rgba(0, 230, 0, 1)';
-  this.blue = 'rgba(0, 0, 230, 1)';
+var myColors = {
+  black: 'rgba(0, 0, 0, 1)',
+  darkGrey: 'rgba(50, 50, 50, 1)',
+  lightGreyTrans: 'rgba(50, 50, 50, 0.3)',
+  greyReset: 'rgb(211,211,211)',
+  lighterGreyReset: 'rgb(240,240,240)',
+  white: 'rgba(250, 250, 250, 1)',
+  red: 'rgba(230, 0, 0, 1)',
+  green: 'rgba(0, 230, 0, 1)',
+  blue: 'rgba(0, 0, 230, 1)',
 }
 
 function TxtBox(x,y,font,color) {
@@ -33,6 +33,13 @@ function TxtBox(x,y,font,color) {
     ctx.font = this.font;
     ctx.fillStyle = this.color;
     ctx.fillText("Sorted!",this.x,this.y);
+  }
+}
+
+function WipeAnim(barCount = 4, direction = 'right') {
+
+  this.init = function() {
+    console.log('WipeAnim init');
   }
 }
 
@@ -158,9 +165,6 @@ function aLoop(timestamp) {
 
     //draw stuff
     clearCanvas();
-    // myArcGroup.update();
-    // drawDisco(20);
-    // myArcGroup.draw();
 
     lastFrameTimeMs = timestamp;
     myReq = requestAnimationFrame(aLoop);
@@ -177,8 +181,8 @@ $(document).ready(function() {
   $('#start').click(function() {
     console.log('loop started');
     ctx = canvas.getContext('2d');
-    // myArcGroup = new ArcGroup(40);
-    // myArcGroup.init();
+    myWipeAnim = new WipeAnim(4,'right');
+    myWipeAnim.init();
     if (myReq !== undefined) {
       cancelAnimationFrame(myReq);
     }
