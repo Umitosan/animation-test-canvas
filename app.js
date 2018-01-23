@@ -58,8 +58,8 @@ function Arc(x,y,r) {
   this.r = r;
   this.sAngle = 0;
   this.eAngle = 2 * Math.PI;
-  this.xVel = getRandomIntInclusive(1,8);
-  this.yVel = 0;
+  this.xVel = getRandomIntInclusive(1,8)*randSign(); // rand speed and direction
+  this.yVel = getRandomIntInclusive(1,8)*randSign(); // rand speed and direction
 
   this.draw = function() {
     // context.arc(x,y,r,sAngle,eAngle,counterclockwise);
@@ -87,10 +87,14 @@ function Arc(x,y,r) {
   // }
 
   this.update = function() {
-    if ( ((this.x + this.xVel + this.r) > canvas.width) || ((this.x + this.xVel - this.r) < 0) ) {
+    if (  ((this.x + this.xVel + this.r) > canvas.width) || ((this.x + this.xVel - this.r) < 0)  ) {
       this.xVel *= -1;
     }
+    if (  ((this.y + this.yVel + this.r) > canvas.height) || ((this.y + this.yVel - this.r) < 0)  ) {
+      this.yVel *= -1;
+    }
     this.x += this.xVel;
+    this.y += this.yVel;
   } // update
 } // Arc
 
@@ -100,7 +104,7 @@ function ArcGroup(quantity) {
   this.init = function() {
     for (var i = 0; i < quantity; i++) {
       //  arc(x,y,radius,startAngle,endAngle);
-      var randRad = getRandomIntInclusive(10, 20);
+      var randRad = getRandomIntInclusive(4, 26);
       this.arcs.push( new Arc(getRandomIntInclusive(100+randRad, 400-randRad), getRandomIntInclusive(100+randRad, 400-randRad), randRad) );
     }
   }
@@ -118,6 +122,15 @@ function ArcGroup(quantity) {
     }
   }
 } // Circles
+
+function randSign() {
+  var num = getRandomIntInclusive(1,2)
+  if (num === 1) {
+    return 1
+  } else {
+    return -1;
+  }
+}
 
 function randColor(type) {
   // more muted colors example
@@ -155,7 +168,7 @@ function aLoop(timestamp) {
     //draw stuff
     myArcGroup.update();
     clearCanvas();
-    drawDisco(20);
+    // drawDisco(20);
     myArcGroup.draw();
 
     lastFrameTimeMs = timestamp;
@@ -173,7 +186,7 @@ $(document).ready(function() {
   $('#start').click(function() {
     console.log('loop started');
     ctx = canvas.getContext('2d');
-    myArcGroup = new ArcGroup(4);
+    myArcGroup = new ArcGroup(40);
     myArcGroup.init();
     console.log('arc created = ', myArcGroup);
     if (myReq !== undefined) {
