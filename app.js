@@ -37,7 +37,7 @@ function TxtBox(x,y,font,color) {
   }
 }
 
-function GradAnim(barCount = 1, direction = 'right', speed = 1) {
+function GradAnim(barCount = 10, direction = 'right', speed = 5) {
   this.barCount = barCount;
   this.direction = direction;
   this.speed = speed;
@@ -48,36 +48,45 @@ function GradAnim(barCount = 1, direction = 'right', speed = 1) {
     var sp = this.speed;
     console.log('GradAnim init');
     for (var i = 0 ; i < this.barCount ; i++) {
-      this.bars.push({  grad1: { x0: 0, y0: 0, x1: canvasWidth/2, y1: 0 },
-                        grad1stopA: { offset: 0, color: 'white' },
-                        grad1stopB: { offset: 0.9, color: 'green' },
-                        rect1: { x0: 0, y0: 0, x1: canvasWidth/2, y1: canvasHeight},
-                        grad2: { x0: canvasWidth/2, y0: 0, x1: canvasWidth, y1: 0 },
-                        grad2stopA: { offset: 0.1, color: 'green' },
+      var randCenter = getRandomIntInclusive(10,canvasWidth-10);
+      var topY = (canvasHeight/barCount)*(i);
+      var botY = (canvasHeight/barCount)*(1+i);
+      // REF: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createLinearGradient
+      this.bars.push({  grad1: { x0: 0, y0: 0, x1: randCenter, y1: 0 },  // ctx.createLinearGradient(x0, y0, x1, y1);
+                        grad1stopA: { offset: 0, color: 'white' },  // void gradient.addColorStop(offset, color);
+                        grad1stopB: { offset: 1, color: 'green' },
+                        rect1: { x0: 0, y0: topY, x1: randCenter, y1: botY},
+
+                        grad2: { x0: randCenter, y0: 0, x1: canvasWidth, y1: 0 },
+                        grad2stopA: { offset: 0, color: 'green' },
                         grad2stopB: { offset: 1, color: 'white' },
-                        rect2: { x0: canvasWidth/2, y0: 0, x1: canvasWidth, y1: canvasHeight},
+                        rect2: { x0: randCenter, y0: topY, x1: canvasWidth, y1: botY},
+
                         direction: dir,
                         speed: sp,
+                        center: randCenter,
                     });
     } // for
     console.log('this.bars = ', this.bars);
   }
   this.draw = function() {
-    // left gradient
-    var gradient1 = ctx.createLinearGradient(this.bars[0].grad1.x0, this.bars[0].grad1.y0, this.bars[0].grad1.x1, this.bars[0].grad1.y1); // ctx.createLinearGradient(x0, y0, x1, y1);
-    gradient1.addColorStop(this.bars[0].grad1stopA.offset, this.bars[0].grad1stopA.color);  // void gradient.addColorStop(offset, color);
-    gradient1.addColorStop(this.bars[0].grad1stopB.offset, this.bars[0].grad1stopB.color);
-    ctx.fillStyle = gradient1;
-    ctx.fillRect(this.bars[0].rect1.x0, this.bars[0].rect1.y0, this.bars[0].rect1.x1, this.bars[0].rect1.y1);
-    // right gradient
-    var gradient2 = ctx.createLinearGradient(this.bars[0].grad2.x0, this.bars[0].grad2.y0, this.bars[0].grad2.x1, this.bars[0].grad2.y1); // ctx.createLinearGradient(x0, y0, x1, y1);
-    gradient2.addColorStop(this.bars[0].grad2stopA.offset, this.bars[0].grad2stopA.color);  // void gradient.addColorStop(offset, color);
-    gradient2.addColorStop(this.bars[0].grad2stopB.offset, this.bars[0].grad2stopB.color);
-    ctx.fillStyle = gradient2;
-    ctx.fillRect(this.bars[0].rect2.x0, this.bars[0].rect2.y0, this.bars[0].rect2.x1, this.bars[0].rect2.y1);
-  }
+    for (var i = 0 ; i < this.bars.length ; i++) {
+      // left gradient
+      var gradient1 = ctx.createLinearGradient(this.bars[i].grad1.x0, this.bars[i].grad1.y0, this.bars[i].grad1.x1, this.bars[i].grad1.y1); // ctx.createLinearGradient(x0, y0, x1, y1);
+      gradient1.addColorStop(this.bars[i].grad1stopA.offset, this.bars[i].grad1stopA.color);  // void gradient.addColorStop(offset, color);
+      gradient1.addColorStop(this.bars[i].grad1stopB.offset, this.bars[i].grad1stopB.color);
+      ctx.fillStyle = gradient1;
+      ctx.fillRect(this.bars[i].rect1.x0, this.bars[i].rect1.y0, this.bars[i].rect1.x1, this.bars[i].rect1.y1);
+      // right gradient
+      var gradient2 = ctx.createLinearGradient(this.bars[i].grad2.x0, this.bars[i].grad2.y0, this.bars[i].grad2.x1, this.bars[i].grad2.y1); // ctx.createLinearGradient(x0, y0, x1, y1);
+      gradient2.addColorStop(this.bars[i].grad2stopA.offset, this.bars[i].grad2stopA.color);  // void gradient.addColorStop(offset, color);
+      gradient2.addColorStop(this.bars[i].grad2stopB.offset, this.bars[i].grad2stopB.color);
+      ctx.fillStyle = gradient2;
+      ctx.fillRect(this.bars[i].rect2.x0, this.bars[i].rect2.y0, this.bars[i].rect2.x1, this.bars[i].rect2.y1);
+    } // for
+  } // draw
   this.update = function() {
-
+    // update postions
   }
 }
 
