@@ -77,16 +77,6 @@ function Arc(x,y,r,color) {
     ctx.stroke();
   } // draw
 
-  // this.drawErase = function() {
-  //   ctx.beginPath();
-  //   ctx.fillStyle = 'lightblue';
-  //   ctx.strokeStyle = 'lightblue';
-  //   ctx.lineWidth = 3;
-  //   ctx.arc(this.x - this.xVel,this.y,this.r,this.sAngle,this.eAngle);
-  //   ctx.fill();
-  //   ctx.stroke();
-  // }
-
   this.update = function() {
     if (  ((this.x + this.xVel + this.r) > canvas.width) || ((this.x + this.xVel - this.r) < 0)  ) {
       this.xVel *= -1;
@@ -104,9 +94,9 @@ function ArcGroup(quantity) {
 
   this.init = function() {
     for (var i = 0; i < quantity; i++) {
-      //  arc(x,y,radius,startAngle,endAngle);
       var randRad = getRandomIntInclusive(4, 26);
-      this.arcs.push( new Arc(getRandomIntInclusive(100+randRad, 400-randRad), getRandomIntInclusive(100+randRad, 400-randRad), randRad, randColor('hex')) );
+      //  arc(x,y,radius,startAngle,endAngle);
+      this.arcs.push( new Arc(getRandomIntInclusive(randRad, canvas.width-randRad), getRandomIntInclusive(randRad, canvas.height-randRad), randRad, randColor('hex')) );
     }
   }
 
@@ -167,10 +157,10 @@ function aLoop(timestamp) {
     }
 
     //draw stuff
-    myArcGroup.update();
     clearCanvas();
+    // myArcGroup.update();
     // drawDisco(20);
-    myArcGroup.draw();
+    // myArcGroup.draw();
 
     lastFrameTimeMs = timestamp;
     myReq = requestAnimationFrame(aLoop);
@@ -187,9 +177,8 @@ $(document).ready(function() {
   $('#start').click(function() {
     console.log('loop started');
     ctx = canvas.getContext('2d');
-    myArcGroup = new ArcGroup(40);
-    myArcGroup.init();
-    console.log('arc created = ', myArcGroup);
+    // myArcGroup = new ArcGroup(40);
+    // myArcGroup.init();
     if (myReq !== undefined) {
       cancelAnimationFrame(myReq);
     }
