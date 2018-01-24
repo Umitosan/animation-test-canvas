@@ -3,7 +3,7 @@
 var canvasWidth = 400,
     canvasHeight = 400,
     canvas = $('#canvas')[0], // canvas must be defined here for backend functions
-    maxFPS = 30,
+    maxFPS = 10,
     lastFrameTimeMs = 0,
     ctx = undefined,
     myReq = undefined, // canvas.getContext('2d')
@@ -24,6 +24,7 @@ var myColors = {
   blue: 'rgba(0, 0, 230, 1)',
 }
 
+
 function TxtBox(x,y,font,color) {
   this.x = x;
   this.y = y;
@@ -37,18 +38,54 @@ function TxtBox(x,y,font,color) {
   }
 }
 
-function GradAnim(barCount = 20, maxSpeed = 20, color1 = 'lightblue', color2 = 'green') {
+// GradBar is two gradients whose edges touch and have the same thickness in a way to make an interesting single bar of color
+function GradBar() {
+  var grad1 = { x0: 0, y0: 0, x1: randCenter, y1: 0 }; // ctx.createLinearGradient(x0, y0, x1, y1);
+  var grad1stopA = { offset: 0, color: 0 };  // void gradient.addColorStop(offset, color);
+  var grad1stopB = { offset: 0, color: 0 };
+  var rect1 = { x0: 0, y0: 0, x1: 0, y1: 0};
+  var grad2 = { x0: 0, y0: 0, x1: 0, y1: 0 };
+  var grad2stopA = { offset: 0, color: 0 };
+  var grad2stopB = { offset: 0, color: 0 };
+  var rect2 = { x0: 0, y0: 0, x1: 0, y1: 0};
+  var speed = 0;
+  var center = 0;
+
+  this.draw = function() {
+    var gradient1 = ctx.createLinearGradient(this.grad1.x0, this.grad1.y0, this.grad1.x1, this.grad1.y1); // ctx.createLinearGradient(x0, y0, x1, y1);
+    gradient1.addColorStop(this.grad1stopA.offset, this.grad1stopA.color);  // void gradient.addColorStop(offset, color);
+    gradient1.addColorStop(this.grad1stopB.offset, this.grad1stopB.color);
+    ctx.fillStyle = gradient1;
+    ctx.fillRect(this.rect1.x0, this.rect1.y0, this.rect1.x1, this.rect1.y1);
+    var gradient2 = ctx.createLinearGradient(this.grad2.x0, this.grad2.y0, this.grad2.x1, this.grad2.y1); // ctx.createLinearGradient(x0, y0, x1, y1);
+    gradient2.addColorStop(this.grad2stopA.offset, this.grad2stopA.color);  // void gradient.addColorStop(offset, color);
+    gradient2.addColorStop(this.grad2stopB.offset, this.grad2stopB.color);
+    ctx.fillStyle = gradient2;
+    ctx.fillRect(this.rect2.x0, this.rect2.y0, this.rect2.x1, this.rect2.y1);
+  }
+}
+
+function getRadianAngle(degreeValue) {
+  return degreeValue * Math.PI / 180;
+}
+
+function GradAnim(barCount = 20, maxSpeed = 20, color1 = 'lightblue', color2 = 'green', rotation = 0) {
   this.barCount = barCount;
   this.maxSpeed = maxSpeed;
   this.color1 = color1;
   this.color2 = color2;
+  this.rotation = rotation;
   this.bars = [];
 
   this.init = function() {
-    var dir = this.direction;
+    console.log('GradAnim init');
+    if (this.rotation !== 0) {
+      ctx.translate(canvasWidth/2, canvasWidth/2);
+      ctx.rotate(getRadianAngle(this.rotation));
+      ctx.translate(-canvasWidth/2, -canvasWidth/2);
+    }
     var c1 = this.color1;
     var c2 = this.color2;
-    console.log('GradAnim init');
     for (var i = 0 ; i < this.barCount ; i++) {
       var randCenter = getRandomIntInclusive(10,canvasWidth-10);
       var sp = getRandomIntInclusive(1,this.maxSpeed);
@@ -63,13 +100,11 @@ function GradAnim(barCount = 20, maxSpeed = 20, color1 = 'lightblue', color2 = '
                         grad2stopA: { offset: 0, color: c2 },
                         grad2stopB: { offset: 1, color: c1 },
                         rect2: { x0: randCenter, y0: topY, x1: canvasWidth, y1: botY},
-                        direction: dir,
                         speed: sp,
                         center: randCenter,
                     });
     } // for
-    // console.log('this.bars = ', this.bars);
-  }
+  } // init
   this.draw = function() {
     for (var i = 0 ; i < this.bars.length ; i++) {
       // left gradient
@@ -242,8 +277,8 @@ $(document).ready(function() {
   $('#start').click(function() {
     console.log('loop started');
     // GradAnim(barCount = 20, maxSpeed = 20, color1 = 'lightblue', color2 = 'green')
-    // myGradAnim = new GradAnim(10,14,'black', 'red');
-    myGradAnim = new GradAnim();
+    myGradAnim = new GradAnim(20,2,'lightblue','yellow');
+    // myGradAnim = new GradAnim();
     myGradAnim.init();
     if (myReq !== undefined) {
       cancelAnimationFrame(myReq);
