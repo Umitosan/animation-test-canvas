@@ -46,11 +46,11 @@ function GradBar(grad1,grad1stopA,grad1stopB,rect1,grad2,grad2stopA,grad2stopB,r
   this.grad1 = grad1;
   this.grad1stopA = grad1stopA;
   this.grad1stopB = grad1stopB;
-  this.rect1 = rect1
-  this.grad2 = grad2
-  this.grad2stopA = grad2stopA
-  this.grad2stopB = grad2stopB
-  this.rect2 = rect2
+  this.rect1 = rect1;
+  this.grad2 = grad2;
+  this.grad2stopA = grad2stopA;
+  this.grad2stopB = grad2stopB;
+  this.rect2 = rect2;
   this.speed = speed;
   this.center = center;
 
@@ -86,16 +86,16 @@ function GradAnim(barCount = 20, maxSpeed = 20, color1 = 'lightblue', color2 = '
       var topY = (canvasHeight/barCount)*(i);
       var botY = (canvasHeight/barCount)*(1+i);
       // REF: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createLinearGradient
-      var bar = new GradBar(  /*grad1:*/ { x0: 0, y0: 0, x1: randCenter, y1: 0 },  // ctx.createLinearGradient(x0, y0, x1, y1);
+      var bar = new GradBar(  /*grad1:*/      { x0: 0, y0: 0, x1: randCenter, y1: 0 },  // ctx.createLinearGradient(x0, y0, x1, y1);
                               /*grad1stopA:*/ { offset: 0, color: c1 },  // void gradient.addColorStop(offset, color);
                               /*grad1stopB:*/ { offset: 1, color: c2 },
-                              /*rect1:*/ { x0: 0, y0: topY, x1: randCenter, y1: botY},
-                              /*grad2*/ { x0: randCenter, y0: 0, x1: canvasWidth, y1: 0 },
+                              /*rect1:*/      { x0: 0, y0: topY, x1: randCenter, y1: botY},
+                              /*grad2*/       { x0: randCenter, y0: 0, x1: canvasWidth, y1: 0 },
                               /*grad2stopA:*/ { offset: 0, color: c2 },
                               /*grad2stopB:*/ { offset: 1, color: c1 },
-                              /*rect2:*/ { x0: randCenter, y0: topY, x1: canvasWidth, y1: botY},
-                              /*speed:*/ sp,
-                              /*center:*/ randCenter,
+                              /*rect2:*/      { x0: randCenter, y0: topY, x1: canvasWidth, y1: botY},
+                              /*speed:*/      sp,
+                              /*center:*/     randCenter,
                             );
     this.bars.push(bar);
     } // for
@@ -280,8 +280,11 @@ $(document).ready(function() {
   $('#start').click(function() {
     console.log('loop started');
     // GradAnim(barCount = 20, maxSpeed = 20, color1 = 'lightblue', color2 = 'green', rotation = 0)
-    myGradAnim = new GradAnim(20,10,'lightblue','yellow', 90);
+    // myGradAnim = new GradAnim(20,10,'lightblue','yellow', 0);
+    myGradAnim = new GradAnim(20,10,randColor('rgba'),randColor('rgba'), 0);
     myGradAnim.init();
+    console.log('current color1 = ', myGradAnim.color1);
+    console.log('current color2 = ', myGradAnim.color2);
     if (myReq !== undefined) {
       cancelAnimationFrame(myReq);
     }
