@@ -3,12 +3,13 @@
 var canvasWidth = 400,
     canvasHeight = 400,
     canvas = $('#canvas')[0], // canvas must be defined here for backend functions
-    maxFPS = 10,
+    maxFPS = 30,
     lastFrameTimeMs = 0,
     ctx = undefined,
     myReq = undefined, // canvas.getContext('2d')
     myArcGroup = undefined,
-    myGradAnim = undefined;
+    myGradAnim = undefined,
+    myGradAnim2 = undefined;
 
 // see this for html names colors
 // https://www.w3schools.com/colors/colors_shades.asp
@@ -22,8 +23,10 @@ var myColors = {
   red: 'rgba(230, 0, 0, 1)',
   green: 'rgba(0, 230, 0, 1)',
   blue: 'rgba(0, 0, 230, 1)',
+  lightblueAlpha: 'rgba(173,216,230,0.2)',
+  yellowAlpha: 'rgba(255,255,0,0.2)',
+  greenAlpha: 'rgba(0,128,0,0.2)',
 }
-
 
 function TxtBox(x,y,font,color) {
   this.x = x;
@@ -39,17 +42,17 @@ function TxtBox(x,y,font,color) {
 }
 
 // GradBar is two gradients whose edges touch and have the same thickness in a way to make an interesting single bar of color
-function GradBar() {
-  var grad1 = { x0: 0, y0: 0, x1: randCenter, y1: 0 }; // ctx.createLinearGradient(x0, y0, x1, y1);
-  var grad1stopA = { offset: 0, color: 0 };  // void gradient.addColorStop(offset, color);
-  var grad1stopB = { offset: 0, color: 0 };
-  var rect1 = { x0: 0, y0: 0, x1: 0, y1: 0};
-  var grad2 = { x0: 0, y0: 0, x1: 0, y1: 0 };
-  var grad2stopA = { offset: 0, color: 0 };
-  var grad2stopB = { offset: 0, color: 0 };
-  var rect2 = { x0: 0, y0: 0, x1: 0, y1: 0};
-  var speed = 0;
-  var center = 0;
+function GradBar(grad1,grad1stopA,grad1stopB,rect1,grad2,grad2stopA,grad2stopB,rect2,speed,center) {
+  this.grad1 = grad1;
+  this.grad1stopA = grad1stopA;
+  this.grad1stopB = grad1stopB;
+  this.rect1 = rect1
+  this.grad2 = grad2
+  this.grad2stopA = grad2stopA
+  this.grad2stopB = grad2stopB
+  this.rect2 = rect2
+  this.speed = speed;
+  this.center = center;
 
   this.draw = function() {
     var gradient1 = ctx.createLinearGradient(this.grad1.x0, this.grad1.y0, this.grad1.x1, this.grad1.y1); // ctx.createLinearGradient(x0, y0, x1, y1);
@@ -62,12 +65,8 @@ function GradBar() {
     gradient2.addColorStop(this.grad2stopB.offset, this.grad2stopB.color);
     ctx.fillStyle = gradient2;
     ctx.fillRect(this.rect2.x0, this.rect2.y0, this.rect2.x1, this.rect2.y1);
-  }
-}
-
-function getRadianAngle(degreeValue) {
-  return degreeValue * Math.PI / 180;
-}
+  } // draw
+} // GradBar
 
 function GradAnim(barCount = 20, maxSpeed = 20, color1 = 'lightblue', color2 = 'green', rotation = 0) {
   this.barCount = barCount;
@@ -79,11 +78,6 @@ function GradAnim(barCount = 20, maxSpeed = 20, color1 = 'lightblue', color2 = '
 
   this.init = function() {
     console.log('GradAnim init');
-    if (this.rotation !== 0) {
-      ctx.translate(canvasWidth/2, canvasWidth/2);
-      ctx.rotate(getRadianAngle(this.rotation));
-      ctx.translate(-canvasWidth/2, -canvasWidth/2);
-    }
     var c1 = this.color1;
     var c2 = this.color2;
     for (var i = 0 ; i < this.barCount ; i++) {
@@ -92,33 +86,35 @@ function GradAnim(barCount = 20, maxSpeed = 20, color1 = 'lightblue', color2 = '
       var topY = (canvasHeight/barCount)*(i);
       var botY = (canvasHeight/barCount)*(1+i);
       // REF: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createLinearGradient
-      this.bars.push({  grad1: { x0: 0, y0: 0, x1: randCenter, y1: 0 },  // ctx.createLinearGradient(x0, y0, x1, y1);
-                        grad1stopA: { offset: 0, color: c1 },  // void gradient.addColorStop(offset, color);
-                        grad1stopB: { offset: 1, color: c2 },
-                        rect1: { x0: 0, y0: topY, x1: randCenter, y1: botY},
-                        grad2: { x0: randCenter, y0: 0, x1: canvasWidth, y1: 0 },
-                        grad2stopA: { offset: 0, color: c2 },
-                        grad2stopB: { offset: 1, color: c1 },
-                        rect2: { x0: randCenter, y0: topY, x1: canvasWidth, y1: botY},
-                        speed: sp,
-                        center: randCenter,
-                    });
+      var bar = new GradBar(  /*grad1:*/ { x0: 0, y0: 0, x1: randCenter, y1: 0 },  // ctx.createLinearGradient(x0, y0, x1, y1);
+                              /*grad1stopA:*/ { offset: 0, color: c1 },  // void gradient.addColorStop(offset, color);
+                              /*grad1stopB:*/ { offset: 1, color: c2 },
+                              /*rect1:*/ { x0: 0, y0: topY, x1: randCenter, y1: botY},
+                              /*grad2*/ { x0: randCenter, y0: 0, x1: canvasWidth, y1: 0 },
+                              /*grad2stopA:*/ { offset: 0, color: c2 },
+                              /*grad2stopB:*/ { offset: 1, color: c1 },
+                              /*rect2:*/ { x0: randCenter, y0: topY, x1: canvasWidth, y1: botY},
+                              /*speed:*/ sp,
+                              /*center:*/ randCenter,
+                            );
+    this.bars.push(bar);
     } // for
   } // init
   this.draw = function() {
     for (var i = 0 ; i < this.bars.length ; i++) {
-      // left gradient
-      var gradient1 = ctx.createLinearGradient(this.bars[i].grad1.x0, this.bars[i].grad1.y0, this.bars[i].grad1.x1, this.bars[i].grad1.y1); // ctx.createLinearGradient(x0, y0, x1, y1);
-      gradient1.addColorStop(this.bars[i].grad1stopA.offset, this.bars[i].grad1stopA.color);  // void gradient.addColorStop(offset, color);
-      gradient1.addColorStop(this.bars[i].grad1stopB.offset, this.bars[i].grad1stopB.color);
-      ctx.fillStyle = gradient1;
-      ctx.fillRect(this.bars[i].rect1.x0, this.bars[i].rect1.y0, this.bars[i].rect1.x1, this.bars[i].rect1.y1);
-      // right gradient
-      var gradient2 = ctx.createLinearGradient(this.bars[i].grad2.x0, this.bars[i].grad2.y0, this.bars[i].grad2.x1, this.bars[i].grad2.y1); // ctx.createLinearGradient(x0, y0, x1, y1);
-      gradient2.addColorStop(this.bars[i].grad2stopA.offset, this.bars[i].grad2stopA.color);  // void gradient.addColorStop(offset, color);
-      gradient2.addColorStop(this.bars[i].grad2stopB.offset, this.bars[i].grad2stopB.color);
-      ctx.fillStyle = gradient2;
-      ctx.fillRect(this.bars[i].rect2.x0, this.bars[i].rect2.y0, this.bars[i].rect2.x1, this.bars[i].rect2.y1);
+      // rotate before drawing
+      if (this.rotation !== 0) {
+        ctx.translate(canvasWidth/2, canvasWidth/2);
+        ctx.rotate(getRadianAngle(this.rotation));
+        ctx.translate(-canvasWidth/2, -canvasWidth/2);
+      }
+      this.bars[i].draw();
+      // rotate back for other calculations to perform correctly
+      if (this.rotation !== 0) {
+        ctx.translate(canvasWidth/2, canvasWidth/2);
+        ctx.rotate(getRadianAngle(this.rotation*-1));
+        ctx.translate(-canvasWidth/2, -canvasWidth/2);
+      }
     } // for
   } // draw
   this.update = function() {
@@ -215,6 +211,13 @@ function ArcGroup(quantity) {
   }
 } // Circles
 
+///////////////////
+// HELPER FUNCTIONS
+///////////////////
+function getRadianAngle(degreeValue) {
+  return degreeValue * Math.PI / 180;
+}
+
 function randSign() {
   var num = getRandomIntInclusive(1,2)
   if (num === 1) {
@@ -276,9 +279,8 @@ $(document).ready(function() {
 
   $('#start').click(function() {
     console.log('loop started');
-    // GradAnim(barCount = 20, maxSpeed = 20, color1 = 'lightblue', color2 = 'green')
-    myGradAnim = new GradAnim(20,2,'lightblue','yellow');
-    // myGradAnim = new GradAnim();
+    // GradAnim(barCount = 20, maxSpeed = 20, color1 = 'lightblue', color2 = 'green', rotation = 0)
+    myGradAnim = new GradAnim(20,10,'lightblue','yellow', 90);
     myGradAnim.init();
     if (myReq !== undefined) {
       cancelAnimationFrame(myReq);
