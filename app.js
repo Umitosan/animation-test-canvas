@@ -3,8 +3,7 @@
 var canvasWidth = 400,
     canvasHeight = 400,
     canvas = $('#canvas')[0], // canvas must be defined here for backend functions
-    maxFPS = 50,
-    lastFrameTimeMs = 0,
+    fps, fpsInterval, startTime, now, then, elapsed,
     ctx = undefined,
     myReq = undefined, // canvas.getContext('2d')
     myArcGroup = undefined,
@@ -250,28 +249,48 @@ function clearCanvas() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
+
+
 //////////////////////////////////////////////////////////////////////////////////
-// GAME LOOP
+// GAME LOOP 2.0
 //////////////////////////////////////////////////////////////////////////////////
-function aLoop(timestamp) {
+function aLoop(newtime) {
 
+  // pause
+  if (aLoopPause) {
+    myReq = requestAnimationFrame(aLoop);
+    return;
+  }
 
+  // calc elapsed time since last loop
+  now = newtime;
+  elapsed = now - then;
 
-    if (timestamp < lastFrameTimeMs + (1000 / maxFPS)) {
-        myReq = requestAnimationFrame(aLoop);
-        return;
-    }
+  // if enough time has elapsed, draw the next frame
+  if (elapsed > fpsInterval) {
+      // Get ready for next frame by setting then=now, but...
+      // Also, adjust for fpsInterval not being multiple of 16.67
+      then = now - (elapsed % fpsInterval);
 
-    //draw stuff
-    if (!aLoopPause) {
       clearCanvas();
-      // drawDisco(4);
       myGradAnim.update();
       myGradAnim.draw();
-    }
+  }
+  myReq = requestAnimationFrame(aLoop);
+}
 
-    lastFrameTimeMs = timestamp;
-    myReq = requestAnimationFrame(aLoop);
+
+// prepare the loop to start based on current state
+function aLoopInit(fps) {
+  fpsInterval = (1000 / fps);  // number of milliseconds per frame
+  then = window.performance.now();
+  startTime = then;
+  console.log(startTime);
+  aLoopPause = false;
+  if (myReq !== undefined) {
+    cancelAnimationFrame(myReq);
+  }
+  myReq = requestAnimationFrame(aLoop);
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -288,13 +307,9 @@ $(document).ready(function() {
     // myGradAnim = new GradAnim(20,10,'lightblue','yellow', 0);
     myGradAnim = new GradAnim(20,10,randColor('rgba'),randColor('rgba'), 0);
     myGradAnim.init();
-    aLoopPause = false;
     console.log('current color1 = ', myGradAnim.color1);
     console.log('current color2 = ', myGradAnim.color2);
-    if (myReq !== undefined) {
-      cancelAnimationFrame(myReq);
-    }
-    myReq = requestAnimationFrame(aLoop);
+    aLoopInit(60);
   });
 
   $('#pause').click(function() {
@@ -313,3 +328,40 @@ $(document).ready(function() {
   });
 
 });
+
+//// Game Loop 1.0
+// function aLoop(newtime) {
+//     // chill, if it hasn't been long enough
+//     if (newtime < lastFrameTimeMs + (1000 / fps)) {
+//         myReq = requestAnimationFrame(aLoop);
+//         return;
+//     }
+//     // draw stuff if not paused
+//     if (!aLoopPause) {
+//       clearCanvas();
+//       // drawDisco(4);
+//       myGradAnim.update();
+//       myGradAnim.draw();
+//     }
+//     lastFrameTimeMs = newtime;
+//     myReq = requestAnimationFrame(aLoop);
+//     return;
+// }
+
+
+// really cool color pairs
+
+// current color1 =  rgba(17,248,200,1)
+// current color2 =  rgba(176,83,227,1)
+
+// current color1 =  rgba(251,45,211,1)
+// current color2 =  rgba(18,199,2,1)
+
+// current color1 =  rgba(52,195,224,1)
+// current color2 =  rgba(246,72,16,1)
+
+// current color1 =  rgba(163,214,159,1)
+// current color2 =  rgba(228,248,154,1)
+
+// current color1 =  rgba(132,175,224,1)
+// current color2 =  rgba(251,200,166,1)
