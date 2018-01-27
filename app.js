@@ -9,7 +9,8 @@ var canvasWidth = 400,
     myReq = undefined, // canvas.getContext('2d')
     myArcGroup = undefined,
     myGradAnim = undefined,
-    myGradAnim2 = undefined;
+    myGradAnim2 = undefined,
+    aLoopPause = true;
 
 // see this for html names colors
 // https://www.w3schools.com/colors/colors_shades.asp
@@ -75,7 +76,6 @@ function GradAnim(barCount = 20, maxSpeed = 20, color1 = 'lightblue', color2 = '
   this.color2 = color2;
   this.rotation = rotation;
   this.bars = [];
-  this.paused = true;
 
   this.init = function() {
     console.log('GradAnim init');
@@ -263,9 +263,9 @@ function aLoop(timestamp) {
     }
 
     //draw stuff
-    // drawDisco(4);
-    if (!myGradAnim.paused) {
+    if (!aLoopPause) {
       clearCanvas();
+      // drawDisco(4);
       myGradAnim.update();
       myGradAnim.draw();
     }
@@ -288,7 +288,7 @@ $(document).ready(function() {
     // myGradAnim = new GradAnim(20,10,'lightblue','yellow', 0);
     myGradAnim = new GradAnim(20,10,randColor('rgba'),randColor('rgba'), 0);
     myGradAnim.init();
-    myGradAnim.paused = false;
+    aLoopPause = false;
     console.log('current color1 = ', myGradAnim.color1);
     console.log('current color2 = ', myGradAnim.color2);
     if (myReq !== undefined) {
@@ -299,10 +299,10 @@ $(document).ready(function() {
 
   $('#pause').click(function() {
     console.log('loop paused');
-    if (!myGradAnim.paused) {
-      myGradAnim.paused = true;
+    if (!aLoopPause) {
+      aLoopPause = true;
     } else {
-      myGradAnim.paused = false;
+      aLoopPause = false;
     }
   });
 
