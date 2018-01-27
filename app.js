@@ -3,7 +3,7 @@
 var canvasWidth = 400,
     canvasHeight = 400,
     canvas = $('#canvas')[0], // canvas must be defined here for backend functions
-    maxFPS = 30,
+    maxFPS = 50,
     lastFrameTimeMs = 0,
     ctx = undefined,
     myReq = undefined, // canvas.getContext('2d')
@@ -75,6 +75,7 @@ function GradAnim(barCount = 20, maxSpeed = 20, color1 = 'lightblue', color2 = '
   this.color2 = color2;
   this.rotation = rotation;
   this.bars = [];
+  this.paused = true;
 
   this.init = function() {
     console.log('GradAnim init');
@@ -254,16 +255,20 @@ function clearCanvas() {
 //////////////////////////////////////////////////////////////////////////////////
 function aLoop(timestamp) {
 
+
+
     if (timestamp < lastFrameTimeMs + (1000 / maxFPS)) {
         myReq = requestAnimationFrame(aLoop);
         return;
     }
 
     //draw stuff
-    clearCanvas();
     // drawDisco(4);
-    myGradAnim.update();
-    myGradAnim.draw();
+    if (!myGradAnim.paused) {
+      clearCanvas();
+      myGradAnim.update();
+      myGradAnim.draw();
+    }
 
     lastFrameTimeMs = timestamp;
     myReq = requestAnimationFrame(aLoop);
@@ -283,6 +288,7 @@ $(document).ready(function() {
     // myGradAnim = new GradAnim(20,10,'lightblue','yellow', 0);
     myGradAnim = new GradAnim(20,10,randColor('rgba'),randColor('rgba'), 0);
     myGradAnim.init();
+    myGradAnim.paused = false;
     console.log('current color1 = ', myGradAnim.color1);
     console.log('current color2 = ', myGradAnim.color2);
     if (myReq !== undefined) {
@@ -293,6 +299,11 @@ $(document).ready(function() {
 
   $('#pause').click(function() {
     console.log('loop paused');
+    if (!myGradAnim.paused) {
+      myGradAnim.paused = true;
+    } else {
+      myGradAnim.paused = false;
+    }
   });
 
   $('#reset').click(function() {
