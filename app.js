@@ -2,18 +2,23 @@
 
 var canvas1 = $('#canvas1')[0], // canvas must be defined here for backend functions
     canvas2 = $('#canvas2')[0], // canvas must be defined here for backend functions
+    canvas3 = $('#canvas3')[0], // canvas must be defined here for backend functions
     fps1, fpsInterval1, startTime1, now1, then1, elapsed1,
     fps2, fpsInterval2, startTime2, now2, then2, elapsed2,
+    fps3, fpsInterval3, startTime3, now3, then3, elapsed3,
     ctx1 = undefined, // canvas.getContext('2d')
     ctx2 = undefined,
+    ctx3 = undefined,
     myReq1 = undefined, // myReq = requestAnimationFrame()
     myReq2 = undefined,
-    myArcGroup = undefined,
+    myReq3 = undefined,
     myGradAnim = undefined,
     myGradAnim2 = undefined,
     myDisco = undefined,
+    myArcGroup = undefined,
     aLoop1Pause = true;
     aLoop2Pause = true;
+    aLoop3Pause = true;
 
 // see this for html names colors
 // https://www.w3schools.com/colors/colors_shades.asp
@@ -174,13 +179,13 @@ function Arc(x,y,r,color) {
     // eAngle	The ending angle, in radians
     // counterclockwise	Optional. Specifies whether the drawing should be counterclockwise or clockwise. False is default, and indicates clockwise, while true indicates counter-clockwise.
 
-    ctx2.beginPath();
-    ctx2.fillStyle = this.color;
-    ctx2.strokeStyle = this.color;
-    ctx2.lineWidth = 1;
-    ctx2.arc(this.x,this.y,this.r,this.sAngle,this.eAngle);
-    ctx2.fill();
-    ctx2.stroke();
+    ctx3.beginPath();
+    ctx3.fillStyle = this.color;
+    ctx3.strokeStyle = this.color;
+    ctx3.lineWidth = 1;
+    ctx3.arc(this.x,this.y,this.r,this.sAngle,this.eAngle);
+    ctx3.fill();
+    ctx3.stroke();
   } // draw
 
   this.update = function() {
@@ -202,7 +207,7 @@ function ArcGroup(quantity) {
     for (var i = 0; i < quantity; i++) {
       var randRad = getRandomIntInclusive(4, 26);
       //  arc(x,y,radius,startAngle,endAngle);
-      this.arcs.push( new Arc(getRandomIntInclusive(randRad, canvas3.width-randRad), getRandomIntInclusive(randRad, canvas1.height-randRad), randRad, randColor('hex')) );
+      this.arcs.push( new Arc(getRandomIntInclusive(randRad, canvas3.width-randRad), getRandomIntInclusive(randRad, canvas3.height-randRad), randRad, randColor('hex')) );
     }
   }
 
@@ -312,9 +317,30 @@ function aLoop2(newtime2) {
       then2 = now2 - (elapsed2 % fpsInterval2);
       clearCanvas(2);
       myDisco.draw();
-      console.log('myDisco = ', myDisco);
   }
   myReq2 = requestAnimationFrame(aLoop2);
+}
+
+function aLoop3(newtime3) {
+  // pause
+  if (aLoop3Pause) {
+    myReq3 = requestAnimationFrame(aLoop3);
+    return;
+  }
+  // calc elapsed time since last loop
+  now3 = newtime3;
+  elapsed3 = now3 - then3;
+
+  // if enough time has elapsed, draw the next frame
+  if (elapsed3 > fpsInterval3) {
+      // Get ready for next frame by setting then=now, but...
+      // Also, adjust for fpsInterval not being multiple of 16.67
+      then3 = now3 - (elapsed3 % fpsInterval3);
+      clearCanvas(3);
+      myArcGroup.update();
+  }
+  myArcGroup.draw();
+  myReq3 = requestAnimationFrame(aLoop3);
 }
 
 
@@ -323,7 +349,7 @@ function aLoop1Init(fps1) {
   fpsInterval1 = (1000 / fps1);  // number of milliseconds per frame
   then1 = window.performance.now();
   startTime1 = then1;
-  console.log(startTime1);
+  // console.log(startTime1);
   aLoop1Pause = false;
   if (myReq1 !== undefined) {
     cancelAnimationFrame(myReq1);
@@ -335,12 +361,24 @@ function aLoop2Init(fps2) {
   fpsInterval2 = (1000 / fps2);  // number of milliseconds per frame
   then2 = window.performance.now();
   startTime2 = then2;
-  console.log(startTime2);
+  // console.log(startTime2);
   aLoop2Pause = false;
   if (myReq2 !== undefined) {
     cancelAnimationFrame(myReq2);
   }
   myReq2 = requestAnimationFrame(aLoop2);
+}
+
+function aLoop3Init(fps3) {
+  fpsInterval3 = (1000 / fps3);  // number of milliseconds per frame
+  then3 = window.performance.now();
+  startTime3 = then3;
+  // console.log(startTime3);
+  aLoop3Pause = false;
+  if (myReq3 !== undefined) {
+    cancelAnimationFrame(myReq3);
+  }
+  myReq3 = requestAnimationFrame(aLoop3);
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -350,8 +388,14 @@ $(document).ready(function() {
 
   canvas1 = $('#canvas1')[0];
   canvas2 = $('#canvas2')[0];
+  canvas3 = $('#canvas3')[0];
   ctx1 = canvas1.getContext('2d');
   ctx2 = canvas2.getContext('2d');
+  ctx3 = canvas3.getContext('2d');
+
+  /////
+  //// Group 1
+  ////
 
   $('#start1').click(function() {
     console.log('loop1 started');
@@ -379,12 +423,15 @@ $(document).ready(function() {
     clearCanvas(1);
   });
 
-  ///////////////////////////////////////
+  /////
+  //// Group 2
+  ////
 
   $('#start2').click(function() {
     console.log('loop2 started');
-    aLoop2Init(3);
+    clearCanvas(2);
     myDisco = new Disco(5);
+    aLoop2Init(10);
   });
 
   $('#pause2').click(function() {
@@ -400,6 +447,33 @@ $(document).ready(function() {
     console.log('loop2 reset');
     cancelAnimationFrame(myReq2);
     clearCanvas(2);
+  });
+
+  /////
+  //// Group 3
+  ////
+
+  $('#start3').click(function() {
+    console.log('loop3 started');
+    clearCanvas(3);
+    myArcGroup = new ArcGroup(20);
+    myArcGroup.init();
+    aLoop3Init(30);
+  });
+
+  $('#pause3').click(function() {
+    console.log('loop3 paused');
+    if (!aLoop3Pause) {
+      aLoop3Pause = true;
+    } else {
+      aLoop3Pause = false;
+    }
+  });
+
+  $('#reset3').click(function() {
+    console.log('loop3 reset');
+    cancelAnimationFrame(myReq3);
+    clearCanvas(3);
   });
 
 });

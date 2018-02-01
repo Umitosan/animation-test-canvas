@@ -18,7 +18,7 @@ h2 {
   border-style: solid;
 }
 
-#canvas1, #canvas2 {
+#canvas1, #canvas2, #canvas3 {
   display: block;
   margin-left: auto;
   margin-right: auto;
