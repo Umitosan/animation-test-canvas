@@ -2,7 +2,8 @@
 
 var canvas1 = $('#canvas1')[0], // canvas must be defined here for backend functions
     canvas2 = $('#canvas2')[0], // canvas must be defined here for backend functions
-    fps, fpsInterval, startTime, now, then, elapsed,
+    fps1, fpsInterval1, startTime1, now1, then1, elapsed1,
+    fps2, fpsInterval2, startTime2, now2, then2, elapsed2,
     ctx1 = undefined, // canvas.getContext('2d')
     ctx2 = undefined,
     myReq1 = undefined, // myReq = requestAnimationFrame()
@@ -10,7 +11,9 @@ var canvas1 = $('#canvas1')[0], // canvas must be defined here for backend funct
     myArcGroup = undefined,
     myGradAnim = undefined,
     myGradAnim2 = undefined,
-    aLoopPause = true;
+    myDisco = undefined,
+    aLoop1Pause = true;
+    aLoop2Pause = true;
 
 // see this for html names colors
 // https://www.w3schools.com/colors/colors_shades.asp
@@ -134,20 +137,25 @@ function GradAnim(barCount = 20, maxSpeed = 20, color1 = 'lightblue', color2 = '
   } // update
 }
 
-function drawDisco(rowSize = 4) {
-  var tx = 0;
-  var ty = 0;
-  var squareSize = canvas2.width/rowSize;
-  for (var i = 0; i < rowSize; i++) {
-    for (var j = 0; j < rowSize; j++) {
-      ctx2.fillRect(tx+j*squareSize,ty+i*squareSize,squareSize,squareSize);
-      ctx2.fillStyle = randColor('rgba');
+function Disco(rowSize = 4) {
+  this.squareSize = canvas2.width/rowSize;
+
+  this.draw = function() {
+    for (var i = 0; i < rowSize; i++) {
+      for (var j = 0; j < rowSize; j++) {
+        ctx2.fillStyle = randColor('rgba');
+        // void ctx.fillRect(x, y, width, height);
+        ctx2.fillRect(j*this.squareSize,i*this.squareSize,this.squareSize,this.squareSize);
+      }
     }
+    ctx2.fillStyle = myColors.black;
+    ctx2.font = '60px Georgia';
+    ctx2.textAlign = 'center';
+    ctx2.fillText('Disco',canvas2.width/2,50);
   }
-  ctx2.fillStyle = myColors.black;
-  ctx2.font = '60px Georgia';
-  ctx2.textAlign = 'center';
-  ctx2.fillText('Disco',canvas1.width/2,50);
+  this.update = function() {
+
+  }
 }
 
 function Arc(x,y,r,color) {
@@ -259,50 +267,80 @@ function clearCanvas(num) {
         break;
     default:
         console.log('opps that\'s not a canvas identifier');
-}
-
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////
 // GAME LOOP 2.0
 //////////////////////////////////////////////////////////////////////////////////
-function aLoop(newtime) {
-
+function aLoop1(newtime1) {
   // pause
-  if (aLoopPause) {
-    myReq1 = requestAnimationFrame(aLoop);
+  if (aLoop1Pause) {
+    myReq1 = requestAnimationFrame(aLoop1);
     return;
   }
-
   // calc elapsed time since last loop
-  now = newtime;
-  elapsed = now - then;
+  now1 = newtime1;
+  elapsed1 = now1 - then1;
 
   // if enough time has elapsed, draw the next frame
-  if (elapsed > fpsInterval) {
+  if (elapsed1 > fpsInterval1) {
       // Get ready for next frame by setting then=now, but...
       // Also, adjust for fpsInterval not being multiple of 16.67
-      then = now - (elapsed % fpsInterval);
-
+      then1 = now1 - (elapsed1 % fpsInterval1);
       clearCanvas(1);
       myGradAnim.update();
   }
   myGradAnim.draw();
-  myReq1 = requestAnimationFrame(aLoop);
+  myReq1 = requestAnimationFrame(aLoop1);
+}
+
+function aLoop2(newtime2) {
+  // pause
+  if (aLoop2Pause) {
+    myReq2 = requestAnimationFrame(aLoop2);
+    return;
+  }
+  // calc elapsed time since last loop
+  now2 = newtime2;
+  elapsed2 = now2 - then2;
+
+  // if enough time has elapsed, draw the next frame
+  if (elapsed2 > fpsInterval2) {
+      // Get ready for next frame by setting then=now, but...
+      // Also, adjust for fpsInterval not being multiple of 16.67
+      then2 = now2 - (elapsed2 % fpsInterval2);
+      clearCanvas(2);
+      myDisco.draw();
+      console.log('myDisco = ', myDisco);
+  }
+  myReq2 = requestAnimationFrame(aLoop2);
 }
 
 
 // prepare the loop to start based on current state
-function aLoopInit(fps) {
-  fpsInterval = (1000 / fps);  // number of milliseconds per frame
-  then = window.performance.now();
-  startTime = then;
-  console.log(startTime);
-  aLoopPause = false;
+function aLoop1Init(fps1) {
+  fpsInterval1 = (1000 / fps1);  // number of milliseconds per frame
+  then1 = window.performance.now();
+  startTime1 = then1;
+  console.log(startTime1);
+  aLoop1Pause = false;
   if (myReq1 !== undefined) {
     cancelAnimationFrame(myReq1);
   }
-  myReq1 = requestAnimationFrame(aLoop);
+  myReq1 = requestAnimationFrame(aLoop1);
+}
+
+function aLoop2Init(fps2) {
+  fpsInterval2 = (1000 / fps2);  // number of milliseconds per frame
+  then2 = window.performance.now();
+  startTime2 = then2;
+  console.log(startTime2);
+  aLoop2Pause = false;
+  if (myReq2 !== undefined) {
+    cancelAnimationFrame(myReq2);
+  }
+  myReq2 = requestAnimationFrame(aLoop2);
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -316,22 +354,22 @@ $(document).ready(function() {
   ctx2 = canvas2.getContext('2d');
 
   $('#start1').click(function() {
-    console.log('loop started');
+    console.log('loop1 started');
     // GradAnim(barCount = 20, maxSpeed = 20, color1 = 'lightblue', color2 = 'green', rotation = 0)
     // myGradAnim = new GradAnim(20,10,'lightblue','yellow', 0);
     myGradAnim = new GradAnim(20,10,randColor('rgba'),randColor('rgba'), 0);
     myGradAnim.init();
     console.log('current color1 = ', myGradAnim.color1);
     console.log('current color2 = ', myGradAnim.color2);
-    aLoopInit(60);
+    aLoop1Init(40);
   });
 
   $('#pause1').click(function() {
     console.log('loop paused');
-    if (!aLoopPause) {
-      aLoopPause = true;
+    if (!aLoop1Pause) {
+      aLoop1Pause = true;
     } else {
-      aLoopPause = false;
+      aLoop1Pause = false;
     }
   });
 
@@ -339,6 +377,29 @@ $(document).ready(function() {
     console.log('loop reset');
     cancelAnimationFrame(myReq1);
     clearCanvas(1);
+  });
+
+  ///////////////////////////////////////
+
+  $('#start2').click(function() {
+    console.log('loop2 started');
+    aLoop2Init(3);
+    myDisco = new Disco(5);
+  });
+
+  $('#pause2').click(function() {
+    console.log('loop2 paused');
+    if (!aLoop2Pause) {
+      aLoop2Pause = true;
+    } else {
+      aLoop2Pause = false;
+    }
+  });
+
+  $('#reset2').click(function() {
+    console.log('loop2 reset');
+    cancelAnimationFrame(myReq2);
+    clearCanvas(2);
   });
 
 });
@@ -379,3 +440,11 @@ $(document).ready(function() {
 
 // current color1 =  rgba(132,175,224,1)
 // current color2 =  rgba(251,200,166,1)
+
+// tangerine
+// current color1 =  rgba(215,177,187,1)
+// current color2 =  rgba(165,253,50,1)
+
+// soft retro
+// current color1 =  rgba(74,162,188,1)
+// current color2 =  rgba(201,149,204,1)
