@@ -18,7 +18,7 @@ h2 {
   border-style: solid;
 }
 
-#canvas1, #canvas2, #canvas3 {
+#canvas1, #canvas2, #canvas3, #canvas4 {
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -58,20 +58,20 @@ h2 {
   text-align: center;
 }
 
-#start {
+#start1, #start2, #start3, #start4 {
 }
-#start:hover {
+#start1:hover, #start2:hover, #start3:hover, #start4:hover, {
   background-color: rgb(137, 183, 36);
 }
 
-#pause {
+#pause1, #pause2, #pause3, #pause4 {
 }
-#pause:hover {
+#pause1:hover, #pause2:hover, #pause3:hover, #pause4:hover {
   background-color: rgb(137, 183, 36);
 }
 
-#reset {
+#reset1, #reset2, #reset3, #reset4 {
 }
-#reset:hover {
+#reset1:hover, #reset2:hover, #reset3:hover, #reset4:hover {
   background-color: rgb(137, 183, 36);
 }
