@@ -1,8 +1,8 @@
 /*jshint esversion: 6 */
 
 var canvas1 = $('#canvas1')[0], // canvas must be defined here for backend functions
-    canvas2 = $('#canvas2')[0], // canvas must be defined here for backend functions
-    canvas3 = $('#canvas3')[0], // canvas must be defined here for backend functions
+    canvas2 = $('#canvas2')[0],
+    canvas3 = $('#canvas3')[0],
     fps1, fpsInterval1, startTime1, now1, then1, elapsed1,
     delta1, // seconds since last frame
     fps2, fpsInterval2, startTime2, now2, then2, elapsed2,
@@ -289,12 +289,12 @@ function TA(context) {
   this.ctx = context;
   this.color = randColor('rgba');
   this.draw = function() {
-    this.ctx.fillStyle = randColor('rgba');
+    this.ctx.fillStyle = this.color;
     // void ctx.fillRect(x, y, width, height);
     this.ctx.fillRect(10,10,100,100);
   };
   this.update = function() {
-    this.color = this.color = randColor('rgba');
+    this.color = randColor('rgba');
   };
 }
 
@@ -306,7 +306,6 @@ function AnimLoop(context, animObj) {
   this.index = undefined;
   this.paused = true;
   this.now = undefined;
-  this.newtime = undefined;
   this.startTime = undefined;
   this.elapsed = undefined;
   this.fps = undefined;
@@ -324,7 +323,6 @@ function AnimLoop(context, animObj) {
     if (this.reqAnimFrame !== undefined) {
       cancelAnimationFrame(this.reqAnimFrame);
     }
-    // console.log('this.draw, this.update = ', this.draw, this.update);
     // this.reqAnimFrame = requestAnimationFrame(this.animate);
   };
 
@@ -338,19 +336,20 @@ function AnimLoop(context, animObj) {
       return;
     }
     // calc elapsed time since last loop
-    this.now = this.newtime;
+    this.now = newtime;
     this.elapsed = this.now - this.then;
     // if enough time has elapsed, draw the next frame
     if (this.elapsed > this.fpsInterval) {
+        // console.log('AnimLoop update');
         // Get ready for next frame by setting then=now, but...
         // Also, adjust for fpsInterval not being multiple of 16.67
         this.then = this.now - (this.elapsed % this.fpsInterval);
-        clearCanvas(this.index);
+        clearCanvas(4);
         this.animObj.update();
     }
     this.animObj.draw();
     this.reqAnimFrame = requestAnimationFrame(this.animate);
-  };
+  }; // this.animate
 } // AnimLoop
 
 function aLoop1(newtime1) {
