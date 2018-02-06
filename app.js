@@ -265,22 +265,11 @@ function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
 }
 
-function clearCanvas(num) {
-  switch(num) {
-    case 1:
-        ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
-        break;
-    case 2:
-        ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
-        break;
-    case 3:
-        ctx3.clearRect(0, 0, canvas3.width, canvas3.height);
-        break;
-    case 4:
-        ctx4.clearRect(0, 0, canvas4.width, canvas4.height);
-        break;
-    default:
-        console.log('opps that\'s not a canvas identifier');
+function clearCanvas(context) {
+  if (context) {
+    context.clearRect(0, 0, canvas1.width, canvas1.height);
+  } else {
+    console.log('opps that\'s not a canvas context');
   }
 }
 
@@ -330,7 +319,7 @@ function AnimLoop(context, animObj) {
     this.reqAnimFrame = requestAnimationFrame(this.animate);
   };
 
-  this.animate = (newtime) => { // MUST USE arrow function or the context of 'this' will be window instead of AnimLoop
+  this.animate = (newtime) => { // MUST USE arrow function here or the context of 'this' will be 'window' instead of AnimLoop
     if (this.paused) {
       this.reqAnimFrame = requestAnimationFrame(this.animate);
       return;
@@ -344,7 +333,7 @@ function AnimLoop(context, animObj) {
         // Get ready for next frame by setting then=now, but...
         // Also, adjust for fpsInterval not being multiple of 16.67
         this.then = this.now - (this.elapsed % this.fpsInterval);
-        clearCanvas(4);
+        clearCanvas(this.ctx);
         this.animObj.update();
     }
     this.animObj.draw();
@@ -367,7 +356,7 @@ function aLoop1(newtime1) {
       // Get ready for next frame by setting then=now, but...
       // Also, adjust for fpsInterval not being multiple of 16.67
       then1 = now1 - (elapsed1 % fpsInterval1);
-      clearCanvas(1);
+      clearCanvas(ctx1);
       myGradAnim.update();
   }
   myGradAnim.draw();
@@ -389,7 +378,7 @@ function aLoop2(newtime2) {
       // Get ready for next frame by setting then=now, but...
       // Also, adjust for fpsInterval not being multiple of 16.67
       then2 = now2 - (elapsed2 % fpsInterval2);
-      clearCanvas(2);
+      clearCanvas(ctx2);
       myDisco.draw();
   }
   myReq2 = requestAnimationFrame(aLoop2);
@@ -410,7 +399,7 @@ function aLoop3(newtime3) {
       // Get ready for next frame by setting then=now, but...
       // Also, adjust for fpsInterval not being multiple of 16.67
       then3 = now3 - (elapsed3 % fpsInterval3);
-      clearCanvas(3);
+      clearCanvas(ctx3);
       myArcGroup.update();
   }
   myArcGroup.draw();
@@ -494,7 +483,7 @@ $(document).ready(function() {
   $('#reset1').click(function() {
     console.log('loop reset');
     cancelAnimationFrame(myReq1);
-    clearCanvas(1);
+    clearCanvas(ctx1);
   });
 
   /////
@@ -503,7 +492,7 @@ $(document).ready(function() {
 
   $('#start2').click(function() {
     console.log('loop2 started');
-    clearCanvas(2);
+    clearCanvas(ctx2);
     myDisco = new Disco(5);
     aLoop2Init(10);
   });
@@ -520,7 +509,7 @@ $(document).ready(function() {
   $('#reset2').click(function() {
     console.log('loop2 reset');
     cancelAnimationFrame(myReq2);
-    clearCanvas(2);
+    clearCanvas(ctx2);
   });
 
   /////
@@ -529,7 +518,7 @@ $(document).ready(function() {
 
   $('#start3').click(function() {
     console.log('loop3 started');
-    clearCanvas(3);
+    clearCanvas(ctx3);
     myArcGroup = new ArcGroup(20);
     myArcGroup.init();
     aLoop3Init(30);
@@ -547,7 +536,7 @@ $(document).ready(function() {
   $('#reset3').click(function() {
     console.log('loop3 reset');
     cancelAnimationFrame(myReq3);
-    clearCanvas(3);
+    clearCanvas(ctx3);
   });
 
   /////
@@ -556,7 +545,7 @@ $(document).ready(function() {
 
   $('#start4').click(function() {
     console.log('loop4 started');
-    clearCanvas(4);
+    clearCanvas(ctx4);
     myTA = new TA(ctx4);
     // AnimLoop(context, animObj)
     aLoop4 = new AnimLoop(ctx4,myTA);
@@ -577,7 +566,7 @@ $(document).ready(function() {
   $('#reset4').click(function() {
     console.log('loop4 reset');
     cancelAnimationFrame(aLoop4.reqAnimFrame);
-    clearCanvas(4);
+    clearCanvas(ctx4);
   });
 
 });
@@ -602,7 +591,7 @@ $(document).ready(function() {
 // }
 
 
-// really cool color pairs
+// cool color bar pairs
 
 // current color1 =  rgba(17,248,200,1)
 // current color2 =  rgba(176,83,227,1)
@@ -626,3 +615,7 @@ $(document).ready(function() {
 // soft retro
 // current color1 =  rgba(74,162,188,1)
 // current color2 =  rgba(201,149,204,1)
+
+// blue brown
+// current color1 =  rgba(10,194,222,1)
+// current color2 =  rgba(132,80,24,1)
