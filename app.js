@@ -381,27 +381,6 @@ function aLoop1(newtime1) {
   myReq1 = requestAnimationFrame(aLoop1);
 }
 
-// function aLoop2(newtime2) {
-//   // pause
-//   if (aLoop2Pause) {
-//     myReq2 = requestAnimationFrame(aLoop2);
-//     return;
-//   }
-//   // calc elapsed time since last loop
-//   now2 = newtime2;
-//   elapsed2 = now2 - then2;
-//
-//   // if enough time has elapsed, draw the next frame
-//   if (elapsed2 > fpsInterval2) {
-//       // Get ready for next frame by setting then=now, but...
-//       // Also, adjust for fpsInterval not being multiple of 16.67
-//       then2 = now2 - (elapsed2 % fpsInterval2);
-//       clearCanvas(ctx2);
-//       myDisco.draw();
-//   }
-//   myReq2 = requestAnimationFrame(aLoop2);
-// }
-
 // prepare the loop to start based on current state
 function aLoop1Init(fps1) {
   fpsInterval1 = (1000 / fps1);  // number of milliseconds per frame
@@ -414,30 +393,21 @@ function aLoop1Init(fps1) {
   myReq1 = requestAnimationFrame(aLoop1);
 }
 
-// function aLoop2Init(fps2) {
-//   fpsInterval2 = (1000 / fps2);  // number of milliseconds per frame
-//   then2 = window.performance.now();
-//   startTime2 = then2;
-//   aLoop2Pause = false;
-//   if (myReq2 !== undefined) {
-//     cancelAnimationFrame(myReq2);
-//   }
-//   myReq2 = requestAnimationFrame(aLoop2);
-// }
-
 //////////////////////////////////////////////////////////////////////////////////
 // FRONT
 //////////////////////////////////////////////////////////////////////////////////
 $(document).ready(function() {
-
-  canvas1 = $('#canvas1')[0];
-  canvas2 = $('#canvas2')[0];
-  canvas3 = $('#canvas3')[0];
-  canvas4 = $('#canvas4')[0];
-  ctx1 = canvas1.getContext('2d');
-  ctx2 = canvas2.getContext('2d');
-  ctx3 = canvas3.getContext('2d');
-  ctx4 = canvas4.getContext('2d');
+  // instanciate any number of canvas' properly and set the context for looop instanciation
+  // assumes that canvas' are in order from top to bottom
+  // AKA
+  // var canvas1 = $('#canvas1')[0];
+  // var ctx1 = window.canvas1.getContext('2d');
+  $("canvas").each(function(index,el) {
+    let canvasVar = 'canvas'+(index+1);
+    let ctxVar = 'ctx'+(index+1);
+    window[canvasVar] = el;
+    window[ctxVar] = window[canvasVar].getContext('2d');
+  });
 
   /////
   //// Group 1
@@ -453,7 +423,6 @@ $(document).ready(function() {
     console.log('current color2 = ', myGradAnim.color2);
     aLoop1Init(60);
   });
-
   $('#pause1').click(function() {
     console.log('loop paused');
     if (!aLoop1Pause) {
@@ -462,7 +431,6 @@ $(document).ready(function() {
       aLoop1Pause = false;
     }
   });
-
   $('#reset1').click(function() {
     console.log('loop reset');
     cancelAnimationFrame(myReq1);
@@ -484,7 +452,6 @@ $(document).ready(function() {
       aLoop2.startAn();
     }
   });
-
   $('#pause2').click(function() {
     if (aLoop2) {
       console.log('loop2 paused');
@@ -495,7 +462,6 @@ $(document).ready(function() {
       }
     }
   });
-
   $('#reset2').click(function() {
     if (aLoop2) {
       console.log('loop2 reset');
@@ -520,7 +486,6 @@ $(document).ready(function() {
       aLoop3.startAn();
     }
   });
-
   $('#pause3').click(function() {
     if (aLoop3) {
       if (!aLoop3.paused) {
@@ -532,7 +497,6 @@ $(document).ready(function() {
       }
     }
   });
-
   $('#reset3').click(function() {
     if (aLoop3) {
       console.log('loop3 reset');
@@ -556,7 +520,6 @@ $(document).ready(function() {
       aLoop4.startAn();
     }
   });
-
   $('#pause4').click(function() {
     if (aLoop4) {
       if (!aLoop4.paused) {
@@ -568,7 +531,6 @@ $(document).ready(function() {
       }
     }
   });
-
   $('#reset4').click(function() {
     if (aLoop4) {
       console.log('loop4 reset');
@@ -579,6 +541,42 @@ $(document).ready(function() {
   });
 
 });
+
+//// Game Loop 2.0  (init + loop)
+// prepare the loop to start based on current state
+// function aLoop1Init(fps1) {
+//   fpsInterval1 = (1000 / fps1);  // number of milliseconds per frame
+//   then1 = window.performance.now();
+//   startTime1 = then1;
+//   aLoop1Pause = false;
+//   if (myReq1 !== undefined) {
+//     cancelAnimationFrame(myReq1);
+//   }
+//   myReq1 = requestAnimationFrame(aLoop1);
+// }
+
+// function aLoop1(newtime1) {
+//   // pause
+//   if (aLoop1Pause) {
+//     myReq1 = requestAnimationFrame(aLoop1);
+//     return;
+//   }
+//   // calc elapsed time since last loop
+//   now1 = newtime1;
+//   elapsed1 = now1 - then1;
+//
+//   // if enough time has elapsed, draw the next frame
+//   if (elapsed1 > fpsInterval1) {
+//       // Get ready for next frame by setting then=now, but...
+//       // Also, adjust for fpsInterval not being multiple of 16.67
+//       then1 = now1 - (elapsed1 % fpsInterval1);
+//       clearCanvas(ctx1);
+//       myGradAnim.update();
+//   }
+//   myGradAnim.draw();
+//   myReq1 = requestAnimationFrame(aLoop1);
+// }
+
 
 //// Game Loop 1.0
 // function aLoop(newtime) {
