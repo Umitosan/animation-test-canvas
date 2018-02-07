@@ -1,28 +1,27 @@
 /*jshint esversion: 6 */
 
 var canvas1 = $('#canvas1')[0], // canvas must be defined here for backend functions
-    canvas2 = $('#canvas2')[0],
     fps1, fpsInterval1, startTime1, now1, then1, elapsed1,
-    fps2, fpsInterval2, startTime2, now2, then2, elapsed2,
-    ctx1 = undefined, // canvas.getContext('2d')
-    ctx2 = undefined,
-    myReq1 = undefined, // myReq = requestAnimationFrame()
-    myReq2 = undefined,
-    myGradAnim = undefined,
-    myGradAnim2 = undefined,
-    myDisco = undefined,
+    ctx1, // canvas.getContext('2d')
+    myReq1, // myReq = requestAnimationFrame()
+    myGradAnim,
+    myGradAnim2,
     aLoop1Pause = true;
-    aLoop2Pause = true;
 
-var canvas4 = $('#canvas4')[0],
-    ctx4 = undefined,
-    aLoop4 = undefined,
-    myTA = undefined;
+var canvas2 = $('#canvas2')[0],
+    ctx2,
+    aLoop2,
+    myDisco;
 
 var canvas3 = $('#canvas3')[0],
-    ctx3 = undefined,
-    aLoop3 = undefined,
-    myArcGroup = undefined;
+    ctx3,
+    aLoop3,
+    myArcGroup;
+
+var canvas4 = $('#canvas4')[0],
+    ctx4,
+    aLoop4,
+    myTA;
 
 // see this for html names colors
 // https://www.w3schools.com/colors/colors_shades.asp
@@ -68,12 +67,12 @@ function GradBar(grad1,grad1stopA,grad1stopB,rect1,grad2,grad2stopA,grad2stopB,r
   this.center = center;
 
   this.draw = function() {
-    var gradient1 = ctx1.createLinearGradient(this.grad1.x0, this.grad1.y0, this.grad1.x1, this.grad1.y1); // ctx.createLinearGradient(x0, y0, x1, y1);
+    let gradient1 = ctx1.createLinearGradient(this.grad1.x0, this.grad1.y0, this.grad1.x1, this.grad1.y1); // ctx.createLinearGradient(x0, y0, x1, y1);
     gradient1.addColorStop(this.grad1stopA.offset, this.grad1stopA.color);  // void gradient.addColorStop(offset, color);
     gradient1.addColorStop(this.grad1stopB.offset, this.grad1stopB.color);
     ctx1.fillStyle = gradient1;
     ctx1.fillRect(this.rect1.x0, this.rect1.y0, this.rect1.x1, this.rect1.y1);
-    var gradient2 = ctx1.createLinearGradient(this.grad2.x0, this.grad2.y0, this.grad2.x1, this.grad2.y1); // ctx.createLinearGradient(x0, y0, x1, y1);
+    let gradient2 = ctx1.createLinearGradient(this.grad2.x0, this.grad2.y0, this.grad2.x1, this.grad2.y1); // ctx.createLinearGradient(x0, y0, x1, y1);
     gradient2.addColorStop(this.grad2stopA.offset, this.grad2stopA.color);  // void gradient.addColorStop(offset, color);
     gradient2.addColorStop(this.grad2stopB.offset, this.grad2stopB.color);
     ctx1.fillStyle = gradient2;
@@ -91,15 +90,15 @@ function GradAnim(barCount = 20, speed = 20, color1 = 'lightblue', color2 = 'gre
 
   this.init = function() {
     console.log('GradAnim init');
-    var c1 = this.color1;
-    var c2 = this.color2;
-    for (var i = 0 ; i < this.barCount ; i++) {
-      var randCenter = getRandomIntInclusive(10,canvas1.width-10);
-      var sp = getRandomIntInclusive(1,this.speed);
-      var topY = (canvas1.height/barCount)*(i);
-      var botY = (canvas1.height/barCount)*(1+i);
+    let c1 = this.color1;
+    let c2 = this.color2;
+    for (let i = 0 ; i < this.barCount ; i++) {
+      let randCenter = getRandomIntInclusive(10,canvas1.width-10);
+      let sp = getRandomIntInclusive(1,this.speed);
+      let topY = (canvas1.height/barCount)*(i);
+      let botY = (canvas1.height/barCount)*(1+i);
       // REF: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createLinearGradient
-      var bar = new GradBar(  /*grad1:*/      { x0: 0, y0: 0, x1: randCenter, y1: 0 },  // ctx.createLinearGradient(x0, y0, x1, y1);
+      let bar = new GradBar(  /*grad1:*/      { x0: 0, y0: 0, x1: randCenter, y1: 0 },  // ctx.createLinearGradient(x0, y0, x1, y1);
                               /*grad1stopA:*/ { offset: 0, color: c1 },  // void gradient.addColorStop(offset, color);
                               /*grad1stopB:*/ { offset: 1, color: c2 },
                               /*rect1:*/      { x0: 0, y0: topY, x1: randCenter, y1: botY},
@@ -114,7 +113,7 @@ function GradAnim(barCount = 20, speed = 20, color1 = 'lightblue', color2 = 'gre
     } // for
   }; // init
   this.draw = function() {
-    for (var i = 0 ; i < this.bars.length ; i++) {
+    for (let i = 0 ; i < this.bars.length ; i++) {
       // rotate before drawing
       if (this.rotation !== 0) {
         ctx1.translate(canvas1.width/2, canvas1.width/2);
@@ -131,12 +130,12 @@ function GradAnim(barCount = 20, speed = 20, color1 = 'lightblue', color2 = 'gre
     } // for
   }; // draw
   this.update = function() {
-    for (var i = 0 ; i < this.bars.length ; i++) {  // update postions for each bar
+    for (let i = 0 ; i < this.bars.length ; i++) {  // update postions for each bar
       if (  ((this.bars[i].center+this.bars[i].speed-10) < 0) || ((this.bars[i].center+this.bars[i].speed+10) > canvas1.width) ) {  // test bound collision
         this.bars[i].speed *= -1; // change direction
       } else { // update the new location
         this.bars[i].center += this.bars[i].speed;
-        var c = this.bars[i].center;
+        let c = this.bars[i].center;
         this.bars[i].grad1.x1 = c;
         this.bars[i].rect1.x1 = c;
         this.bars[i].grad2.x0 = c;
@@ -146,25 +145,41 @@ function GradAnim(barCount = 20, speed = 20, color1 = 'lightblue', color2 = 'gre
   }; // update
 }
 
-function Disco(rowSize = 4) {
+function Disco(context, rowSize = 4) {
+  this.ctx = context;
+  this.rowSize = rowSize;
   this.squareSize = canvas2.width/rowSize;
+  this.txtColor = randColor('rgba');
+  this.boxColors = [];
 
+  this.init = function() {
+    for (let q = 0; q < (rowSize*rowSize); q++) {
+      this.boxColors.push(randColor('rgba'));
+    }
+  };  // init
   this.draw = function() {
-    for (var i = 0; i < rowSize; i++) {
-      for (var j = 0; j < rowSize; j++) {
-        ctx2.fillStyle = randColor('rgba');
-        // void ctx.fillRect(x, y, width, height);
-        ctx2.fillRect(j*this.squareSize,i*this.squareSize,this.squareSize,this.squareSize);
+    for (let i = 0; i < rowSize; i++) {
+      for (let j = 0; j < rowSize; j++) {
+        // this.ctx.fillStyle = this.boxColors[i+j]; // diagonal bars
+        // this.ctx.fillStyle = this.boxColors[j]; // vertical bars
+        // this.ctx.fillStyle = this.boxColors[i]; // horizontal bars
+        // this.ctx.fillStyle = this.boxColors[j]; // horizontal bars
+        this.ctx.fillStyle = this.boxColors[(i*rowSize)+j]; // all different
+        this.ctx.fillRect(j*this.squareSize,i*this.squareSize,this.squareSize,this.squareSize);  // void ctx.fillRect(x, y, width, height);
       }
     }
-    ctx2.fillStyle = randColor('rgba');
-    ctx2.font = '60px Georgia';
-    ctx2.textAlign = 'center';
-    ctx2.fillText('Disco',canvas2.width/2,50);
-  };
+    this.ctx.fillStyle = this.txtColor;
+    this.ctx.font = '60px Georgia';
+    this.ctx.textAlign = 'center';
+    this.ctx.fillText('Disco',canvas2.width/2,50);
+  };  // draw
   this.update = function() {
-
-  };
+    for (let k = 0; k < this.boxColors.length; k++) {
+      this.boxColors[k] = randColor('rgba');
+    }
+    // update txt
+    this.txtColor = randColor('rgba');
+  };  // update
 }
 
 function Arc(x,y,r,color,context) {
@@ -210,8 +225,8 @@ function ArcGroup(quantity, context) {
   this.context = context;
 
   this.init = function() {
-    for (var i = 0; i < quantity; i++) {
-      var randRad = getRandomIntInclusive(2, 26);
+    for (let i = 0; i < quantity; i++) {
+      let randRad = getRandomIntInclusive(2, 26);
       //  arc(x,y,radius,startAngle,endAngle,);
       this.arcs.push( new Arc(getRandomIntInclusive(randRad, canvas3.width-randRad),
                               getRandomIntInclusive(randRad, canvas3.height-randRad),
@@ -223,13 +238,13 @@ function ArcGroup(quantity, context) {
   };
 
   this.draw = function() {
-    for (var i = 0; i < this.arcs.length; i++) {
+    for (let i = 0; i < this.arcs.length; i++) {
       this.arcs[i].draw();
     }
   };
 
   this.update = function() {
-    for (var i = 0; i < this.arcs.length; i++) {
+    for (let i = 0; i < this.arcs.length; i++) {
       this.arcs[i].update();
     }
   };
@@ -240,8 +255,7 @@ function TA(context) {
   this.color = randColor('rgba');
   this.draw = function() {
     this.ctx.fillStyle = this.color;
-    // void ctx.fillRect(x, y, width, height);
-    this.ctx.fillRect(50,50,300,300);
+    this.ctx.fillRect(50,50,300,300);  // void ctx.fillRect(x, y, width, height);
   };
   this.update = function() {
     this.color = randColor('rgba');
@@ -256,7 +270,7 @@ function getRadianAngle(degreeValue) {
 }
 
 function randSign() {
-  var num = getRandomIntInclusive(1,2);
+  let num = getRandomIntInclusive(1,2);
   if (num === 1) {
     return 1;
   } else {
@@ -367,26 +381,26 @@ function aLoop1(newtime1) {
   myReq1 = requestAnimationFrame(aLoop1);
 }
 
-function aLoop2(newtime2) {
-  // pause
-  if (aLoop2Pause) {
-    myReq2 = requestAnimationFrame(aLoop2);
-    return;
-  }
-  // calc elapsed time since last loop
-  now2 = newtime2;
-  elapsed2 = now2 - then2;
-
-  // if enough time has elapsed, draw the next frame
-  if (elapsed2 > fpsInterval2) {
-      // Get ready for next frame by setting then=now, but...
-      // Also, adjust for fpsInterval not being multiple of 16.67
-      then2 = now2 - (elapsed2 % fpsInterval2);
-      clearCanvas(ctx2);
-      myDisco.draw();
-  }
-  myReq2 = requestAnimationFrame(aLoop2);
-}
+// function aLoop2(newtime2) {
+//   // pause
+//   if (aLoop2Pause) {
+//     myReq2 = requestAnimationFrame(aLoop2);
+//     return;
+//   }
+//   // calc elapsed time since last loop
+//   now2 = newtime2;
+//   elapsed2 = now2 - then2;
+//
+//   // if enough time has elapsed, draw the next frame
+//   if (elapsed2 > fpsInterval2) {
+//       // Get ready for next frame by setting then=now, but...
+//       // Also, adjust for fpsInterval not being multiple of 16.67
+//       then2 = now2 - (elapsed2 % fpsInterval2);
+//       clearCanvas(ctx2);
+//       myDisco.draw();
+//   }
+//   myReq2 = requestAnimationFrame(aLoop2);
+// }
 
 // prepare the loop to start based on current state
 function aLoop1Init(fps1) {
@@ -400,16 +414,16 @@ function aLoop1Init(fps1) {
   myReq1 = requestAnimationFrame(aLoop1);
 }
 
-function aLoop2Init(fps2) {
-  fpsInterval2 = (1000 / fps2);  // number of milliseconds per frame
-  then2 = window.performance.now();
-  startTime2 = then2;
-  aLoop2Pause = false;
-  if (myReq2 !== undefined) {
-    cancelAnimationFrame(myReq2);
-  }
-  myReq2 = requestAnimationFrame(aLoop2);
-}
+// function aLoop2Init(fps2) {
+//   fpsInterval2 = (1000 / fps2);  // number of milliseconds per frame
+//   then2 = window.performance.now();
+//   startTime2 = then2;
+//   aLoop2Pause = false;
+//   if (myReq2 !== undefined) {
+//     cancelAnimationFrame(myReq2);
+//   }
+//   myReq2 = requestAnimationFrame(aLoop2);
+// }
 
 //////////////////////////////////////////////////////////////////////////////////
 // FRONT
@@ -460,25 +474,35 @@ $(document).ready(function() {
   ////
 
   $('#start2').click(function() {
-    console.log('loop2 started');
-    clearCanvas(ctx2);
-    myDisco = new Disco(5);
-    aLoop2Init(10);
+    if (!aLoop2) {
+      console.log('loop2 started');
+      clearCanvas(ctx2);
+      myDisco = new Disco(ctx2,5);
+      myDisco.init();
+      aLoop2 = new AnimLoop(ctx2,myDisco);   // AnimLoop(context, animObj)
+      aLoop2.init(10,4);    // this.init = function(fps,someIndex)
+      aLoop2.startAn();
+    }
   });
 
   $('#pause2').click(function() {
-    console.log('loop2 paused');
-    if (!aLoop2Pause) {
-      aLoop2Pause = true;
-    } else {
-      aLoop2Pause = false;
+    if (aLoop2) {
+      console.log('loop2 paused');
+      if (!aLoop2.paused) {
+        aLoop2.paused = true;
+      } else {
+        aLoop2.paused = false;
+      }
     }
   });
 
   $('#reset2').click(function() {
-    console.log('loop2 reset');
-    cancelAnimationFrame(myReq2);
-    clearCanvas(ctx2);
+    if (aLoop2) {
+      console.log('loop2 reset');
+      cancelAnimationFrame(aLoop2.reqAnimFrame);
+      aLoop2 = undefined;
+      clearCanvas(ctx2);
+    }
   });
 
   /////
@@ -510,10 +534,12 @@ $(document).ready(function() {
   });
 
   $('#reset3').click(function() {
-    console.log('loop3 reset');
-    cancelAnimationFrame(aLoop3.reqAnimFrame);
-    aLoop3 = undefined;
-    clearCanvas(ctx3);
+    if (aLoop3) {
+      console.log('loop3 reset');
+      cancelAnimationFrame(aLoop3.reqAnimFrame);
+      aLoop3 = undefined;
+      clearCanvas(ctx3);
+    }
   });
 
   /////
