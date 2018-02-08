@@ -1,12 +1,9 @@
 /*jshint esversion: 6 */
 
 var canvas1 = $('#canvas1')[0], // canvas must be defined here for backend functions
-    fps1, fpsInterval1, startTime1, now1, then1, elapsed1,
     ctx1, // canvas.getContext('2d')
-    myReq1, // myReq = requestAnimationFrame()
-    myGradAnim,
-    myGradAnim2,
-    aLoop1Pause = true;
+    aLoop1,
+    myGradAnim;
 
 var canvas2 = $('#canvas2')[0],
     ctx2,
@@ -54,7 +51,8 @@ function TxtBox(x,y,font,color) {
 }
 
 // GradBar is two gradients whose edges touch and have the same thickness in a way to make an interesting single bar of color
-function GradBar(grad1,grad1stopA,grad1stopB,rect1,grad2,grad2stopA,grad2stopB,rect2,speed,center) {
+function GradBar(context,grad1,grad1stopA,grad1stopB,rect1,grad2,grad2stopA,grad2stopB,rect2,speed,center) {
+  this.ctx = context;
   this.grad1 = grad1;
   this.grad1stopA = grad1stopA;
   this.grad1stopB = grad1stopB;
@@ -67,20 +65,21 @@ function GradBar(grad1,grad1stopA,grad1stopB,rect1,grad2,grad2stopA,grad2stopB,r
   this.center = center;
 
   this.draw = function() {
-    let gradient1 = ctx1.createLinearGradient(this.grad1.x0, this.grad1.y0, this.grad1.x1, this.grad1.y1); // ctx.createLinearGradient(x0, y0, x1, y1);
+    let gradient1 = this.ctx.createLinearGradient(this.grad1.x0, this.grad1.y0, this.grad1.x1, this.grad1.y1); // ctx.createLinearGradient(x0, y0, x1, y1);
     gradient1.addColorStop(this.grad1stopA.offset, this.grad1stopA.color);  // void gradient.addColorStop(offset, color);
     gradient1.addColorStop(this.grad1stopB.offset, this.grad1stopB.color);
-    ctx1.fillStyle = gradient1;
-    ctx1.fillRect(this.rect1.x0, this.rect1.y0, this.rect1.x1, this.rect1.y1);
-    let gradient2 = ctx1.createLinearGradient(this.grad2.x0, this.grad2.y0, this.grad2.x1, this.grad2.y1); // ctx.createLinearGradient(x0, y0, x1, y1);
+    this.ctx.fillStyle = gradient1;
+    this.ctx.fillRect(this.rect1.x0, this.rect1.y0, this.rect1.x1, this.rect1.y1);
+    let gradient2 = this.ctx.createLinearGradient(this.grad2.x0, this.grad2.y0, this.grad2.x1, this.grad2.y1); // ctx.createLinearGradient(x0, y0, x1, y1);
     gradient2.addColorStop(this.grad2stopA.offset, this.grad2stopA.color);  // void gradient.addColorStop(offset, color);
     gradient2.addColorStop(this.grad2stopB.offset, this.grad2stopB.color);
-    ctx1.fillStyle = gradient2;
-    ctx1.fillRect(this.rect2.x0, this.rect2.y0, this.rect2.x1, this.rect2.y1);
+    this.ctx.fillStyle = gradient2;
+    this.ctx.fillRect(this.rect2.x0, this.rect2.y0, this.rect2.x1, this.rect2.y1);
   }; // draw
 } // GradBar
 
-function GradAnim(barCount = 20, speed = 20, color1 = 'lightblue', color2 = 'green', rotation = 0) {
+function GradAnim(context, barCount = 20, speed = 20, color1 = 'lightblue', color2 = 'green', rotation = 0) {
+  this.ctx = context;
   this.barCount = barCount;
   this.speed = speed; // pixels per second
   this.color1 = color1;
@@ -89,7 +88,6 @@ function GradAnim(barCount = 20, speed = 20, color1 = 'lightblue', color2 = 'gre
   this.bars = [];
 
   this.init = function() {
-    console.log('GradAnim init');
     let c1 = this.color1;
     let c2 = this.color2;
     for (let i = 0 ; i < this.barCount ; i++) {
@@ -98,16 +96,17 @@ function GradAnim(barCount = 20, speed = 20, color1 = 'lightblue', color2 = 'gre
       let topY = (canvas1.height/barCount)*(i);
       let botY = (canvas1.height/barCount)*(1+i);
       // REF: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createLinearGradient
-      let bar = new GradBar(  /*grad1:*/      { x0: 0, y0: 0, x1: randCenter, y1: 0 },  // ctx.createLinearGradient(x0, y0, x1, y1);
-                              /*grad1stopA:*/ { offset: 0, color: c1 },  // void gradient.addColorStop(offset, color);
-                              /*grad1stopB:*/ { offset: 1, color: c2 },
-                              /*rect1:*/      { x0: 0, y0: topY, x1: randCenter, y1: botY},
-                              /*grad2*/       { x0: randCenter, y0: 0, x1: canvas1.width, y1: 0 },
-                              /*grad2stopA:*/ { offset: 0, color: c2 },
-                              /*grad2stopB:*/ { offset: 1, color: c1 },
-                              /*rect2:*/      { x0: randCenter, y0: topY, x1: canvas1.width, y1: botY},
-                              /*speed:*/      sp,
-                              /*center:*/     randCenter
+      let bar = new GradBar(  /*context*/    this.ctx,
+                              /*grad1*/      { x0: 0, y0: 0, x1: randCenter, y1: 0 },  // ctx.createLinearGradient(x0, y0, x1, y1);
+                              /*grad1stopA*/ { offset: 0, color: c1 },  // void gradient.addColorStop(offset, color);
+                              /*grad1stopB*/ { offset: 1, color: c2 },
+                              /*rect1*/      { x0: 0, y0: topY, x1: randCenter, y1: botY},
+                              /*grad2*/      { x0: randCenter, y0: 0, x1: canvas1.width, y1: 0 },
+                              /*grad2stopA*/ { offset: 0, color: c2 },
+                              /*grad2stopB*/ { offset: 1, color: c1 },
+                              /*rect2*/      { x0: randCenter, y0: topY, x1: canvas1.width, y1: botY},
+                              /*speed*/      sp,
+                              /*center*/     randCenter
                             );
     this.bars.push(bar);
     } // for
@@ -116,16 +115,16 @@ function GradAnim(barCount = 20, speed = 20, color1 = 'lightblue', color2 = 'gre
     for (let i = 0 ; i < this.bars.length ; i++) {
       // rotate before drawing
       if (this.rotation !== 0) {
-        ctx1.translate(canvas1.width/2, canvas1.width/2);
-        ctx1.rotate(getRadianAngle(this.rotation));
-        ctx1.translate(-canvas1.width/2, -canvas1.width/2);
+        this.ctx.translate(canvas1.width/2, canvas1.width/2);
+        this.ctx.rotate(getRadianAngle(this.rotation));
+        this.ctx.translate(-canvas1.width/2, -canvas1.width/2);
       }
       this.bars[i].draw();
       // rotate back for other calculations to perform correctly
       if (this.rotation !== 0) {
-        ctx1.translate(canvas1.width/2, canvas1.width/2);
-        ctx1.rotate(getRadianAngle(this.rotation*-1));
-        ctx1.translate(-canvas1.width/2, -canvas1.width/2);
+        this.ctx.translate(canvas1.width/2, canvas1.width/2);
+        this.ctx.rotate(getRadianAngle(this.rotation*-1));
+        this.ctx.translate(-canvas1.width/2, -canvas1.width/2);
       }
     } // for
   }; // draw
@@ -359,40 +358,6 @@ function AnimLoop(context, animObj) {
   }; // this.animate
 } // AnimLoop
 
-function aLoop1(newtime1) {
-  // pause
-  if (aLoop1Pause) {
-    myReq1 = requestAnimationFrame(aLoop1);
-    return;
-  }
-  // calc elapsed time since last loop
-  now1 = newtime1;
-  elapsed1 = now1 - then1;
-
-  // if enough time has elapsed, draw the next frame
-  if (elapsed1 > fpsInterval1) {
-      // Get ready for next frame by setting then=now, but...
-      // Also, adjust for fpsInterval not being multiple of 16.67
-      then1 = now1 - (elapsed1 % fpsInterval1);
-      clearCanvas(ctx1);
-      myGradAnim.update();
-  }
-  myGradAnim.draw();
-  myReq1 = requestAnimationFrame(aLoop1);
-}
-
-// prepare the loop to start based on current state
-function aLoop1Init(fps1) {
-  fpsInterval1 = (1000 / fps1);  // number of milliseconds per frame
-  then1 = window.performance.now();
-  startTime1 = then1;
-  aLoop1Pause = false;
-  if (myReq1 !== undefined) {
-    cancelAnimationFrame(myReq1);
-  }
-  myReq1 = requestAnimationFrame(aLoop1);
-}
-
 //////////////////////////////////////////////////////////////////////////////////
 // FRONT
 //////////////////////////////////////////////////////////////////////////////////
@@ -412,35 +377,40 @@ $(document).ready(function() {
   /////
   //// Group 1
   ////
-
   $('#start1').click(function() {
-    console.log('loop1 started');
-    // GradAnim(barCount = 20, speed = 20, color1 = 'lightblue', color2 = 'green', rotation = 0)
-    // myGradAnim = new GradAnim(20,10,'lightblue','yellow', 0);
-    myGradAnim = new GradAnim(20,10,randColor('rgba'),randColor('rgba'), 0);
-    myGradAnim.init();
-    console.log('current color1 = ', myGradAnim.color1);
-    console.log('current color2 = ', myGradAnim.color2);
-    aLoop1Init(60);
+    if (!aLoop1) {
+      console.log('loop1 started');
+      clearCanvas(ctx1);
+      // GradAnim(barCount = 20, speed = 20, color1 = 'lightblue', color2 = 'green', rotation = 0)
+      // myGradAnim = new GradAnim(20,10,'lightblue','yellow', 0);
+      myGradAnim = new GradAnim(ctx1,20,10,randColor('rgba'),randColor('rgba'), 0);
+      myGradAnim.init();
+      console.log('current color1 = ', myGradAnim.color1);
+      console.log('current color2 = ', myGradAnim.color2);
+      aLoop1 = new AnimLoop(ctx1,myGradAnim);   // AnimLoop(context, animObj)
+      aLoop1.init(50,1);    // this.init = function(fps,someIndex)
+      aLoop1.startAn();
+    }
   });
   $('#pause1').click(function() {
-    console.log('loop paused');
-    if (!aLoop1Pause) {
-      aLoop1Pause = true;
-    } else {
-      aLoop1Pause = false;
+    if (aLoop1) {
+      console.log('loop1 pause toggle');
+      aLoop1.paused = (!aLoop1.paused ? true : false);
     }
   });
   $('#reset1').click(function() {
-    console.log('loop reset');
-    cancelAnimationFrame(myReq1);
-    clearCanvas(ctx1);
+    console.log('loop1 reset');
+    if (aLoop1) {
+      console.log('loop1 reset');
+      cancelAnimationFrame(aLoop1.reqAnimFrame);
+      aLoop1 = undefined;
+      clearCanvas(ctx1);
+    }
   });
 
   /////
   //// Group 2
   ////
-
   $('#start2').click(function() {
     if (!aLoop2) {
       console.log('loop2 started');
@@ -448,18 +418,14 @@ $(document).ready(function() {
       myDisco = new Disco(ctx2,5);
       myDisco.init();
       aLoop2 = new AnimLoop(ctx2,myDisco);   // AnimLoop(context, animObj)
-      aLoop2.init(10,4);    // this.init = function(fps,someIndex)
+      aLoop2.init(10,2);    // this.init = function(fps,someIndex)
       aLoop2.startAn();
     }
   });
   $('#pause2').click(function() {
     if (aLoop2) {
-      console.log('loop2 paused');
-      if (!aLoop2.paused) {
-        aLoop2.paused = true;
-      } else {
-        aLoop2.paused = false;
-      }
+      console.log('loop2 pause toggle');
+      aLoop2.paused = (!aLoop2.paused ? true : false);
     }
   });
   $('#reset2').click(function() {
@@ -474,7 +440,6 @@ $(document).ready(function() {
   /////
   //// Group 3
   ////
-
   $('#start3').click(function() {
     if (!aLoop3) {
       console.log('loop3 started');
@@ -488,13 +453,8 @@ $(document).ready(function() {
   });
   $('#pause3').click(function() {
     if (aLoop3) {
-      if (!aLoop3.paused) {
-        console.log('loop3 paused');
-        aLoop3.paused = true;
-      } else {
-        console.log('loop3 not paused');
-        aLoop3.paused = false;
-      }
+      console.log('loop3 pause toggle');
+      aLoop3.paused = (!aLoop3.paused ? true : false);
     }
   });
   $('#reset3').click(function() {
@@ -509,7 +469,6 @@ $(document).ready(function() {
   /////
   //// Group 4
   ////
-
   $('#start4').click(function() {
     if (!aLoop4) {
       console.log('loop4 started');
@@ -522,13 +481,8 @@ $(document).ready(function() {
   });
   $('#pause4').click(function() {
     if (aLoop4) {
-      if (!aLoop4.paused) {
-        console.log('loop4 paused');
-        aLoop4.paused = true;
-      } else {
-        console.log('loop4 not paused');
-        aLoop4.paused = false;
-      }
+      console.log('loop4 pause toggle');
+      aLoop4.paused = (!aLoop4.paused ? true : false);
     }
   });
   $('#reset4').click(function() {
@@ -543,18 +497,6 @@ $(document).ready(function() {
 });
 
 //// Game Loop 2.0  (init + loop)
-// prepare the loop to start based on current state
-// function aLoop1Init(fps1) {
-//   fpsInterval1 = (1000 / fps1);  // number of milliseconds per frame
-//   then1 = window.performance.now();
-//   startTime1 = then1;
-//   aLoop1Pause = false;
-//   if (myReq1 !== undefined) {
-//     cancelAnimationFrame(myReq1);
-//   }
-//   myReq1 = requestAnimationFrame(aLoop1);
-// }
-
 // function aLoop1(newtime1) {
 //   // pause
 //   if (aLoop1Pause) {
@@ -574,6 +516,18 @@ $(document).ready(function() {
 //       myGradAnim.update();
 //   }
 //   myGradAnim.draw();
+//   myReq1 = requestAnimationFrame(aLoop1);
+// }
+
+// prepare the loop to start based on current state
+// function aLoop1Init(fps1) {
+//   fpsInterval1 = (1000 / fps1);  // number of milliseconds per frame
+//   then1 = window.performance.now();
+//   startTime1 = then1;
+//   aLoop1Pause = false;
+//   if (myReq1 !== undefined) {
+//     cancelAnimationFrame(myReq1);
+//   }
 //   myReq1 = requestAnimationFrame(aLoop1);
 // }
 
@@ -626,4 +580,9 @@ current color2 =  rgba(246,72,16,1)
  blue brown
  current color1 =  rgba(10,194,222,1)
  current color2 =  rgba(132,80,24,1)
+
+another blue brown
+current color1 =  rgba(25,151,254,1)
+current color2 =  rgba(85,71,3,1)
+
  */
