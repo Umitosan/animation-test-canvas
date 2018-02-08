@@ -4,17 +4,14 @@ var canvas1 = $('#canvas1')[0], // canvas must be defined here for backend funct
     ctx1, // canvas.getContext('2d')
     aLoop1,
     myGradAnim;
-
 var canvas2 = $('#canvas2')[0],
     ctx2,
     aLoop2,
     myDisco;
-
 var canvas3 = $('#canvas3')[0],
     ctx3,
     aLoop3,
     myArcGroup;
-
 var canvas4 = $('#canvas4')[0],
     ctx4,
     aLoop4,
@@ -150,10 +147,13 @@ function Disco(context, rowSize = 4) {
   this.squareSize = canvas2.width/rowSize;
   this.txtColor = randColor('rgba');
   this.boxColors = [];
+  this.boxColorsInner = [];
 
   this.init = function() {
     for (let q = 0; q < (rowSize*rowSize); q++) {
-      this.boxColors.push(randColor('rgba'));
+      let randC = randColor('rgba');
+      this.boxColors.push(randC);
+      this.boxColorsInner.push(invertRGBAstr(randC));
     }
   };  // init
   this.draw = function() {
@@ -165,16 +165,29 @@ function Disco(context, rowSize = 4) {
         // this.ctx.fillStyle = this.boxColors[j]; // horizontal bars
         this.ctx.fillStyle = this.boxColors[(i*rowSize)+j]; // all different
         this.ctx.fillRect(j*this.squareSize,i*this.squareSize,this.squareSize,this.squareSize);  // void ctx.fillRect(x, y, width, height);
+        // draw inner box
+        this.ctx.fillStyle = this.boxColorsInner[(i*rowSize)+j];
+        this.ctx.fillRect( (j*this.squareSize)+(this.squareSize/4) , (i*this.squareSize)+(this.squareSize)/4 ,this.squareSize/2,this.squareSize/2);
       }
     }
     this.ctx.fillStyle = this.txtColor;
     this.ctx.font = '60px Georgia';
     this.ctx.textAlign = 'center';
-    this.ctx.fillText('Disco',canvas2.width/2,50);
+    this.ctx.save();
+    for (let i = 0; i < 4; i++) { // rotate 4 times, printing the txt
+      this.ctx.translate(canvas2.width/2, canvas2.height/2);  // translate to center
+      this.ctx.rotate(Math.PI/2); // rotate 90 deg (but in RAD) about the center point
+      this.ctx.translate(-canvas2.width/2, -canvas2.height/2);  // translate back
+      this.ctx.textAlign = "center";
+      this.ctx.fillText('Disco',canvas2.width/2,50);
+    }
+    this.ctx.restore();
   };  // draw
   this.update = function() {
     for (let k = 0; k < this.boxColors.length; k++) {
-      this.boxColors[k] = randColor('rgba');
+      let randC = randColor('rgba');
+      this.boxColors[k] = randC;
+      this.boxColorsInner[k] = invertRGBAstr(randC);
     }
     // update txt
     this.txtColor = randColor('rgba');
@@ -279,14 +292,26 @@ function randSign() {
 
 function randColor(type) {
   // more muted colors example
-  // return ( "#" + Math.round((getRandomIntInclusive(0,99999999) + 0x77000000)).toString(16) );
-  // full spectum
+      // return ( "#" + Math.round((getRandomIntInclusive(0,99999999) + 0x77000000)).toString(16) );
+  // full spectum below
   if (type === 'hex') {
     return ( "#" + Math.round((getRandomIntInclusive(0,0xffffff))).toString(16) );
-  }
-  if (type === 'rgba') {
+  } else if (type === 'rgba') {
     return ( 'rgba('+ getRandomIntInclusive(0,255) +','+ getRandomIntInclusive(0,255) +','+ getRandomIntInclusive(0,255) +','+1+')' );
+  } else {
+    console.log("Not valid option for randColor()");
+    return undefined;
   }
+}
+
+function invertRGBAstr(str) {
+  let arr1 = str.slice(5,-1); // arr1 = "173,216,230,0.2"
+  let arr2 = arr1.split(','); // arr2 = ["173","216","230","0.2"]
+  let r = -1 * arr2[0] + 255;
+  let g = -1 * arr2[1] + 255;
+  let b = -1 * arr2[2] + 255;
+  let a = arr2[3];
+  return 'rgba('+r+','+g+','+b+','+a+')';
 }
 
 function getRandomIntInclusive(min, max) {
@@ -418,7 +443,7 @@ $(document).ready(function() {
       myDisco = new Disco(ctx2,5);
       myDisco.init();
       aLoop2 = new AnimLoop(ctx2,myDisco);   // AnimLoop(context, animObj)
-      aLoop2.init(10,2);    // this.init = function(fps,someIndex)
+      aLoop2.init(6,2);    // this.init = function(fps,someIndex)
       aLoop2.startAn();
     }
   });
