@@ -139,7 +139,7 @@ function GradAnim(context, barCount = 20, speed = 20, color1 = 'lightblue', colo
       } // if
     } // for
   }; // update
-}
+} // gradAnim
 
 function Disco(context, rowSize = 4) {
   this.ctx = context;
@@ -192,7 +192,7 @@ function Disco(context, rowSize = 4) {
     // update txt
     this.txtColor = randColor('rgba');
   };  // update
-}
+} // disco
 
 function Arc(x,y,r,color,context) {
   this.x = x;
