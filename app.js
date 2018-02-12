@@ -269,20 +269,26 @@ function TA(context) {
   this.y1 = 100;
   this.x2 = 200;
   this.y2 = 200;
-  this.angle = 0.0174533;  // angle of rotation in radians
+  this.angleRad = 0;  // angle of rotation in radians, 0.0174533 rad ~ 1 degree
   this.rotV = 0.0174533;  // rotational velocity
+  this.updateCount = 0;
+  this.colorFreq = 10; // update() run / 1 color change
   this.draw = function() {
     this.ctx.fillStyle = this.color;
-    this.ctx.fillRect(this.x1,this.y1,this.x2,this.y2);  // void ctx.fillRect(x, y, width, height);
     this.ctx.save();
     this.ctx.translate(canvas4.width/2, canvas4.height/2);  // translate to center
-    this.ctx.rotate(getRadianAngle(this.angle)); // rotate 90 deg (but in RAD) about the center point
-    this.ctx.translate(-canvas2.width/2, -canvas2.height/2);  // translate back
+    this.ctx.rotate(this.angleRad); // rotate 90 deg (but in RAD) about the center point
+    this.ctx.translate(-canvas4.width/2, -canvas4.height/2);  // translate back
+    this.ctx.fillRect(this.x1,this.y1,this.x2,this.y2);  // void ctx.fillRect(x, y, width, height);
     this.ctx.restore();
   };
   this.update = function() {
-    this.color = randColor('rgba');
-    this.angle += this.rotV;
+    if (this.updateCount > this.colorFreq) {
+      this.color = randColor('rgba');
+      this.updateCount = 0;
+    }
+    this.angleRad += this.rotV;
+    this.updateCount += 1;
   };
 }
 
@@ -512,7 +518,7 @@ $(document).ready(function() {
       clearCanvas(ctx4);
       myTA = new TA(ctx4);
       aLoop4 = new AnimLoop(ctx4,myTA);   // AnimLoop(context, animObj)
-      aLoop4.init(8,4);    // this.init = function(fps,someIndex)
+      aLoop4.init(30,4);    // this.init = function(fps,someIndex)
       aLoop4.startAn();
     }
   });
