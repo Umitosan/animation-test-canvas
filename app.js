@@ -265,10 +265,10 @@ function ArcGroup(quantity, context) {
 function TA(context) {
   this.ctx = context;
   this.color = randColor('rgba');
-  this.x1 = 100;
-  this.y1 = 100;
-  this.x2 = 200;
-  this.y2 = 200;
+  this.x1 = 100; this.y1 = 100;
+  this.x2 = 200; this.y2 = 200;
+  this.x3 = 100; this.y3 = 100;
+  this.x4 = 136; this.y4 = 136;
   this.angleRad = 0;  // angle of rotation in radians, 0.0174533 rad ~ 1 degree
   this.rotV = 0.0174533/4;  // rotational velocity
   this.updateCount = 0;
@@ -281,6 +281,7 @@ function TA(context) {
       this.ctx.rotate(this.angleRad*(i+0.1)); // rotate 90 deg (but in RAD) about the center point
       this.ctx.translate(-canvas4.width/2, -canvas4.height/2);  // translate back
       this.ctx.strokeRect(this.x1,this.y1,this.x2,this.y2);  // void ctx.fillRect(x, y, width, height);
+      this.ctx.strokeRect(this.x3,this.y3,this.x4,this.y4);  // void ctx.fillRect(x, y, width, height);
       this.ctx.restore();
     }
   };
