@@ -266,22 +266,23 @@ function TA(context) {
   this.ctx = context;
   this.color = randColor('rgba');
   this.x1 = 100; this.y1 = 100;
-  this.x2 = 200; this.y2 = 200;
-  this.x3 = 100; this.y3 = 100;
-  this.x4 = 136; this.y4 = 136;
+  this.width1 = 200; this.height1 = 200;
+  this.x2 = 180; this.y2 = 180;
+  this.width2 = 80; this.height2 = 80;
   this.angleRad = 0;  // angle of rotation in radians, 0.0174533 rad ~ 1 degree
   this.rotV = 0.0174533/4;  // rotational velocity
   this.updateCount = 0;
-  this.colorFreq = 50; // update() run / 1 color change
+  this.colorFreq = 80; // update() run / 1 color change
   this.draw = function() {
-    this.ctx.strokeStyle = this.color;
     for (let i=0; i<10; i++) {
       this.ctx.save();
+      this.ctx.strokeStyle = this.color;
       this.ctx.translate(canvas4.width/2, canvas4.height/2);  // translate to center
-      this.ctx.rotate(this.angleRad*(i+0.1)); // rotate 90 deg (but in RAD) about the center point
+      this.ctx.rotate(this.angleRad*(i+0.05)); // rotate 90 deg (but in RAD) about the center point
       this.ctx.translate(-canvas4.width/2, -canvas4.height/2);  // translate back
-      this.ctx.strokeRect(this.x1,this.y1,this.x2,this.y2);  // void ctx.fillRect(x, y, width, height);
-      this.ctx.strokeRect(this.x3,this.y3,this.x4,this.y4);  // void ctx.fillRect(x, y, width, height);
+      this.ctx.strokeRect(this.x1,this.y1,this.width1,this.height1);  // void ctx.fillRect(x, y, width, height);
+      this.ctx.strokeStyle = invertRGBAstr(this.color);
+      this.ctx.strokeRect(this.x2,this.y2,this.width2,this.height2);  // void ctx.fillRect(x, y, width, height);
       this.ctx.restore();
     }
   };
