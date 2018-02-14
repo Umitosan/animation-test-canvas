@@ -15,7 +15,11 @@ var canvas3 = $('#canvas3')[0],
 var canvas4 = $('#canvas4')[0],
     ctx4,
     aLoop4,
-    myTA;
+    myMandala;
+var canvas5 = $('#canvas5')[0],
+    ctx5,
+    aLoop5,
+    mySprite;
 
 // see this for html names colors
 // https://www.w3schools.com/colors/colors_shades.asp
@@ -244,7 +248,7 @@ function ArcGroup(quantity, context) {
                               getRandomIntInclusive(randRad, canvas3.height-randRad),
                               randRad,
                               randColor('hex'),
-                              ctx3
+                              this.context
                      ));
     }
   };
@@ -262,15 +266,14 @@ function ArcGroup(quantity, context) {
   };
 } // Circles
 
-function TA(context) {
+function Mandala(context) {
   this.ctx = context;
   this.color = randColor('rgba');
-  this.x1 = 100; this.y1 = 100;
-  this.width1 = 200; this.height1 = 200;
-  this.x2 = 180; this.y2 = 180;
-  this.width2 = 80; this.height2 = 80;
+  this.x1 = 94; this.y1 = 94; this.width1 = 212; this.height1 = 212;
+  this.x2 = 180; this.y2 = 180; this.width2 = 94; this.height2 = 94;
+  this.x3 = 50; this.y3 = 50; this.width3 = 316; this.height3 = 316;
   this.angleRad = 0;  // angle of rotation in radians, 0.0174533 rad ~ 1 degree
-  this.rotV = 0.0174533/4;  // rotational velocity
+  this.rotV = 0.0174533/6;  // rotational velocity
   this.updateCount = 0;
   this.colorFreq = 80; // update() run / 1 color change
   this.draw = function() {
@@ -283,6 +286,7 @@ function TA(context) {
       this.ctx.strokeRect(this.x1,this.y1,this.width1,this.height1);  // void ctx.fillRect(x, y, width, height);
       this.ctx.strokeStyle = invertRGBAstr(this.color);
       this.ctx.strokeRect(this.x2,this.y2,this.width2,this.height2);  // void ctx.fillRect(x, y, width, height);
+      this.ctx.strokeRect(this.x3,this.y3,this.width3,this.height3);  // void ctx.fillRect(x, y, width, height);
       this.ctx.restore();
     }
   };
@@ -520,8 +524,8 @@ $(document).ready(function() {
     if (!aLoop4) {
       console.log('loop4 started');
       clearCanvas(ctx4);
-      myTA = new TA(ctx4);
-      aLoop4 = new AnimLoop(ctx4,myTA);   // AnimLoop(context, animObj)
+      myMandala = new Mandala(ctx4);
+      aLoop4 = new AnimLoop(ctx4,myMandala);   // AnimLoop(context, animObj)
       aLoop4.init(60,4);    // this.init = function(fps,someIndex)
       aLoop4.startAn();
     }
@@ -538,6 +542,34 @@ $(document).ready(function() {
       cancelAnimationFrame(aLoop4.reqAnimFrame);
       aLoop4 = undefined;
       clearCanvas(ctx4);
+    }
+  });
+
+  /////
+  //// Group 4
+  ////
+  $('#start5').click(function() {
+    if (!aLoop5) {
+      console.log('loop5 started');
+      clearCanvas(ctx5);
+      myMandala = new Mandala(ctx5);
+      aLoop5 = new AnimLoop(ctx5,myMandala);   // AnimLoop(context, animObj)
+      aLoop5.init(60,5);    // this.init = function(fps,someIndex)
+      aLoop5.startAn();
+    }
+  });
+  $('#pause5').click(function() {
+    if (aLoop5) {
+      console.log('loop5 pause toggle');
+      aLoop5.paused = (!aLoop5.paused ? true : false);
+    }
+  });
+  $('#reset5').click(function() {
+    if (aLoop5) {
+      console.log('loop5 reset');
+      cancelAnimationFrame(aLoop5.reqAnimFrame);
+      aLoop5 = undefined;
+      clearCanvas(ctx5);
     }
   });
 
