@@ -19,7 +19,7 @@ var canvas4 = $('#canvas4')[0],
 var canvas5 = $('#canvas5')[0],
     ctx5,
     aLoop5,
-    mySprite;
+    mySpriteGroup;
 
 // see this for html names colors
 // https://www.w3schools.com/colors/colors_shades.asp
@@ -300,40 +300,35 @@ function Mandala(context) {
   };
 }
 
-function SpriteGroup(context) {
+function Sprite(context,sheet,sWidth,sHeight,dWidth,dHeight,x,y,frameTotal,curFrame,duration) {
   this.ctx = context;
-  this.destX = canvas5.width/4;
-  this.destY = canvas5.height/4;
-  this.spriteHeight = 0;
-  this.spriteWidth = 0;
-  this.spriteSheet = new Image();
-  this.frameDuration = 0;
+  this.spriteSheet = sheet;
+  this.spriteWidth = sWidth;
+  this.spriteHeight = sHeight;
+  this.displayWidth = dWidth;
+  this.displayHeight = dHeight;
+  this.destX = x;
+  this.destY = y;
+  this.frameTotal = frameTotal;
+  this.curFrame = curFrame;
+  this.frameDuration = duration;
   this.timeCount = 0;
-  this.curFrame = 0;
-  this.frameTotal = 0;
 
-  this.init = function(height,width,frameTotal,duration) {
-    this.spriteSheet.src = "img/blue1anim.png";
-    this.spriteHeight = height;
-    this.spriteWidth = width;
-    this.frameTotal = frameTotal;
-    this.frameDuration = duration;
+  this.init = function() {
   }; // init
   this.draw = function() {
     // console.log('drawing frame ', this.curFrame);
-    // simple draw image
-    // drawImage(image, x, y)
-    // draw slice of image
-    // drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
+    // simple draw image:     drawImage(image, x, y)
+    // draw slice of image:   drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
     this.ctx.drawImage( /*image*/   this.spriteSheet,
-                        /* sx */    this.spriteWidth*this.curFrame,
+                        /* sx */    (this.spriteWidth*this.curFrame), // read sprite shit right to left like this:  (this.spriteWidth*this.frameTotal-this.spriteWidth) - (this.spriteWidth*this.curFrame)
                         /* sy */    0,
                         /*sWidth*/  this.spriteWidth,
                         /*sHeight*/ this.spriteHeight,
                         /* dx */    this.destX,
                         /* dy */    this.destY,
-                        /*dWidth*/  canvas5.width/2,
-                        /*dHidth*/  canvas5.height/2);
+                        /*dWidth*/  this.displayWidth,
+                        /*dHidth*/  this.displayHeight );
   }; // draw
   this.update = function() {
     if (this.timeCount >= this.frameDuration) {
@@ -345,6 +340,55 @@ function SpriteGroup(context) {
       this.timeCount += 1;
     }
   }; // update
+}
+
+function SpriteGroup(ctx,src,sWidth,sHeight,dWidth,dHeight,frameT,duration) {
+  this.ctx = ctx;
+  this.spriteSheet = new Image();
+  this.spriteSheet.src = src;
+  this.spriteWidth = sWidth;
+  this.spriteHeight = sHeight;
+  this.displayWidth = dWidth;
+  this.displayHeight = dHeight;
+  this.frameTotal = frameT;
+  this.frameDuration = duration;
+  this.spriteArr = [];
+
+  this.init = function() {
+    let colTotal = Math.floor(canvas5.width / this.displayWidth);
+    let rowTotal = Math.floor(canvas5.height / this.displayHeight);
+    let xGapOffset = (canvas5.width % this.displayWidth) / 2;
+    let yGapOffset = (canvas5.height % this.displayHeight) / 2;
+    let frameCounter = 4;
+    for (let r=0; r<rowTotal; r++) {
+      for (let c=0; c<colTotal; c++) {
+        // Sprite(context,sheet,sWidth,sHeight,dWidth,dHeight,x,y,frameTotal,curFrame,duration)
+        this.spriteArr.push( new Sprite(  /* context */    this.ctx,
+                                          /* sheet */      this.spriteSheet,
+                                          /* sWidth */      this.spriteWidth,
+                                          /* sHeight */     this.spriteHeight,
+                                          /* dWidth */      this.displayWidth,
+                                          /* dHeight */     this.displayHeight,
+                                          /* x */          (this.displayWidth * c)+xGapOffset,
+                                          /* y */          (this.displayHeight * r)+yGapOffset,
+                                          /* frameTotal */ this.frameTotal,
+                                          /* curFrame */   frameCounter,
+                                          /* duration */   this.frameDuration )
+                            );
+        frameCounter = ( (frameCounter >= this.frameTotal-1) ? (0) : (frameCounter + 1) );  // cycles between 0 and 7 for example, staggering the beginning frame for effect
+      }
+    }
+  }; // init
+  this.draw = function() {
+    for (let i=0; i<this.spriteArr.length; i++) {
+      this.spriteArr[i].draw();
+    }
+  };
+  this.update = function() {
+    for (let i=0; i<this.spriteArr.length; i++) {
+      this.spriteArr[i].update();
+    }
+  };
 }
 
 ///////////////////
@@ -599,8 +643,9 @@ $(document).ready(function() {
     if (!aLoop5) {
       console.log('loop5 started');
       clearCanvas(ctx5);
-      mySpriteGroup = new SpriteGroup(ctx5);
-      mySpriteGroup.init(64,64,8,10);  // function(height,width,frameTotal,duration)
+      // SpriteGroup(ctx,src,sWidth,sHeight,dWidth,dHeight,frameT,duration)
+      mySpriteGroup = new SpriteGroup(ctx5,'img/blue1anim.png',64,64,40,40,8,2);
+      mySpriteGroup.init();  //
       aLoop5 = new AnimLoop(ctx5,mySpriteGroup);   // AnimLoop(context, animObj)
       aLoop5.init(60,5);    // this.init = function(fps,someIndex)
       aLoop5.startAn();
