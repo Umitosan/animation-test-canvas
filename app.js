@@ -439,7 +439,7 @@ function getRandomIntInclusive(min, max) {
 
 function clearCanvas(context) {
   if (context) {
-    context.clearRect(0, 0, canvas1.width, canvas1.height);
+    context.clearRect(0, 0, canvas5.width, canvas5.height);
   } else {
     console.log('opps that\'s not a canvas context');
   }
@@ -509,12 +509,15 @@ $(document).ready(function() {
   // AKA
   // var canvas1 = $('#canvas1')[0];
   // var ctx1 = window.canvas1.getContext('2d');
-  $("canvas").each(function(index,el) {
-    let canvasVar = 'canvas'+(index+1);
-    let ctxVar = 'ctx'+(index+1);
-    window[canvasVar] = el;
-    window[ctxVar] = window[canvasVar].getContext('2d');
-  });
+  // $("canvas").each(function(index,el) {
+  //   let canvasVar = 'canvas'+(index+1);
+  //   let ctxVar = 'ctx'+(index+1);
+  //   window[canvasVar] = el;
+  //   window[ctxVar] = window[canvasVar].getContext('2d');
+  // });
+
+  canvas5 = $('#canvas5')[0];
+  ctx5 = canvas5.getContext('2d');
 
   /////
   //// Group 1
@@ -640,11 +643,13 @@ $(document).ready(function() {
   //// Group 4
   ////
   $('#start5').click(function() {
+    canvas5.width  = window.innerWidth;
+    canvas5.height = window.innerHeight;
     if (!aLoop5) {
       console.log('loop5 started');
       clearCanvas(ctx5);
       // SpriteGroup(ctx,src,sWidth,sHeight,dWidth,dHeight,frameT,duration)
-      mySpriteGroup = new SpriteGroup(ctx5,'img/blue1anim.png',64,64,40,40,8,2);
+      mySpriteGroup = new SpriteGroup(ctx5,'img/blue1anim.png',64,64,128,128,8,2);
       mySpriteGroup.init();  //
       aLoop5 = new AnimLoop(ctx5,mySpriteGroup);   // AnimLoop(context, animObj)
       aLoop5.init(60,5);    // this.init = function(fps,someIndex)
