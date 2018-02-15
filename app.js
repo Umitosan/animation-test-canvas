@@ -202,6 +202,7 @@ function Arc(x,y,r,color,context) {
   this.x = x;
   this.y = y;
   this.r = r;
+  this.lineW = 2;
   this.color = color;
   this.ctx = context;
   this.sAngle = 0;
@@ -214,18 +215,17 @@ function Arc(x,y,r,color,context) {
     // sAngle	The starting angle, in radians (0 is at the 3 o'clock position of the arc's circle)
     // eAngle	The ending angle, in radians
     // counterclockwise	Optional. Specifies whether the drawing should be counterclockwise or clockwise. False is default, and indicates clockwise, while true indicates counter-clockwise.
-
     ctx3.beginPath();
     ctx3.fillStyle = this.color;
-    ctx3.strokeStyle = this.color;
-    ctx3.lineWidth = 1;
+    ctx3.strokeStyle = invertRGBAstr(this.color);
+    ctx3.lineWidth = this.lineW;
     ctx3.arc(this.x,this.y,this.r,this.sAngle,this.eAngle);
     ctx3.fill();
     ctx3.stroke();
   }; // draw
 
   this.update = function() {
-    if (  ((this.x + this.xVel + this.r) > canvas3.width) || ((this.x + this.xVel - this.r) < 0)  ) {
+    if (  ((this.x + this.xVel + this.r + this.lineW) > canvas3.width) || ((this.x + this.xVel - this.r - this.lineW) < 0)  ) {
       this.xVel *= -1;
     }
     if (  ((this.y + this.yVel + this.r) > canvas3.height) || ((this.y + this.yVel - this.r) < 0)  ) {
@@ -242,12 +242,12 @@ function ArcGroup(quantity, context) {
 
   this.init = function() {
     for (let i = 0; i < quantity; i++) {
-      let randRad = getRandomIntInclusive(2, 26);
+      let randRad = getRandomIntInclusive(2, 32);
       //  arc(x,y,radius,startAngle,endAngle,);
       this.arcs.push( new Arc(getRandomIntInclusive(randRad, canvas3.width-randRad),
                               getRandomIntInclusive(randRad, canvas3.height-randRad),
                               randRad,
-                              randColor('hex'),
+                              randColor('rgba'),
                               this.context
                      ));
     }
@@ -298,6 +298,53 @@ function Mandala(context) {
     this.angleRad += this.rotV;
     this.updateCount += 1;
   };
+}
+
+function SpriteGroup(context) {
+  this.ctx = context;
+  this.destX = canvas5.width/4;
+  this.destY = canvas5.height/4;
+  this.spriteHeight = 0;
+  this.spriteWidth = 0;
+  this.spriteSheet = new Image();
+  this.frameDuration = 0;
+  this.timeCount = 0;
+  this.curFrame = 0;
+  this.frameTotal = 0;
+
+  this.init = function(height,width,frameTotal,duration) {
+    this.spriteSheet.src = "img/blue1anim.png";
+    this.spriteHeight = height;
+    this.spriteWidth = width;
+    this.frameTotal = frameTotal;
+    this.frameDuration = duration;
+  }; // init
+  this.draw = function() {
+    // console.log('drawing frame ', this.curFrame);
+    // simple draw image
+    // drawImage(image, x, y)
+    // draw slice of image
+    // drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
+    this.ctx.drawImage( /*image*/   this.spriteSheet,
+                        /* sx */    this.spriteWidth*this.curFrame,
+                        /* sy */    0,
+                        /*sWidth*/  this.spriteWidth,
+                        /*sHeight*/ this.spriteHeight,
+                        /* dx */    this.destX,
+                        /* dy */    this.destY,
+                        /*dWidth*/  canvas5.width/2,
+                        /*dHidth*/  canvas5.height/2);
+  }; // draw
+  this.update = function() {
+    if (this.timeCount >= this.frameDuration) {
+      this.timeCount = 0;
+      // console.log("frame ending = ", this.curFrame );
+      this.curFrame = ( (this.curFrame >= this.frameTotal-1) ? (0) : (this.curFrame + 1) );
+      // console.log("frame starting = ", this.curFrame);
+    } else {
+      this.timeCount += 1;
+    }
+  }; // update
 }
 
 ///////////////////
@@ -355,7 +402,7 @@ function clearCanvas(context) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-// GAME LOOP 2.0
+// GAME LOOP 3.0
 //////////////////////////////////////////////////////////////////////////////////
 function AnimLoop(context, animObj) {
   this.ctx = context;
@@ -552,8 +599,9 @@ $(document).ready(function() {
     if (!aLoop5) {
       console.log('loop5 started');
       clearCanvas(ctx5);
-      myMandala = new Mandala(ctx5);
-      aLoop5 = new AnimLoop(ctx5,myMandala);   // AnimLoop(context, animObj)
+      mySpriteGroup = new SpriteGroup(ctx5);
+      mySpriteGroup.init(64,64,8,10);  // function(height,width,frameTotal,duration)
+      aLoop5 = new AnimLoop(ctx5,mySpriteGroup);   // AnimLoop(context, animObj)
       aLoop5.init(60,5);    // this.init = function(fps,someIndex)
       aLoop5.startAn();
     }
