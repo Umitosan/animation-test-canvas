@@ -304,31 +304,31 @@ function Mandala(context) {
   };
 }
 
-function Sprite(x,y,frameTotal,frame0,curFrame,duration) {
-  this.destX = x;
-  this.destY = y;
-  this.frameTotal = frameTotal;
-  this.frame0 = frame0;
-  this.curFrame = curFrame;
-  this.frameDuration = duration;
-  this.timeCount = 0;
-
-  this.draw = function() {
-    this.ctx.imageSmoothingEnabled = false;  // turns off AntiAliasing
-    // console.log('drawing frame ', this.curFrame);
-    // simple draw image:     drawImage(image, x, y)
-    // draw slice of image:   drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
-    this.ctx.drawImage( /*image*/   this.spriteSheet,
-                        /* sx */    (this.spriteWidth*this.curFrame), // read sprite shit right to left like this:  (this.spriteWidth*this.frameTotal-this.spriteWidth) - (this.spriteWidth*this.curFrame)
-                        /* sy */    0,
-                        /*sWidth*/  this.spriteWidth,
-                        /*sHeight*/ this.spriteHeight,
-                        /* dx */    this.destX,
-                        /* dy */    this.destY,
-                        /*dWidth*/  this.displayWidth,
-                        /*dHidth*/  this.displayHeight );
-  }; // draw
-}
+// function Sprite(x,y,frameTotal,frame0,curFrame,duration) {
+//   this.destX = x;
+//   this.destY = y;
+//   this.frameTotal = frameTotal;
+//   this.frame0 = frame0;
+//   this.curFrame = curFrame;
+//   this.frameDuration = duration;
+//   this.timeCount = 0;
+//
+//   this.draw = function() {
+//     this.ctx.imageSmoothingEnabled = false;  // turns off AntiAliasing
+//     // console.log('drawing frame ', this.curFrame);
+//     // simple draw image:     drawImage(image, x, y)
+//     // draw slice of image:   drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
+//     this.ctx.drawImage( /*image*/   this.spriteSheet,
+//                         /* sx */    (this.spriteWidth*this.curFrame), // read sprite shit right to left like this:  (this.spriteWidth*this.frameTotal-this.spriteWidth) - (this.spriteWidth*this.curFrame)
+//                         /* sy */    0,
+//                         /*sWidth*/  this.spriteWidth,
+//                         /*sHeight*/ this.spriteHeight,
+//                         /* dx */    this.destX,
+//                         /* dy */    this.destY,
+//                         /*dWidth*/  this.displayWidth,
+//                         /*dHidth*/  this.displayHeight );
+//   }; // draw
+// }
 
 function SpriteGroup(ctx,src,sWidth,sHeight,dWidth,dHeight,frameT,frame0,duration,tiled) {
   this.ctx = ctx;
@@ -340,7 +340,7 @@ function SpriteGroup(ctx,src,sWidth,sHeight,dWidth,dHeight,frameT,frame0,duratio
   this.displayHeight = dHeight;
   this.frameTotal = frameT;
   this.frame0 = frame0;
-  this.curFrame = frame0;
+  this.curFrameIndex = 0;
   this.frameDuration = duration;
   this.tiled = tiled;
   this.timeCount = 0;
@@ -365,43 +365,44 @@ function SpriteGroup(ctx,src,sWidth,sHeight,dWidth,dHeight,frameT,frame0,duratio
         }
       }
     } else { // not tiled
-      let xGapOffset = (canvas5.width % this.displayWidth) / 2;
-      let yGapOffset = (canvas5.height % this.displayHeight) / 2;
-      this.spriteArr.push({ sx: this.frame0 * this.spriteWidth,
-                            sy: 0,
-                            dx: xGapOffset,
-                            dy: yGapOffset,
-                          });
+      let xGapOffset = (canvas5.width - this.displayWidth) / 2;
+      let yGapOffset = (canvas5.height - this.displayHeight) / 2;
+      for (let i=0; i < this.frameTotal; i++) {
+        this.spriteArr.push({ sx: (this.frame0 * this.spriteWidth) + (i * this.spriteWidth),
+                              sy: 0,
+                              dx: xGapOffset,
+                              dy: yGapOffset,
+                            });
+        } // for
     } // if
   }; // init
   this.draw = function() {
-    for (let i=0; i<this.spriteArr.length; i++) {
-      let sprite = this.spriteArr[i];
-      this.ctx.imageSmoothingEnabled = false;  // turns off AntiAliasing
-      // simple draw image:     drawImage(image, x, y)
-      // draw slice of image:   drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
-      this.ctx.drawImage( /*image*/   this.spriteSheet,
-                          /* sx */    sprite.sx, // read sprite shit right to left like this:  (this.spriteWidth*this.frameTotal-this.spriteWidth) - (this.spriteWidth*this.curFrame)
-                          /* sy */    sprite.xy,
-                          /*sWidth*/  this.spriteWidth,
-                          /*sHeight*/ this.spriteHeight,
-                          /* dx */    sprite.dx,
-                          /* dy */    sprite.dy,
-                          /*dWidth*/  this.displayWidth,
-                          /*dHidth*/  this.displayHeight );
-    }
+    // console.log('this.spriteArr = ', this.spriteArr);
+    // console.log('this.curFrameIndex ', this.curFrameIndex );
+    this.ctx.imageSmoothingEnabled = false;  // turns off AntiAliasing
+    // simple draw image:     drawImage(image, x, y)
+    // draw slice of image:   drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
+    this.ctx.drawImage( /*image*/   this.spriteSheet,
+                        /* sx */    this.spriteArr[this.curFrameIndex].sx, // read sprite shit right to left like this:  (this.spriteWidth*this.frameTotal-this.spriteWidth) - (this.spriteWidth*this.curFrameIndex)
+                        /* sy */    this.spriteArr[this.curFrameIndex].sy,
+                        /*sWidth*/  this.spriteWidth,
+                        /*sHeight*/ this.spriteHeight,
+                        /* dx */    this.spriteArr[this.curFrameIndex].dx,
+                        /* dy */    this.spriteArr[this.curFrameIndex].dy,
+                        /*dWidth*/  this.displayWidth,
+                        /*dHidth*/  this.displayHeight );
   };
   this.update = function() {
     for (let i=0; i<this.spriteArr.length; i++) {
       let sprite = this.spriteArr[i];
       if (this.timeCount >= this.frameDuration) {
       this.timeCount = 0;
-        this.curFrame = ( (this.curFrame >= this.frameTotal-1) ? (this.frame0) : (this.curFrame + 1) );
+        this.curFrameIndex = ( (this.curFrameIndex >= this.frameTotal-1) ? (0) : (this.curFrameIndex + 1) );
       } else {
         this.timeCount += 1;
       }
     }
-  };
+  };  // update
 }
 
 ///////////////////
@@ -687,7 +688,7 @@ $(document).ready(function() {
       console.log('loop6 started');
       clearCanvas(ctx6);
       // SpriteGroup(ctx,src,sWidth,sHeight,dWidth,dHeight,frameT,frame0,duration,tiled)
-      marioWalk = new SpriteGroup(ctx6,'img/mario1walk.png',20,16,200,200,14,7,20,false);
+      marioWalk = new SpriteGroup(ctx6,'img/mario1walk.png',20,16,200,200,3,7,30,false);
       marioWalk.init();  //
       aLoop6 = new AnimLoop(ctx6,marioWalk);   // AnimLoop(context, animObj)
       aLoop6.init(60,6);    // this.init = function(fps,someIndex)
