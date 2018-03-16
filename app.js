@@ -163,7 +163,19 @@ $(document).ready(function() {
       console.log('loop5 started');
       clearCanvas(ctx5);
       // SpriteGroup(ctx,canvW,canvH,src,sWidth,sHeight,dWidth,dHeight,frameT,frame0,duration,tiled)
-      mySpriteGroup = new SpriteGroup(ctx5,400,400,'img/blue1anim.png',64,64,100,100,8,0,100,true);
+      mySpriteGroup = new SpriteGroup(/* ctx      */  ctx5,
+                                      /* canvW    */  400,
+                                      /* canvH    */  400,
+                                      /* src      */  'img/blue1anim.png',
+                                      /* sWidth   */  64,
+                                      /* sHeight  */  64,
+                                      /* dWidth   */  canvas5.width/10,
+                                      /* dHeight  */  canvas5.width/10,
+                                      /* frameT   */  8,
+                                      /* frame0   */  0,
+                                      /* duration */  50,
+                                      /* tiled    */  true
+                                     );
       mySpriteGroup.init();  //
       aLoop5 = new AnimLoop(ctx5,mySpriteGroup);   // AnimLoop(context, animObj)
       aLoop5.init(60,5);    // this.init = function(fps,someIndex)
@@ -193,7 +205,19 @@ $(document).ready(function() {
       console.log('loop6 started');
       clearCanvas(ctx6);
       // SpriteGroup(ctx,canvW,canvH,src,sWidth,sHeight,dWidth,dHeight,frameT,frame0,duration,tiled)
-      marioWalk = new SpriteGroup(ctx6,400,400,'img/mario1walk.png',20,16,200,200,3,7,30,false);
+      marioWalk = new SpriteGroup(    /* ctx      */  ctx6,
+                                      /* canvW    */  400,
+                                      /* canvH    */  400,
+                                      /* src      */  'img/mario1walk.png',
+                                      /* sWidth   */  20,
+                                      /* sHeight  */  16,
+                                      /* dWidth   */  200,
+                                      /* dHeight  */  200,
+                                      /* frameT   */  10,
+                                      /* frame0   */  0,
+                                      /* duration */  100,
+                                      /* tiled    */  false
+                                     );
       marioWalk.init();  //
       aLoop6 = new AnimLoop(ctx6,marioWalk);   // AnimLoop(context, animObj)
       aLoop6.init(60,6);    // this.init = function(fps,someIndex)
