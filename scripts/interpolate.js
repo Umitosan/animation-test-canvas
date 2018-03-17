@@ -10,7 +10,7 @@ function InterAnim(totalDots) {
   this.total = totalDots;
   this.dots = [];
   this.color = myColors.mossGreen;
-  this.coef = 0.97;
+  this.coef = 0.98;
   this.startTime = null;
   this.updateSpeed = 30; // ms
 
