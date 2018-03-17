@@ -16,6 +16,7 @@ var myColors = {
   lightblueAlpha: 'rgba(173,216,230,0.2)',
   yellowAlpha: 'rgba(255,255,0,0.2)',
   greenAlpha: 'rgba(0,128,0,0.2)',
+  mossGreen: 'rgba(140, 156, 9, 1)',
 };
 
 
