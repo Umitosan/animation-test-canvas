@@ -220,7 +220,7 @@ $(document).ready(function() {
                                      );
       marioWalk.init();  //
       aLoop6 = new AnimLoop(ctx6,marioWalk);   // AnimLoop(context, animObj)
-      aLoop6.init(60,6);    // this.init = function(fps,someIndex)
+      aLoop6.init(60,6);    // function(fps,someIndex)
       aLoop6.startAn();
     }
   });
@@ -236,6 +236,35 @@ $(document).ready(function() {
       cancelAnimationFrame(aLoop6.reqAnimFrame);
       aLoop6 = undefined;
       clearCanvas(ctx6);
+    }
+  });
+
+  /////
+  //// Group 7
+  ////
+  $('#start7').click(function() {
+    if (!aLoop7) {
+      console.log('loop7 started');
+      clearCanvas(ctx7);
+      myInterpolation = new InterAnim(40); // interAnim(totalDots)
+      myInterpolation.init();
+      aLoop7 = new AnimLoop(ctx7,myInterpolation);   // AnimLoop(context, animObj)
+      aLoop7.init(60,4);    // function(fps,someIndex)
+      aLoop7.startAn();
+    }
+  });
+  $('#pause7').click(function() {
+    if (aLoop7) {
+      console.log('loop7 pause toggle');
+      aLoop7.paused = (!aLoop7.paused ? true : false);
+    }
+  });
+  $('#reset7').click(function() {
+    if (aLoop7) {
+      console.log('loop7 reset');
+      cancelAnimationFrame(aLoop7.reqAnimFrame);
+      aLoop7 = undefined;
+      clearCanvas(ctx7);
     }
   });
 

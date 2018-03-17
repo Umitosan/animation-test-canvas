@@ -36,7 +36,7 @@ body {
   border-style: solid;
 }
 
-#canvas1, #canvas2, #canvas3, #canvas4, #canvas5, #canvas6 {
+#canvas1, #canvas2, #canvas3, #canvas4, #canvas5, #canvas6, #canvas7 {
   /* outline-color: darkgrey;
   outline-width: 4px;
   outline-style: outset; */
@@ -80,23 +80,23 @@ body {
   text-align: center;
 }
 
-#start1, #start2, #start3, #start4, #canvas5, #canvas6 {
+#start1, #start2, #start3, #start4, #canvas5, #canvas6, #canvas7 {
 }
-#start1:hover, #start2:hover, #start3:hover, #start4:hover, #start5:hover, #start6:hover {
+#start1:hover, #start2:hover, #start3:hover, #start4:hover, #start5:hover, #start6:hover, #start7:hover {
   background-color: white;
   color: black;
 }
 
-#pause1, #pause2, #pause3, #pause4, #canvas5, #canvas6 {
+#pause1, #pause2, #pause3, #pause4, #canvas5, #canvas6, #canvas7 {
 }
-#pause1:hover, #pause2:hover, #pause3:hover, #pause4:hover, #pause5:hover, #pause6:hover {
+#pause1:hover, #pause2:hover, #pause3:hover, #pause4:hover, #pause5:hover, #pause6:hover, #pause7:hover {
   background-color: white;
   color: black;
 }
 
-#reset1, #reset2, #reset3, #reset4, #canvas5, #canvas6 {
+#reset1, #reset2, #reset3, #reset4, #canvas5, #canvas6, #canvas7 {
 }
-#reset1:hover, #reset2:hover, #reset3:hover, #reset4:hover, #reset5:hover, #reset6:hover {
+#reset1:hover, #reset2:hover, #reset3:hover, #reset4:hover, #reset5:hover, #reset6:hover, #reset7:hover {
   background-color: white;
   color: black;
 }
