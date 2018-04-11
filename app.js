@@ -269,4 +269,33 @@ $(document).ready(function() {
     }
   });
 
+  /////
+  //// Group 8
+  ////
+  $('#start8').click(function() {
+    if (!aLoop8) {
+      console.log('loop8 started');
+      clearCanvas(ctx8);
+      myMouseTrack = new MouseTrack(ctx8,10);
+      myMouseTrack.init();
+      aLoop8 = new AnimLoop(ctx8,myMouseTrack);   // AnimLoop(context, animObj)
+      aLoop8.init(60,4);    // function(fps,someIndex)
+      aLoop8.startAn();
+    }
+  });
+  $('#pause8').click(function() {
+    if (aLoop8) {
+      console.log('loop8 pause toggle');
+      aLoop8.paused = (!aLoop8.paused ? true : false);
+    }
+  });
+  $('#reset8').click(function() {
+    if (aLoop8) {
+      console.log('loop8 reset');
+      cancelAnimationFrame(aLoop8.reqAnimFrame);
+      aLoop8 = undefined;
+      clearCanvas(ctx8);
+    }
+  });
+
 });
