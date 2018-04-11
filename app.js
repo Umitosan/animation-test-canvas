@@ -276,7 +276,7 @@ $(document).ready(function() {
     if (!aLoop8) {
       console.log('loop8 started');
       clearCanvas(ctx8);
-      myMouseTrack = new MouseTrack(ctx8,10);
+      myMouseTrack = new MouseTrack(ctx8,40);
       myMouseTrack.init();
       aLoop8 = new AnimLoop(ctx8,myMouseTrack);   // AnimLoop(context, animObj)
       aLoop8.init(60,4);    // function(fps,someIndex)
