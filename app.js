@@ -165,8 +165,8 @@ $(document).ready(function() {
       clearCanvas(ctx5);
       // SpriteGroup(ctx,canvW,canvH,src,sWidth,sHeight,dWidth,dHeight,frameT,frame0,duration,tiled)
       mySpriteGroup = new SpriteGroup(/* ctx      */  ctx5,
-                                      /* canvW    */  400,
-                                      /* canvH    */  400,
+                                      /* canvW    */  500,
+                                      /* canvH    */  500,
                                       /* src      */  'img/blue1anim.png',
                                       /* sWidth   */  64,
                                       /* sHeight  */  64,
@@ -174,7 +174,7 @@ $(document).ready(function() {
                                       /* dHeight  */  canvas5.width/10,
                                       /* frameT   */  8,
                                       /* frame0   */  0,
-                                      /* duration */  50,
+                                      /* duration */  70,
                                       /* tiled    */  true
                                      );
       mySpriteGroup.init();  //
@@ -207,8 +207,8 @@ $(document).ready(function() {
       clearCanvas(ctx6);
       // SpriteGroup(ctx,canvW,canvH,src,sWidth,sHeight,dWidth,dHeight,frameT,frame0,duration,tiled)
       marioWalk = new SpriteGroup(    /* ctx      */  ctx6,
-                                      /* canvW    */  400,
-                                      /* canvH    */  400,
+                                      /* canvW    */  500,
+                                      /* canvH    */  500,
                                       /* src      */  'img/mario1walk.png',
                                       /* sWidth   */  20,
                                       /* sHeight  */  16,
@@ -247,7 +247,7 @@ $(document).ready(function() {
     if (!aLoop7) {
       console.log('loop7 started');
       clearCanvas(ctx7);
-      myInterpolation = new InterAnim(40); // interAnim(totalDots)
+      myInterpolation = new InterAnim(50); // interAnim(totalDots)
       myInterpolation.init();
       aLoop7 = new AnimLoop(ctx7,myInterpolation);   // AnimLoop(context, animObj)
       aLoop7.init(60,4);    // function(fps,someIndex)

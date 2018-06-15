@@ -19,8 +19,8 @@ function InterAnim(totalDots) {
   this.init = function() {
     console.log('interAnim init');
     let offset = 5;
-    let cols = 400/offset;
-    let rows = 400/offset;
+    let cols = 500/offset;
+    let rows = 500/offset;
     for (var i = 0; i < rows; i++) {
       for (var j = 0; j < cols; j++) {
         let tColor;
@@ -67,21 +67,21 @@ function InterAnim(totalDots) {
       let c = this.coef;
       for (var i = 0; i < this.dots.length; i++) {
         // collapse towards center Y axis (y = 200)
-        if (this.dots[i].y > 201) {
-          let gap = this.dots[i].y - 200;
+        if (this.dots[i].y > 251) {
+          let gap = this.dots[i].y - 250;
           this.dots[i].y -= (gap - (gap * c))*this.zoomDir;
-        } else if (this.dots[i].y < 199) {
-          let gap = 200 - this.dots[i].y;
+        } else if (this.dots[i].y < 249) {
+          let gap = 250 - this.dots[i].y;
           this.dots[i].y += (gap - (gap * c))*this.zoomDir;
         } else {
           // nothin
         } // if
         // collapse towards center X axis (x = 200)
-        if (this.dots[i].x > 201) {
-          let gap = this.dots[i].x - 200;
+        if (this.dots[i].x > 251) {
+          let gap = this.dots[i].x - 250;
           this.dots[i].x -= (gap - (gap * c))*this.zoomDir;
-        } else if (this.dots[i].x < 199) {
-          let gap = 200 - this.dots[i].x;
+        } else if (this.dots[i].x < 249) {
+          let gap = 250 - this.dots[i].x;
           this.dots[i].x += (gap - (gap * c))*this.zoomDir;
         } else {
           // nothin
