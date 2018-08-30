@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>animations</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/anim.css">
     <link href="https://fonts.googleapis.com/css?family=Padauk|Rubik" rel="stylesheet">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -16,41 +17,57 @@
     <script type="text/javascript" src="scripts/sprites.js"></script>
     <script type="text/javascript" src="scripts/interpolate.js"></script>
     <script type="text/javascript" src="scripts/mouse_track.js"></script>
+    <script type="text/javascript" src="scripts/pseudo_maze.js"></script>
     <script type="text/javascript" src="app.js"></script>
   </head>
   <body>
+    <div class="scrollable" id="scroll-top">
 
     <div class="nav-bar">
-      <div class="nav-item nav-left logo">
+      <div class="nav-item nav-left logo scrollable" href="#scroll-top">
       </div>
       <div class="nav-item nav-right menu">
+        <div class="menu-bar" id="menu-bar-top"></div>
         <div class="menu-bar"></div>
         <div class="menu-bar"></div>
-        <div class="menu-bar"></div>
+        <div class="proj-list-menu">
+          <div class="menu-item scrollable" href="#scroll-grad">gradients</div>
+          <div class="menu-item scrollable" href="#scroll-disco">disco</div>
+          <div class="menu-item scrollable" href="#scroll-circles">circles</div>
+          <div class="menu-item scrollable" href="#scroll-mandala">mandala</div>
+          <div class="menu-item scrollable" href="#scroll-sprites">sprite</div>
+          <div class="menu-item scrollable" href="#scroll-mario">mario</div>
+          <div class="menu-item scrollable" href="#scroll-interpol">interpolation</div>
+          <div class="menu-item scrollable" href="#scroll-sparks">sparks</div>
+          <div class="menu-item scrollable" href="#scroll-maze">pseudo maze</div>
+          <div class="hr-sm"></div>
+          <div class="menu-item scrollable" href="#scroll-contact">contact</div>
+        </div>
       </div>
     </div>
+
 
     <div class="content-column"> <!-- column exists to help center content in a fixed way -->
 
       <div class="title-container">
-        <p id="main-title">Animation Test</p>
+        <p id="main-title">Canvas Animation</p>
       </div>
 
-      <div class="canvas-container">
-        <p class='animTitle'>Gradients</p>
+      <div class="canvas-container scrollable" id="scroll-grad">
+        <p class="animTitle">Gradients</p>
         <div class="input-group">
           <div class="input-wrapper">
-            <div id='start1' class="input start-btn">
+            <div id="start1" class="input start-btn">
               <div class="txt">
                 start
               </div>
             </div>
-            <div id='pause1' class="input pause-btn">
+            <div id="pause1" class="input pause-btn">
               <div class="txt">
                 pause
               </div>
             </div>
-            <div id='reset1' class="input reset-btn">
+            <div id="reset1" class="input reset-btn">
               <div class="txt">
                 reset
               </div>
@@ -60,21 +77,21 @@
         <canvas id="canvas1" class="canvas-el" width="500" height="500"></canvas>
       </div>
 
-      <div class="canvas-container">
-        <p class='animTitle'>Disco</p>
+      <div class="canvas-container scrollable" id="scroll-disco">
+        <p class="animTitle">Disco</p>
         <div class="input-group">
           <div class="input-wrapper">
-            <div id='start2' class="input start-btn">
+            <div id="start2" class="input start-btn">
               <div class="txt">
                 start
               </div>
             </div>
-            <div id='pause2' class="input pause-btn">
+            <div id="pause2" class="input pause-btn">
               <div class="txt">
                 pause
               </div>
             </div>
-            <div id='reset2' class="input reset-btn">
+            <div id="reset2" class="input reset-btn">
               <div class="txt">
                 reset
               </div>
@@ -84,21 +101,21 @@
         <canvas id="canvas2" class="canvas-el" width="500" height="500"></canvas>
       </div>
 
-      <div class="canvas-container">
-        <p class='animTitle'>Circles</p>
+      <div class="canvas-container  scrollable" id="scroll-circles">
+        <p class="animTitle">Circles</p>
         <div class="input-group">
           <div class="input-wrapper">
-            <div id='start3' class="input start-btn">
+            <div id="start3" class="input start-btn">
               <div class="txt">
                 start
               </div>
             </div>
-            <div id='pause3' class="input pause-btn">
+            <div id="pause3" class="input pause-btn">
               <div class="txt">
                 pause
               </div>
             </div>
-            <div id='reset3' class="input reset-btn">
+            <div id="reset3" class="input reset-btn">
               <div class="txt">
                 reset
               </div>
@@ -108,21 +125,21 @@
         <canvas id="canvas3" class="canvas-el" width="500" height="500"></canvas>
       </div>
 
-      <div class="canvas-container">
-        <p class='animTitle'>Mandala</p>
+      <div class="canvas-container scrollable" id="scroll-mandala">
+        <p class="animTitle">Mandala</p>
         <div class="input-group">
           <div class="input-wrapper">
-            <div id='start4' class="input start-btn">
+            <div id="start4" class="input start-btn">
               <div class="txt">
                 start
               </div>
             </div>
-            <div id='pause4' class="input pause-btn">
+            <div id="pause4" class="input pause-btn">
               <div class="txt">
                 pause
               </div>
             </div>
-            <div id='reset4' class="input reset-btn">
+            <div id="reset4" class="input reset-btn">
               <div class="txt">
                 reset
               </div>
@@ -132,21 +149,21 @@
         <canvas id="canvas4" class="canvas-el" width="500" height="500"></canvas>
       </div>
 
-      <div class="canvas-container">
-        <p class='animTitle'>Sprite</p>
+      <div class="canvas-container scrollable" id="scroll-sprites">
+        <p class="animTitle">Sprite</p>
         <div class="input-group">
           <div class="input-wrapper">
-            <div id='start5' class="input start-btn">
+            <div id="start5" class="input start-btn">
               <div class="txt">
                 start
               </div>
             </div>
-            <div id='pause5' class="input pause-btn">
+            <div id="pause5" class="input pause-btn">
               <div class="txt">
                 pause
               </div>
             </div>
-            <div id='reset5' class="input reset-btn">
+            <div id="reset5" class="input reset-btn">
               <div class="txt">
                 reset
               </div>
@@ -156,21 +173,21 @@
         <canvas id="canvas5" class="canvas-el" width="500" height="500"></canvas>
       </div>
 
-      <div class="canvas-container">
-        <p class='animTitle'>Mario</p>
+      <div class="canvas-container scrollable" id="scroll-mario">
+        <p class="animTitle">Mario</p>
         <div class="input-group">
           <div class="input-wrapper">
-            <div id='start6' class="input start-btn">
+            <div id="start6" class="input start-btn">
               <div class="txt">
                 start
               </div>
             </div>
-            <div id='pause6' class="input pause-btn">
+            <div id="pause6" class="input pause-btn">
               <div class="txt">
                 pause
               </div>
             </div>
-            <div id='reset6' class="input reset-btn">
+            <div id="reset6" class="input reset-btn">
               <div class="txt">
                 reset
               </div>
@@ -180,21 +197,21 @@
         <canvas id="canvas6" class="canvas-el" width="500" height="500"></canvas>
       </div>
 
-      <div class="canvas-container">
-        <p class='animTitle'>Interpolation</p>
+      <div class="canvas-container scrollable" id="scroll-interpol">
+        <p class="animTitle">Interpolation</p>
         <div class="input-group">
           <div class="input-wrapper">
-            <div id='start7' class="input start-btn">
+            <div id="start7" class="input start-btn">
               <div class="txt">
                 start
               </div>
             </div>
-            <div id='pause7' class="input pause-btn">
+            <div id="pause7" class="input pause-btn">
               <div class="txt">
                 pause
               </div>
             </div>
-            <div id='reset7' class="input reset-btn">
+            <div id="reset7" class="input reset-btn">
               <div class="txt">
                 reset
               </div>
@@ -204,21 +221,23 @@
         <canvas id="canvas7" class="canvas-el" width="500" height="500"></canvas>
       </div>
 
-      <div class="canvas-container">
-        <p class='animTitle'>Mouse Sparks</p>
+      <div class="canvas-container scrollable" id="scroll-sparks">
+        <p class="animTitle">Mouse Sparks</p>
+        <div class="anim-instruct"> click START </div>
+        <div class="anim-instruct"> left-click mouse on canvas </div>
         <div class="input-group">
           <div class="input-wrapper">
-            <div id='start8' class="input start-btn">
+            <div id="start8" class="input start-btn">
               <div class="txt">
                 start
               </div>
             </div>
-            <div id='pause8' class="input pause-btn">
+            <div id="pause8" class="input pause-btn">
               <div class="txt">
                 pause
               </div>
             </div>
-            <div id='reset8' class="input reset-btn">
+            <div id="reset8" class="input reset-btn">
               <div class="txt">
                 reset
               </div>
@@ -228,7 +247,31 @@
         <canvas id="canvas8" class="canvas-el" width="500" height="500"></canvas>
       </div>
 
-      <div class="footer-container">
+      <div class="canvas-container scrollable" id="scroll-maze">
+        <p class="animTitle">Pseudo Maze</p>
+        <div class="input-group">
+          <div class="input-wrapper">
+            <div id="start9" class="input start-btn">
+              <div class="txt">
+                start
+              </div>
+            </div>
+            <div id="pause9" class="input pause-btn">
+              <div class="txt">
+                pause
+              </div>
+            </div>
+            <div id="reset9" class="input reset-btn">
+              <div class="txt">
+                reset
+              </div>
+            </div>
+          </div>
+        </div>
+        <canvas id="canvas9" class="canvas-el" width="500" height="500"></canvas>
+      </div>
+
+      <div class="footer-container scrollable" id="scroll-contact">
         <p id="footer-text">admin@dombrown.net</p>
       </div>
 

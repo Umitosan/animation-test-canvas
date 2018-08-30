@@ -36,6 +36,21 @@ $(document).ready(function() {
     window[ctxVar] = window[canvasVar].getContext('2d');
   });
 
+
+  $('.scrollable').on('click', function(event) {
+    console.log('scrollable clicked');
+    var target = $(this.getAttribute('href'));
+    if( target.length ) {
+      event.preventDefault();
+      // console.log('target.offset().top = ', target.offset().top);
+      if (target[0].getAttribute('id') === "scroll-top") {
+        $('html, body').stop().animate({ scrollTop: (target.offset().top -120) }, 500); // 120 because of nav bar
+      } else {
+        $('html, body').stop().animate({ scrollTop: (target.offset().top -72) }, 500); // -53 to adjust for margin
+      }
+    }
+  });
+
   /////
   //// Group 1
   ////
@@ -297,5 +312,34 @@ $(document).ready(function() {
       clearCanvas(ctx8);
     }
   });
+
+  /////
+  //// Group 9
+  ////
+  // $('#start7').click(function() {
+  //   if (!aLoop7) {
+  //     console.log('loop7 started');
+  //     clearCanvas(ctx7);
+  //     myInterpolation = new InterAnim(50); // interAnim(totalDots)
+  //     myInterpolation.init();
+  //     aLoop7 = new AnimLoop(ctx7,myInterpolation);   // AnimLoop(context, animObj)
+  //     aLoop7.init(60,4);    // function(fps,someIndex)
+  //     aLoop7.startAn();
+  //   }
+  // });
+  // $('#pause7').click(function() {
+  //   if (aLoop7) {
+  //     console.log('loop7 pause toggle');
+  //     aLoop7.paused = (!aLoop7.paused ? true : false);
+  //   }
+  // });
+  // $('#reset7').click(function() {
+  //   if (aLoop7) {
+  //     console.log('loop7 reset');
+  //     cancelAnimationFrame(aLoop7.reqAnimFrame);
+  //     aLoop7 = undefined;
+  //     clearCanvas(ctx7);
+  //   }
+  // });
 
 });

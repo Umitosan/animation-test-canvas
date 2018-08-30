@@ -15,7 +15,7 @@ function Mandala(context) {
   this.angleRad = 0;  // angle of rotation in radians, 0.0174533 rad ~ 1 degree
   this.rotV = 0.0174533/6;  // rotational velocity
   this.updateCount = 0;
-  this.colorFreq = 80; // update() run / 1 color change
+  this.colorFreq = 160; // update() run / 1 color change
   this.draw = function() {
     for (let i=0; i<10; i++) {
       this.ctx.save();
