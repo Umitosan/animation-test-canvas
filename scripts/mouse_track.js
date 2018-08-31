@@ -16,7 +16,7 @@ function MouseTrack(context,quantity) {
   this.sparks = [];
 
   this.init = function() {
-    console.log('mouse track init');
+    // console.log('mouse track init');
       canvas8.addEventListener('mousemove', (evt) => {
         this.mouseEventData = evt;
       }, false);
@@ -52,7 +52,7 @@ function MouseTrack(context,quantity) {
                           color: color
                         });
     } // for
-    console.log('this.sparks = ', this.sparks);
+    // console.log('this.sparks = ', this.sparks);
   }; // initDeathSparkles
 
   this.nextSpark = function() {

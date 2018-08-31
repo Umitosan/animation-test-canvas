@@ -316,30 +316,30 @@ $(document).ready(function() {
   /////
   //// Group 9
   ////
-  // $('#start7').click(function() {
-  //   if (!aLoop7) {
-  //     console.log('loop7 started');
-  //     clearCanvas(ctx7);
-  //     myInterpolation = new InterAnim(50); // interAnim(totalDots)
-  //     myInterpolation.init();
-  //     aLoop7 = new AnimLoop(ctx7,myInterpolation);   // AnimLoop(context, animObj)
-  //     aLoop7.init(60,4);    // function(fps,someIndex)
-  //     aLoop7.startAn();
-  //   }
-  // });
-  // $('#pause7').click(function() {
-  //   if (aLoop7) {
-  //     console.log('loop7 pause toggle');
-  //     aLoop7.paused = (!aLoop7.paused ? true : false);
-  //   }
-  // });
-  // $('#reset7').click(function() {
-  //   if (aLoop7) {
-  //     console.log('loop7 reset');
-  //     cancelAnimationFrame(aLoop7.reqAnimFrame);
-  //     aLoop7 = undefined;
-  //     clearCanvas(ctx7);
-  //   }
-  // });
+  $('#start9').click(function() {
+    if (!aLoop9) {
+      console.log('loop9 started');
+      clearCanvas(ctx9);
+      myMaze = new Maze(ctx9); // interAnim(totalDots)
+      myMaze.init(30);
+      aLoop9 = new AnimLoop(ctx9,myMaze);   // AnimLoop(context, animObj)
+      aLoop9.init(60,4);    // function(fps,someIndex)
+      aLoop9.startAn();
+    }
+  });
+  $('#pause9').click(function() {
+    if (aLoop9) {
+      console.log('loop9 pause toggle');
+      aLoop9.paused = (!aLoop9.paused ? true : false);
+    }
+  });
+  $('#reset9').click(function() {
+    if (aLoop9) {
+      console.log('loop9 reset');
+      cancelAnimationFrame(aLoop9.reqAnimFrame);
+      aLoop9 = undefined;
+      clearCanvas(ctx9);
+    }
+  });
 
 });

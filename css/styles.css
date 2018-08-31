@@ -93,7 +93,7 @@ body {
   border-radius: 0px 0px 0px 12px; /* top-left | top-right | bottom-right | bottom-left */
 }
 .menu:hover .proj-list-menu {
-  height: 260px;
+  height: 240px;
   opacity: 1;
   transition: all 1s ease;
 }
@@ -155,6 +155,9 @@ body {
   /* outline-color: darkgrey;
   outline-width: 4px;
   outline-style: outset; */
+  outline-color: darkgrey;
+  outline-width: 1px;
+  outline-style: solid;
   display: block;
   margin-left: auto;
   margin-right: auto;
