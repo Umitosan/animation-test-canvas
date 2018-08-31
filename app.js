@@ -17,6 +17,7 @@ var myColors = {
   yellowAlpha: 'rgba(255,255,0,0.2)',
   greenAlpha: 'rgba(0,128,0,0.2)',
   mossGreen: 'rgba(140, 156, 9, 1)',
+  coral: 'rgba(242, 137, 134, 1)'
 };
 
 
@@ -320,10 +321,10 @@ $(document).ready(function() {
     if (!aLoop9) {
       console.log('loop9 started');
       clearCanvas(ctx9);
-      myMaze = new Maze(ctx9); // interAnim(totalDots)
-      myMaze.init(30);
+      myMaze = new Maze(ctx9, 30); // Maze(context, spacing)
+      myMaze.init();
       aLoop9 = new AnimLoop(ctx9,myMaze);   // AnimLoop(context, animObj)
-      aLoop9.init(60,4);    // function(fps,someIndex)
+      aLoop9.init(1,4);    // function(fps,someIndex)
       aLoop9.startAn();
     }
   });
