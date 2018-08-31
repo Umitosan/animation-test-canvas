@@ -24,65 +24,55 @@ function Maze(context) {
     }
 
     // fill/compute LINES paths
-    let x1 = this.nodes[0][Math.round(gridSize/2)].x;
-    let y1 = 0;
-    let x2 = 0;
-    let y2 = 0;
-    for (let i = 0; i < gridSize; i++) {
-      let randN = getRandomIntInclusive(0,1);
-      // console.log('randN = ', randN);
-      if (randN === 0) { // left
-        // console.log('left');
-        x2 = x1 - spacing;
-        y2 = y1 + spacing;
-      } else if (randN === 1) { // right
-        // console.log('right');
-        x2 = x1 + spacing;
-        y2 = y1 + spacing;
-      } else {
-        console.log('randN probs');
-      }
+    for (let j = 0; j < gridSize; j++) {
+        for (let i = 0; i < gridSize; i++) {
+          let x1 = this.nodes[j][i].x;
+          let y1 = 0;
+          let x2 = this.nodes[j][i].x + spacing;
+          let y2 = 0;
+          let randN = getRandomIntInclusive(0,1);
+          if (randN === 0) { // bot-left to top-right
+            console.log('forward slash');
+            y1 = this.nodes[j][i].y + spacing;
+            y2 = this.nodes[j][i].y;
+          } else if (randN === 1) { // top-left to bot-right
+            console.log('back slash');
+            y1 = this.nodes[j][i].y;
+            y2 = this.nodes[j][i].y + spacing;
+          } else {
+            console.log('randN probs');
+          }
 
-      this.lines.push({"x1": x1, "y1": y1,
-                       "x2": x2, "y2": y2,
-                      });
-      x1 = x2;
-      y1 = y2;
-    }
+          this.lines.push({"x1": x1, "y1": y1,
+                           "x2": x2, "y2": y2,
+                          });
+
+        } // for
+    } // for
     // console.log('this.lines = ', this.lines);
   }; // end init
 
   this.draw = function() {
     let ctx = this.ctx;
-    // draw all NODES
-    for (let r = 0; r < this.nodes.length; r++) {
-      for (let c = 0; c < this.nodes[r].length; c++) {
-        ctx.beginPath();
-        ctx.fillStyle = myColors.blue;
-        // ctx.strokeStyle = invertRGBAstr(myColors.green);
-        ctx.strokeStyle = myColors.black;
-        ctx.lineWidth = 1;
-        // ctx9.arc(this.x,this.y,this.r,this.sAngle,this.eAngle);
-        ctx.arc(this.nodes[r][c].x,this.nodes[r][c].y,3,0,360);
-        ctx.fill();
-        ctx.stroke();
-      }
-    }
 
-    // ctx.beginPath();
-    // // ctx.fillStyle = myColors.green;
-    // // ctx.strokeStyle = invertRGBAstr(myColors.green);
-    // ctx.strokeStyle = myColors.black;
-    // ctx.lineWidth = 2;
-    // ctx.moveTo(0,0);
-    // ctx.lineTo(100,100);
-    // // ctx.fill();
-    // ctx.stroke();
+    // draw all NODES
+    // for (let r = 0; r < this.nodes.length; r++) {
+    //   for (let c = 0; c < this.nodes[r].length; c++) {
+    //     ctx.beginPath();
+    //     ctx.fillStyle = myColors.blue;
+    //     // ctx.strokeStyle = invertRGBAstr(myColors.green);
+    //     ctx.strokeStyle = myColors.black;
+    //     ctx.lineWidth = 1;
+    //     // ctx9.arc(this.x,this.y,this.r,this.sAngle,this.eAngle);
+    //     ctx.arc(this.nodes[r][c].x,this.nodes[r][c].y,3,0,360);
+    //     ctx.fill();
+    //     ctx.stroke();
+    //   }
+    // }
 
     // draw all LINES
     for (let i = 0; i < this.lines.length-1; i++) {
       let curLine = this.lines[i];
-      // console.log('curLine = ', curLine);
       let x1 = curLine.x1;
       let y1 = curLine.y1;
       let x2 = curLine.x2;
