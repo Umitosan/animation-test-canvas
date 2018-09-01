@@ -321,10 +321,10 @@ $(document).ready(function() {
     if (!aLoop9) {
       console.log('loop9 started');
       clearCanvas(ctx9);
-      myMaze = new Maze(ctx9, 30); // Maze(context, spacing)
+      myMaze = new Maze(ctx9, 26); // Maze(context, spacing)
       myMaze.init();
       aLoop9 = new AnimLoop(ctx9,myMaze);   // AnimLoop(context, animObj)
-      aLoop9.init(1,4);    // function(fps,someIndex)
+      aLoop9.init(0.7,4);    // function(fps,someIndex)
       aLoop9.startAn();
     }
   });

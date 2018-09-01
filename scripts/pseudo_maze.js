@@ -11,8 +11,14 @@ function Maze(context, spacing) {
   this.lines = undefined;
   this.ctx = context;
   this.spacing = spacing;
+  this.lineW = 1.4;
+  this.color1 = undefined;
+  this.color2 = undefined;
 
   this.init = function() {
+    this.color1 = randColor('rgba');
+    this.color2 = randColor('rgba');
+    // this.color2 = invertRGBAstr(this.color1);
     this.lines = [];
     let sp = this.spacing;
 
@@ -33,12 +39,14 @@ function Maze(context, spacing) {
           let y1 = 0;
           let x2 = this.nodes[j][i].x + sp;
           let y2 = 0;
-          let randN = getRandomIntInclusive(0,1);  // Change this probability for cool results!!!!
-          if (randN === 0) { // bot-left to top-right
+          let divisionVal = 0.5;
+          // let randN = getRandomIntInclusive(0,1);  // Change this probability for cool results!!!!
+          let randN = Math.random();  // Change this probability for cool results!!!!
+          if (randN >= divisionVal) { // bot-left to top-right
             // console.log('forward slash');
             y1 = this.nodes[j][i].y + sp;
             y2 = this.nodes[j][i].y;
-          } else if (randN === 1) { // top-left to bot-right
+          } else if (randN < divisionVal) { // top-left to bot-right
             // console.log('back slash');
             y1 = this.nodes[j][i].y;
             y2 = this.nodes[j][i].y + sp;
@@ -67,7 +75,7 @@ function Maze(context, spacing) {
     //     ctx.strokeStyle = myColors.black;
     //     ctx.lineWidth = 1;
     //     // ctx9.arc(this.x,this.y,this.r,this.sAngle,this.eAngle);
-    //     ctx.arc(this.nodes[r][c].x,this.nodes[r][c].y,3,0,360);
+    //     ctx.arc(this.nodes[r][c].x,this.nodes[r][c].y,2,0,360);
     //     ctx.fill();
     //     ctx.stroke();
     //   }
@@ -84,12 +92,13 @@ function Maze(context, spacing) {
       // ctx.fillStyle = myColors.green;
       // ctx.strokeStyle = invertRGBAstr(myColors.green);
       if (y1 > y2) {
-        ctx.strokeStyle = myColors.lightblueAlpha; // change the colors for fun stuff!
+        // ctx.strokeStyle = myColors.lightblueAlpha; // change the colors for fun stuff!
+        ctx.strokeStyle = this.color1; // change the colors for fun stuff!
       } else {
-        // ctx.strokeStyle = invertRGBAstr(myColors.black); // change the colors for fun stuff!
-        ctx.strokeStyle = myColors.coral; // change the colors for fun stuff!
+        ctx.strokeStyle = this.color2; // change the colors for fun stuff!
+        // ctx.strokeStyle = myColors.coral; // change the colors for fun stuff!
       }
-      ctx.lineWidth = 1;
+      ctx.lineWidth = this.lineW;
       ctx.moveTo(x1,y1);
       ctx.lineTo(x2,y2);
       // ctx.fill();
