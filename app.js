@@ -39,7 +39,7 @@ $(document).ready(function() {
 
 
   $('.scrollable').on('click', function(event) {
-    console.log('scrollable clicked');
+    // console.log('scrollable clicked');
     var target = $(this.getAttribute('href'));
     if( target.length ) {
       event.preventDefault();
@@ -352,10 +352,10 @@ $(document).ready(function() {
     if (!aLoop10) {
       console.log('loop10 started');
       clearCanvas(ctx10);
-      myPlaid = new Plaid(ctx10, lineCount); // Maze(context, lineCount)
+      myPlaid = new Plaid(ctx10, 10); // Maze(context, lineCount)
       myPlaid.init();
       aLoop9 = new AnimLoop(ctx10,myPlaid);   // AnimLoop(context, animObj)
-      aLoop9.init(1,4);    // function(fps,someIndex)
+      aLoop9.init(2,4);    // function(fps,someIndex)
       aLoop9.startAn();
     }
   });
