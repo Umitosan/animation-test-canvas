@@ -352,11 +352,11 @@ $(document).ready(function() {
     if (!aLoop10) {
       console.log('loop10 started');
       clearCanvas(ctx10);
-      myPlaid = new Plaid(ctx10, 10); // Maze(context, lineCount)
+      myPlaid = new Plaid(ctx10, 20); // Maze(context, lineCount)
       myPlaid.init();
-      aLoop9 = new AnimLoop(ctx10,myPlaid);   // AnimLoop(context, animObj)
-      aLoop9.init(2,4);    // function(fps,someIndex)
-      aLoop9.startAn();
+      aLoop10 = new AnimLoop(ctx10,myPlaid);   // AnimLoop(context, animObj)
+      aLoop10.init(30,4);    // function(fps,someIndex)
+      aLoop10.startAn();
     }
   });
   $('#pause10').click(function() {
@@ -366,6 +366,7 @@ $(document).ready(function() {
     }
   });
   $('#reset10').click(function() {
+    console.log('loop10 resest clicked');
     if (aLoop10) {
       console.log('loop10 reset');
       cancelAnimationFrame(aLoop10.reqAnimFrame);

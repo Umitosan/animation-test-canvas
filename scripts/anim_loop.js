@@ -50,9 +50,9 @@ function AnimLoop(context, animObj) {
         // Get ready for next frame by setting then=now, but...
         // Also, adjust for fpsInterval not being multiple of 16.67
         this.then = this.now - (this.elapsed % this.fpsInterval);
-        clearCanvas(this.ctx);
         this.animObj.update();
     }
+    clearCanvas(this.ctx);
     this.animObj.draw();
     this.reqAnimFrame = requestAnimationFrame(this.animate);
   }; // this.animate

@@ -65,6 +65,7 @@ function Maze(context, spacing) {
 
   this.draw = function() {
     let ctx = this.ctx;
+    ctx.lineJoin = 'round';
 
     // draw all NODES (intersections)
     // for (let r = 0; r < this.nodes.length; r++) {
