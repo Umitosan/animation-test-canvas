@@ -314,6 +314,7 @@ $(document).ready(function() {
     }
   });
 
+
   /////
   //// Group 9
   ////
@@ -340,6 +341,36 @@ $(document).ready(function() {
       cancelAnimationFrame(aLoop9.reqAnimFrame);
       aLoop9 = undefined;
       clearCanvas(ctx9);
+    }
+  });
+
+
+  /////
+  //// Group 10
+  ////
+  $('#start10').click(function() {
+    if (!aLoop10) {
+      console.log('loop10 started');
+      clearCanvas(ctx10);
+      myPlaid = new Plaid(ctx10, lineCount); // Maze(context, lineCount)
+      myPlaid.init();
+      aLoop9 = new AnimLoop(ctx10,myPlaid);   // AnimLoop(context, animObj)
+      aLoop9.init(1,4);    // function(fps,someIndex)
+      aLoop9.startAn();
+    }
+  });
+  $('#pause10').click(function() {
+    if (aLoop10) {
+      console.log('loop10 pause toggle');
+      aLoop10.paused = (!aLoop10.paused ? true : false);
+    }
+  });
+  $('#reset10').click(function() {
+    if (aLoop10) {
+      console.log('loop10 reset');
+      cancelAnimationFrame(aLoop10.reqAnimFrame);
+      aLoop10 = undefined;
+      clearCanvas(ctx10);
     }
   });
 
