@@ -9,11 +9,13 @@ var canvas10 = $('#canvas10')[0], // canvas must be defined here for backend fun
 function Plaid(context, lc) {
   this.ctx = context;
   this.lineCount = lc;
-  this.lineThickness = 500/this.lineCount;
+  this.lineThickness = (500/this.lineCount);
   this.bars = undefined;
+  this.rowVel = 0.5;
+  this.colVel = 1;
 
   this.init = function() {
-    console.log('plaid init');
+    // console.log('plaid init');
     this.bars = [];
     let rows = [];
     let cols = [];
@@ -37,7 +39,6 @@ function Plaid(context, lc) {
     }
     this.bars.push(rows);
     this.bars.push(cols);
-    console.log('this.bars = ', this.bars);
   };
 
   this.draw = function() {
@@ -51,33 +52,31 @@ function Plaid(context, lc) {
 
   this.update = function() {
     for (let r = 0; r < this.bars[0].length; r++) {
+      this.bars[0][r].y += this.rowVel;
       if ( (this.bars[0][r].y) > 500 ) {
+        let firstBarY = this.bars[0][0].y;
         this.bars[0].pop();
-        this.bars[0].unshift(new Bar(/* context*/ this.ctx,
-                          /* x       */ 0,
-                          /* y       */ -this.lineThickness,
-                          /* c       */ randColor('rgba',0.3),
-                          /* height  */ this.lineThickness,
-                          /* length  */ 500
-                          ));
-        this.bars[0][0].y += 2; // immediately move the new bar
-      } else {
-        this.bars[0][r].y += 1;
+        this.bars[0].unshift(new Bar( /* context*/ this.ctx,
+                                      /* x       */ 0,
+                                      /* y       */ firstBarY-this.lineThickness,
+                                      /* c       */ randColor('rgba',0.3),
+                                      /* width   */ this.lineThickness,
+                                      /* length  */ 500
+                                      ));
       }
     } // for
     for (let c = 0; c < this.bars[1].length; c++) {
+      this.bars[1][c].x += this.colVel;
       if ( (this.bars[1][c].x) > 500 ) {
+        let firstBarX = this.bars[1][0].x;
         this.bars[1].pop();
-        this.bars[1].unshift(new Bar(/* context*/ this.ctx,
-                          /* x       */ -this.lineThickness,
-                          /* y       */ 0,
-                          /* c       */ randColor('rgba',0.3),
-                          /* height  */ 500,
-                          /* length  */ this.lineThickness
-                          ));
-        this.bars[1][0].x += 2; // immediately move the new bar
-      } else {
-        this.bars[1][c].x += 1;
+        this.bars[1].unshift(new Bar( /* context*/ this.ctx,
+                                      /* x       */ firstBarX-this.lineThickness,
+                                      /* y       */ 0,
+                                      /* c       */ randColor('rgba',0.3),
+                                      /* width   */ 500,
+                                      /* length  */ this.lineThickness
+                                      ));
       }
     } // for
   };
@@ -93,9 +92,12 @@ function Bar(context,x,y,c,w,l) {
   this.length = l;
 
   this.draw = function() {
-    this.ctx.fillStyle = this.color;
+    ctx = this.ctx;
+    ctx.beginPath();
+    ctx.fillStyle = this.color;
     // void ctx.fillRect(x, y, width, height);
-    this.ctx.fillRect(this.x,this.y,this.length,this.width);
+    ctx.fillRect(this.x,this.y,this.length,this.width);
+    ctx.closePath();
   };
 
   this.update = function() {

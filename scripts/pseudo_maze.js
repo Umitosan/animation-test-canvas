@@ -109,7 +109,7 @@ function Maze(context, spacing) {
 
   this.update = function() {
     this.init();
-    console.log('update happened');
+    // console.log('update happened');
   };
 
 }

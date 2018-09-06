@@ -352,10 +352,10 @@ $(document).ready(function() {
     if (!aLoop10) {
       console.log('loop10 started');
       clearCanvas(ctx10);
-      myPlaid = new Plaid(ctx10, 20); // Maze(context, lineCount)
+      myPlaid = new Plaid(ctx10, 16); // Maze(context, lineCount)
       myPlaid.init();
       aLoop10 = new AnimLoop(ctx10,myPlaid);   // AnimLoop(context, animObj)
-      aLoop10.init(30,4);    // function(fps,someIndex)
+      aLoop10.init(60,4);    // function(fps,someIndex)
       aLoop10.startAn();
     }
   });
