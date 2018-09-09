@@ -1,26 +1,26 @@
 /*jshint esversion: 6 */
 
-var canvas1 = $('#canvas7')[0], // canvas must be defined here for backend functions
+var canvas7 = document.getElementById('canvas7'), // canvas must be defined here for backend functions
     ctx7, // canvas.getContext('2d')
     aLoop7,
     myInterpolation;
 
 
-function InterAnim(totalDots) {
-  this.total = totalDots;
+function InterAnim(dgw) {
+  this.dotsGridWidth = dgw; // number of columns (and rows) of dots wide
   this.dots = [];
   this.coef = 0.975;
   this.zoomDir = 1; // controls zoom direction: 1 is inward, -1 is outward
   this.zoomInBoundaryCoef = 1.4;  // when dots[2]x - dots[1].x < 1.22... time to revers the zoom
-  this.zoomOutBoundaryCoef = 10;  // when dots[2]x - dots[1].x > 1.22... time to revers the zoom
+  this.zoomOutBoundaryCoef = 13;
   this.startTime = null;
-  this.updateSpeed = 30; // ms
+  this.updateSpeed = 20; // ms
 
   this.init = function() {
     console.log('interAnim init');
-    let offset = 5;
-    let cols = 500/offset;
-    let rows = 500/offset;
+    let cols = this.dotsGridWidth;
+    let rows = this.dotsGridWidth;
+    let offset = (500 / this.dotsGridWidth);
     for (var i = 0; i < rows; i++) {
       for (var j = 0; j < cols; j++) {
         let tColor;
@@ -48,17 +48,23 @@ function InterAnim(totalDots) {
     for (var k = 0; k < this.dots.length; k++) {
       ctx7.beginPath();
       ctx7.fillStyle = this.dots[k].color;
-      ctx7.fillRect(this.dots[k].x, this.dots[k].y,this.dots[k].width,this.dots[k].height);
+      ctx7.fillRect(  Math.floor(this.dots[k].x),
+                      Math.floor(this.dots[k].y),
+                      this.dots[k].width,
+                      this.dots[k].height
+                    );
       ctx7.fill();
     }
 
-    // blue x and y axis
-    // ctx7.strokeStyle = 'blue';
-    // ctx7.moveTo(0,200);
-    // ctx7.lineTo(400,200);
-    // ctx7.moveTo(200,0);
-    // ctx7.lineTo(200,400);
-    // ctx7.stroke();
+    // paint x and y axis
+    ctx7.strokeStyle = 'blue';
+    ctx7.moveTo(0,250);
+    ctx7.lineTo(500,250);
+    ctx7.stroke();
+    ctx7.strokeStyle = 'blue';
+    ctx7.moveTo(250,0);
+    ctx7.lineTo(250,500);
+    ctx7.stroke();
   };
 
   this.update = function() {
@@ -89,10 +95,10 @@ function InterAnim(totalDots) {
       } // for
     } // if
     if  ( (this.dots[1].x - this.dots[0].x) < this.zoomInBoundaryCoef ) {
-      console.log('changing zoom to OUT');
+      // console.log('changing zoom to OUT');
       this.zoomDir = -1;
     } else if ( (this.dots[1].x - this.dots[0].x) > this.zoomOutBoundaryCoef ) {
-      console.log('changing zoom to IN');
+      // console.log('changing zoom to IN');
       this.zoomDir = 1;
     } else {
       // console.log('zoom boundary probs');

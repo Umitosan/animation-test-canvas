@@ -1,6 +1,6 @@
 /* jshint esversion: 6 */
 
-var canvas10 = $('#canvas10')[0], // canvas must be defined here for backend functions
+var canvas10 = document.getElementById('canvas10'), // canvas must be defined here for backend functions
     ctx10, // canvas.getContext('2d')
     aLoop10,
     myPlaid;

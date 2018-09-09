@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 
 
-var canvas4 = $('#canvas4')[0],
+var canvas4 = document.getElementById('canvas4'),
     ctx4,
     aLoop4,
     myMandala;

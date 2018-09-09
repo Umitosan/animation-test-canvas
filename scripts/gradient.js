@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 
 
-var canvas1 = $('#canvas1')[0], // canvas must be defined here for backend functions
+var canvas1 = document.getElementById('canvas1'), // canvas must be defined here for backend functions
     ctx1, // canvas.getContext('2d')
     aLoop1,
     myGradAnim;

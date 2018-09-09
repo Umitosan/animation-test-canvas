@@ -263,7 +263,7 @@ $(document).ready(function() {
     if (!aLoop7) {
       console.log('loop7 started');
       clearCanvas(ctx7);
-      myInterpolation = new InterAnim(50); // interAnim(totalDots)
+      myInterpolation = new InterAnim(40); // interAnim(dotsGridWidth)
       myInterpolation.init();
       aLoop7 = new AnimLoop(ctx7,myInterpolation);   // AnimLoop(context, animObj)
       aLoop7.init(60,4);    // function(fps,someIndex)
@@ -372,6 +372,37 @@ $(document).ready(function() {
       cancelAnimationFrame(aLoop10.reqAnimFrame);
       aLoop10 = undefined;
       clearCanvas(ctx10);
+    }
+  });
+
+
+  /////
+  //// Group 11
+  ////
+  $('#start11').click(function() {
+    if (!aLoop11) {
+      console.log('loop11 started');
+      clearCanvas(ctx11);
+      myMarbles = new marbleSim(ctx11, 1); // Maze(context, marbleCount)
+      myMarbles.init();
+      aLoop11 = new AnimLoop(ctx11,myMarbles);   // AnimLoop(context, animObj)
+      aLoop11.init(2,4);    // function(fps,someIndex)
+      aLoop11.startAn();
+    }
+  });
+  $('#pause11').click(function() {
+    if (aLoop11) {
+      console.log('loop11 pause toggle');
+      aLoop11.paused = (!aLoop11.paused ? true : false);
+    }
+  });
+  $('#reset11').click(function() {
+    console.log('loop11 resest clicked');
+    if (aLoop11) {
+      console.log('loop11 reset');
+      cancelAnimationFrame(aLoop11.reqAnimFrame);
+      aLoop11 = undefined;
+      clearCanvas(ctx11);
     }
   });
 

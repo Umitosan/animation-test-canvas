@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 
 
-var canvas2 = $('#canvas2')[0],
+var canvas2 = document.getElementById('canvas2'),
     ctx2,
     aLoop2,
     myDisco;

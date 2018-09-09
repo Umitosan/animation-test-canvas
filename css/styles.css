@@ -93,7 +93,7 @@ body {
   border-radius: 0px 0px 0px 12px; /* top-left | top-right | bottom-right | bottom-left */
 }
 .menu:hover .proj-list-menu {
-  height: 240px;
+  height: 266px;
   opacity: 1;
   transition: all 1s ease;
 }

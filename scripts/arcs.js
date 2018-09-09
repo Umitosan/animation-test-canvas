@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 
 
-var canvas3 = $('#canvas3')[0],
+var canvas3 = document.getElementById('canvas3'),
     ctx3,
     aLoop3,
     myArcGroup;

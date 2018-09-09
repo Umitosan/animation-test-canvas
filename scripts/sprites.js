@@ -1,11 +1,11 @@
 /*jshint esversion: 6 */
 
 
-var canvas5 = $('#canvas5')[0],
+var canvas5 = document.getElementById('canvas5'),
     ctx5,
     aLoop5,
     mySpriteGroup;
-var canvas6 = $('#canvas6')[0],
+var canvas6 = document.getElementById('canvas6'),
     ctx6,
     aLoop6,
     marioWalk;

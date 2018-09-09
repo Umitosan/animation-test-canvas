@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 
 
-var canvas8 = $('#canvas8')[0],
+var canvas8 = document.getElementById('canvas8'),
     ctx8,
     aLoop8,
     myMouseTrack;

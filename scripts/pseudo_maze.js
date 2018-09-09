@@ -1,6 +1,6 @@
 /* jshint esversion: 6 */
 
-var canvas9 = $('#canvas9')[0], // canvas must be defined here for backend functions
+var canvas9 = document.getElementById('canvas9'), // canvas must be defined here for backend functions
     ctx9, // canvas.getContext('2d')
     aLoop9,
     myInterpolation;
