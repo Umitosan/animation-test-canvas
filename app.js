@@ -73,7 +73,7 @@ $(document).ready(function() {
   $('#pause1').click(function() {
     if (aLoop1) {
       console.log('loop1 pause toggle');
-      aLoop1.paused = (!aLoop1.paused ? true : false);
+      aLoop1.paused = (!aLoop1.paused);
     }
   });
   $('#reset1').click(function() {
@@ -103,7 +103,7 @@ $(document).ready(function() {
   $('#pause2').click(function() {
     if (aLoop2) {
       console.log('loop2 pause toggle');
-      aLoop2.paused = (!aLoop2.paused ? true : false);
+      aLoop2.paused = (!aLoop2.paused);
     }
   });
   $('#reset2').click(function() {
@@ -132,7 +132,7 @@ $(document).ready(function() {
   $('#pause3').click(function() {
     if (aLoop3) {
       console.log('loop3 pause toggle');
-      aLoop3.paused = (!aLoop3.paused ? true : false);
+      aLoop3.paused = (!aLoop3.paused);
     }
   });
   $('#reset3').click(function() {
@@ -160,7 +160,7 @@ $(document).ready(function() {
   $('#pause4').click(function() {
     if (aLoop4) {
       console.log('loop4 pause toggle');
-      aLoop4.paused = (!aLoop4.paused ? true : false);
+      aLoop4.paused = (!aLoop4.paused);
     }
   });
   $('#reset4').click(function() {
@@ -202,7 +202,7 @@ $(document).ready(function() {
   $('#pause5').click(function() {
     if (aLoop5) {
       console.log('loop5 pause toggle');
-      aLoop5.paused = (!aLoop5.paused ? true : false);
+      aLoop5.paused = (!aLoop5.paused );
     }
   });
   $('#reset5').click(function() {
@@ -244,7 +244,7 @@ $(document).ready(function() {
   $('#pause6').click(function() {
     if (aLoop6) {
       console.log('loop6 pause toggle');
-      aLoop6.paused = (!aLoop6.paused ? true : false);
+      aLoop6.paused = (!aLoop6.paused );
     }
   });
   $('#reset6').click(function() {
@@ -273,7 +273,7 @@ $(document).ready(function() {
   $('#pause7').click(function() {
     if (aLoop7) {
       console.log('loop7 pause toggle');
-      aLoop7.paused = (!aLoop7.paused ? true : false);
+      aLoop7.paused = (!aLoop7.paused);
     }
   });
   $('#reset7').click(function() {
@@ -302,7 +302,7 @@ $(document).ready(function() {
   $('#pause8').click(function() {
     if (aLoop8) {
       console.log('loop8 pause toggle');
-      aLoop8.paused = (!aLoop8.paused ? true : false);
+      aLoop8.paused = (!aLoop8.paused);
     }
   });
   $('#reset8').click(function() {
@@ -332,7 +332,7 @@ $(document).ready(function() {
   $('#pause9').click(function() {
     if (aLoop9) {
       console.log('loop9 pause toggle');
-      aLoop9.paused = (!aLoop9.paused ? true : false);
+      aLoop9.paused = (!aLoop9.paused);
     }
   });
   $('#reset9').click(function() {
@@ -362,7 +362,8 @@ $(document).ready(function() {
   $('#pause10').click(function() {
     if (aLoop10) {
       console.log('loop10 pause toggle');
-      aLoop10.paused = (!aLoop10.paused ? true : false);
+      // aLoop10.paused = (!aLoop10.paused );
+      aLoop10.paused = (!aLoop10.paused);
     }
   });
   $('#reset10').click(function() {
@@ -383,17 +384,17 @@ $(document).ready(function() {
     if (!aLoop11) {
       console.log('loop11 started');
       clearCanvas(ctx11);
-      myMarbles = new marbleSim(ctx11, 1); // Maze(context, marbleCount)
-      myMarbles.init();
-      aLoop11 = new AnimLoop(ctx11,myMarbles);   // AnimLoop(context, animObj)
-      aLoop11.init(2,4);    // function(fps,someIndex)
+      myMarbleSim = new MarbleSim(ctx11, 20);   // Obj(context, total)
+      myMarbleSim.init();
+      aLoop11 = new AnimLoop(ctx11,myMarbleSim);   // AnimLoop(context, animObj)
+      aLoop11.init(60,4);    // function(fps,someIndex)
       aLoop11.startAn();
     }
   });
   $('#pause11').click(function() {
     if (aLoop11) {
       console.log('loop11 pause toggle');
-      aLoop11.paused = (!aLoop11.paused ? true : false);
+      aLoop11.paused = (!aLoop11.paused);
     }
   });
   $('#reset11').click(function() {
