@@ -68,22 +68,22 @@ function Marble(c,g) {
     // counterclockwise	Optional. Specifies whether the drawing should be counterclockwise or clockwise. False is default, and indicates clockwise, while true indicates counter-clockwise.
     ctx.beginPath();
     ctx.fillStyle = this.color;
-    // ctx.strokeStyle = invertRGBAstr(this.color);
-    ctx.strokeStyle = this.color;
+    ctx.strokeStyle = invertRGBAstr(this.color);
+    // ctx.strokeStyle = myColors.mossGreen;
     ctx.lineWidth = this.lineW;
     ctx.arc(this.x,this.y,this.r,this.sAngle,this.eAngle);
     ctx.fill();
     ctx.stroke();
 
-    ctx.beginPath();
-    ctx.fillStyle = invertRGBAstr(this.color);
-    ctx.arc(this.x,this.y,this.r*0.7,this.sAngle,this.eAngle);
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.fillStyle = this.color;
-    ctx.arc(this.x,this.y,this.r*0.2,this.sAngle,this.eAngle);
-    ctx.fill();
+    // ctx.beginPath();
+    // ctx.fillStyle = invertRGBAstr(this.color);
+    // ctx.arc(this.x,this.y,this.r*0.7,this.sAngle,this.eAngle);
+    // ctx.fill();
+    //
+    // ctx.beginPath();
+    // ctx.fillStyle = this.color;
+    // ctx.arc(this.x,this.y,this.r*0.2,this.sAngle,this.eAngle);
+    // ctx.fill();
   }; // draw
 
   this.update = function() {
