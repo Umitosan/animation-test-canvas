@@ -56,6 +56,11 @@ function randColor(type, alphaSwitch = null) { // default alpha = 1
   }
 }
 
+function randGrey() {
+  let randVal = getRandomIntInclusive(0,255);
+  return ( 'rgba('+ randVal +','+ randVal +','+ randVal +','+1+')' );
+}
+
 function invertRGBAstr(str) {
   let arr1 = str.slice(5,-1); // arr1 = "173,216,230,0.2"
   let arr2 = arr1.split(','); // arr2 = ["173","216","230","0.2"]
