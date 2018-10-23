@@ -40,32 +40,36 @@ function Warp(context,quantity) {
   this.initStars = function() {
     console.log('this.initStars');
     for (var i = 0; i < this.quant; i++) {
-      let randX =  getRandomIntInclusive(5,canvas12.width);
-      let randY =  getRandomIntInclusive(5,canvas12.height);
-      let randLen = getRandomIntInclusive(10,30);
-      let vel = 0.05;
-      let color = randColor('rgba');
-      let computedAngle = this.getAngleToCenter(randX,randY,250,250);
-      this.stars.push({   x:     randX,
-                          y:     randY,
-                          angle: computedAngle,
-                          len:   randLen,
-                          vel:   vel,
-                          color: color
-                        });
+      this.stars.push(this.makeNewStar());
     } // for
-    console.log('this.stars = ', this.stars);
+    // console.log('this.stars = ', this.stars);
   }; // initStars
+
+  this.makeNewStar = function() {
+    let randX =  getRandomIntInclusive(5,canvas12.width);
+    let randY =  getRandomIntInclusive(5,canvas12.height);
+    let randLen = getRandomIntInclusive(10,30);
+    let vel = 0.05;
+    let color = randColor('rgba');
+    let computedAngle = this.getAngleToCenter(randX,randY,250,250);
+    return {  x:     randX,
+              y:     randY,
+              angle: computedAngle,
+              len:   randLen,
+              vel:   vel,
+              color: color
+            };
+  };
 
   this.getAngleToCenter = function(x1,y1,centX,centY) {
     if ( (x1 >= centX) && (y1 >= centY) ) { // lower right
-      return 180;
+      return Math.atan((y1-centY)/(x1-centX))+getRadianAngle(180);
     } else if ( (x1 <= centX) && (y1 >= centY) ) { // lower left
-      return 225;
+      return Math.atan((y1-centY)/(x1-centY));
     } else if ( (x1 < centX) && (y1 < centY) ) { // upper left
-      return -225;
+      return Math.atan((centY-y1)/(centX-x1));
     } else if ( (x1 > centX) && (y1 < centY) ) { // upper right
-      return -180;
+      return Math.atan((y1-centY)/(x1-centX))+getRadianAngle(180);
     } else {
       // nothin
     }
@@ -81,6 +85,8 @@ function Warp(context,quantity) {
       // destroy stars when they get close to center
       if ( (Math.abs(this.stars[i].x - (canvas12.width/2)) < 10) || (Math.abs(this.stars[i].y - (canvas12.height/2)) < 10) ) {
         this.stars.splice(i,1); // remove the spark from array
+        this.stars.push(this.makeNewStar()); // make a new one!
+        // console.log('number of stars = ', this.stars.length);
       }
     }
   };

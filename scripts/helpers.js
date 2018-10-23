@@ -17,8 +17,12 @@ function TxtBox(x,y,font,color) {
   };
 }
 
-function getRadianAngle(degreeValue) {
-  return degreeValue * Math.PI / 180;
+function getRadianAngle(degreeVal) {
+  return degreeVal * Math.PI / 180;
+}
+
+function getDegreeAngle(radianVal) {
+  return radianVal * 180 / Math.PI;
 }
 
 function randSign() {
