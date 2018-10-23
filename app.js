@@ -407,4 +407,34 @@ $(document).ready(function() {
     }
   });
 
+  /////
+  //// Group 12
+  ////
+  $('#start12').click(function() {
+    if (!aLoop12) {
+      console.log('loop12 started');
+      clearCanvas(ctx12);
+      myWarp = new Warp(ctx12, 20);   // Obj(context, total)
+      myWarp.init();
+      aLoop12 = new AnimLoop(ctx12,myWarp);   // AnimLoop(context, animObj)
+      aLoop12.init(60,4);    // function(fps,someIndex)
+      aLoop12.startAn();
+    }
+  });
+  $('#pause12').click(function() {
+    if (aLoop12) {
+      console.log('loop12 pause toggle');
+      aLoop12.paused = (!aLoop12.paused);
+    }
+  });
+  $('#reset12').click(function() {
+    console.log('loop12 resest clicked');
+    if (aLoop12) {
+      console.log('loop12 reset');
+      cancelAnimationFrame(aLoop12.reqAnimFrame);
+      aLoop12 = undefined;
+      clearCanvas(ctx12);
+    }
+  });
+
 });
