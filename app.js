@@ -414,7 +414,7 @@ $(document).ready(function() {
     if (!aLoop12) {
       console.log('loop12 started');
       clearCanvas(ctx12);
-      myWarp = new Warp(ctx12, 140);   // Obj(context, total)
+      myWarp = new Warp(ctx12, 300);   // Obj(context, total)
       myWarp.init();
       aLoop12 = new AnimLoop(ctx12,myWarp);   // AnimLoop(context, animObj)
       aLoop12.init(60,4);    // function(fps,someIndex)

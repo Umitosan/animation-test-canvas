@@ -13,10 +13,13 @@ function Warp(context,quantity) {
   this.y = undefined; // center coords of warp convergence
   this.centerX = 250;
   this.centerY = 250;
-  this.mouseCircleRadius = 10;
+  this.mouseCircleRadius = 4;
   this.mouseEventData = undefined;
   this.stars = [];
-  this.acceleration = 0.002;
+  this.acceleration = 0.07;
+  this.starMaxWidth = 4;
+  this.starLen = 2;
+  this.starMaxLen = 20;
 
   this.init = function() {
     console.log('warp init');
@@ -47,7 +50,7 @@ function Warp(context,quantity) {
   }; // initStars
 
   this.makeNewStar = function(mode) {
-    let offset = 10;  // this val helps to start lines off the screen for better smoothness on animation
+    let offset = 20;  // this val helps to start lines off the screen for better smoothness on animation
     let newX;
     let newY;
     if (mode === 'even') {
@@ -72,16 +75,19 @@ function Warp(context,quantity) {
           newX = -offset;
         }
       }
-    }
-    let randLen = getRandomIntInclusive(10,30);
-    let vel = 0.05;
+    } // end if
+    // let randLen = getRandomIntInclusive(10,30);
+    let newLen = 4;
+    let newWidth = getRandomIntInclusive(1,this.starMaxWidth);
+    let vel = 0.2;
     let color = randColor('rgba');
     // let color = randGrey();
     let computedAngle = this.getAngleToPoint(newX,newY,this.centerX,this.centerY);
     return {  x:     newX,
               y:     newY,
               angle: computedAngle,
-              len:   randLen,
+              len:   newLen,
+              width: newWidth,
               vel:   vel,
               color: color
             };
@@ -101,28 +107,50 @@ function Warp(context,quantity) {
     }
   };
 
+  this.getDistToCenter = function(x, y) {
+    let a = Math.abs(this.centerX-x);
+    let b = Math.abs(this.centerY-y);
+    let dist = (Math.sqrt(Math.pow(a,2)+Math.pow(b,2)));
+    return dist;
+  };
+
+  this.getNewLen = function(starX, starY) {
+    let dist = this.getDistToCenter(starX,starY);
+    let coef = 1 - (dist/708); // 708 is max distance diagonally from mouse point
+    let newLen = (this.starMaxLen * coef);
+    if (newLen < 1) { // force lengh to be at least 1 pixel
+      newLen = 1;
+    }
+    return newLen;
+  };
+
   this.moveStars = function() {
     let acc = this.acceleration;
     for (let i = 0; i < this.stars.length; i++) {
       let angle = this.stars[i].angle;
       let len = this.stars[i].len;
       let vel = this.stars[i].vel;
-      this.stars[i].x += (vel*(len*Math.cos(angle)));
-      this.stars[i].y += (vel*(len*Math.sin(angle)));
+      this.stars[i].x += (vel*(Math.cos(angle)));
+      this.stars[i].y += (vel*(Math.sin(angle)));
       // apply acceleration
       this.stars[i].vel += acc;
-      // destroy stars when they get close to center
-      if ( (Math.abs(this.stars[i].x - (this.centerX)) < 15) && (Math.abs(this.stars[i].y - (this.centerY)) < 15) ) {
+      // destroy stars when they get close to center OR off canvas too far
+      if ( ((Math.abs(this.stars[i].x - (this.centerX)) < this.stars[i].len) && (Math.abs(this.stars[i].y - (this.centerY)) < this.stars[i].len)) ||
+           (this.stars[i].x < -20) || (this.stars[i].x > canvas12.width+20) ||
+           (this.stars[i].y < -20) || (this.stars[i].y > canvas12.height+20)) {
         this.stars.splice(i,1); // remove the spark from array
-        this.stars.push(this.makeNewStar('edge')); // make a new one!
+        // this.stars.push(this.makeNewStar('edge')); // make a new one!
         // console.log('number of stars = ', this.stars.length);
       }
     }
   };
 
-  this.updateStarAngles = function() {
+  this.updateStars = function() {
     for (var i = 0; i < this.stars.length; i++) {
+      // update angles
       this.stars[i].angle = this.getAngleToPoint(this.stars[i].x,this.stars[i].y,this.centerX,this.centerY);
+      // update lengths
+      this.stars[i].len = this.getNewLen(this.stars[i].x,this.stars[i].y);
     }
   };
 
@@ -139,12 +167,13 @@ function Warp(context,quantity) {
     this.ctx.beginPath();
     this.ctx.fillStyle = this.color;
     this.ctx.strokeStyle = 'black';
-    this.ctx.lineWidth = 2;
+    this.ctx.lineWidth = 1;
     this.ctx.arc(this.x,this.y,this.mouseCircleRadius,0,360);
     this.ctx.stroke();
     // stars
     for (var i = 0; i < this.stars.length; i++) {
-      this.ctx.lineWidth = 2;
+      this.ctx.lineWidth = this.stars[i].width;
+      // this.ctx.lineWidth = getRandomIntInclusive(1,2);
       this.ctx.strokeStyle = this.stars[i].color;
       let x = this.stars[i].x;
       let y = this.stars[i].y;
@@ -165,9 +194,12 @@ function Warp(context,quantity) {
       this.y = mouseData.y;
       this.centerX = this.x;
       this.centerY = this.y;
-      this.updateStarAngles();
+      this.updateStars();
     }
     if ( (this.stars !== undefined) && (this.stars.length > 0) ) {  this.moveStars(); }
+    for (var i = 0; i < 5; i++) {
+      this.stars.push(this.makeNewStar('edge')); // make a new one!
+    }
   }; // update
 
 

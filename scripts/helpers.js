@@ -18,11 +18,11 @@ function TxtBox(x,y,font,color) {
 }
 
 function getRadianAngle(degreeVal) {
-  return degreeVal * Math.PI / 180;
+  return (degreeVal * (Math.PI / 180));
 }
 
 function getDegreeAngle(radianVal) {
-  return radianVal * 180 / Math.PI;
+  return (radianVal * (180 / Math.PI));
 }
 
 function randSign() {
@@ -79,7 +79,7 @@ function getRandomIntInclusive(min, max) {
 
 function clearCanvas(context) {
   if (context) {
-    context.clearRect(0, 0, canvas1.width, canvas1.height);
+    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
   } else {
     console.log('opps that\'s not a canvas context');
   }
