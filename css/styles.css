@@ -151,6 +151,21 @@ body {
   border-style: solid;
 }
 
+.canvas-container12 {
+  width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 50px;
+  border-radius: 4px;
+  border-color: lightgrey;
+  border-width: 2px;
+  border-style: solid;
+}
+
+.canvas-container #canvas12 {
+  cursor: none;
+}
+
 .canvas-el {
   /* outline-color: darkgrey;
   outline-width: 4px;

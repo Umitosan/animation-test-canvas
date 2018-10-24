@@ -13,13 +13,14 @@ function Warp(context,quantity) {
   this.y = undefined; // center coords of warp convergence
   this.centerX = 250;
   this.centerY = 250;
-  this.mouseCircleRadius = 4;
+  this.mouseCircleRadius = 6;
   this.mouseEventData = undefined;
   this.stars = [];
   this.acceleration = 0.07;
   this.starMaxWidth = 4;
   this.starLen = 2;
   this.starMaxLen = 20;
+  this.spawnRate = 10;
 
   this.init = function() {
     console.log('warp init');
@@ -135,7 +136,7 @@ function Warp(context,quantity) {
       // apply acceleration
       this.stars[i].vel += acc;
       // destroy stars when they get close to center OR off canvas too far
-      if ( ((Math.abs(this.stars[i].x - (this.centerX)) < this.stars[i].len) && (Math.abs(this.stars[i].y - (this.centerY)) < this.stars[i].len)) ||
+      if ( ((Math.abs(this.stars[i].x - (this.centerX)) < this.stars[i].len+6) && (Math.abs(this.stars[i].y - (this.centerY)) < this.stars[i].len+6)) ||
            (this.stars[i].x < -20) || (this.stars[i].x > canvas12.width+20) ||
            (this.stars[i].y < -20) || (this.stars[i].y > canvas12.height+20)) {
         this.stars.splice(i,1); // remove the spark from array
@@ -165,11 +166,13 @@ function Warp(context,quantity) {
                        );
     // circle around mouse
     this.ctx.beginPath();
-    this.ctx.fillStyle = this.color;
+    // this.ctx.fillStyle = this.color;
+    this.ctx.fillStyle = this.black;
     this.ctx.strokeStyle = 'black';
     this.ctx.lineWidth = 1;
     this.ctx.arc(this.x,this.y,this.mouseCircleRadius,0,360);
     this.ctx.stroke();
+    this.ctx.fill();
     // stars
     for (var i = 0; i < this.stars.length; i++) {
       this.ctx.lineWidth = this.stars[i].width;
@@ -197,7 +200,7 @@ function Warp(context,quantity) {
       this.updateStars();
     }
     if ( (this.stars !== undefined) && (this.stars.length > 0) ) {  this.moveStars(); }
-    for (var i = 0; i < 5; i++) {
+    for (let i = 0; i < this.spawnRate; i++) {
       this.stars.push(this.makeNewStar('edge')); // make a new one!
     }
   }; // update
