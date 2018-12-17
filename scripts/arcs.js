@@ -32,6 +32,16 @@ function Arc(x,y,r,color,context) {
     }
   };
 
+  this.getMousePos = function() {
+    let rect = canvas12.getBoundingClientRect();
+    let msDataX = this.mouseEventData.clientX;
+    let msDataY = this.mouseEventData.clientY;
+    return {
+      x: msDataX - rect.left,
+      y: msDataY - rect.top
+    };
+  };
+
   this.changeRad = function() {
     if ( ((this.r + this.rVel) > 40) || ((this.r + this.rVel) < 2) ) {
       this.rVel *= -1;

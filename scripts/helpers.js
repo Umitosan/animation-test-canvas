@@ -56,6 +56,14 @@ function randColor(type, alphaSwitch = null) { // default alpha = 1
   }
 }
 
+function changeAlpha(colorString,newAlpha) {
+  let a = colorString.split(",");
+  a.pop();
+  a.push(newAlpha.toString()+")");
+  let finalColor = a.join(",");
+  return finalColor;
+}
+
 function randGrey() {
   let randVal = getRandomIntInclusive(0,255);
   return ( 'rgba('+ randVal +','+ randVal +','+ randVal +','+1+')' );

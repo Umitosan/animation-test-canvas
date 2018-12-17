@@ -437,4 +437,34 @@ $(document).ready(function() {
     }
   });
 
+  /////
+  //// Group 13
+  ////
+  $('#start13').click(function() {
+    if (!aLoop13) {
+      console.log('loop13 started');
+      clearCanvas(ctx13);
+      myRipple = new Ripple(ctx13);   // Obj(context, total)
+      myRipple.init();
+      aLoop13 = new AnimLoop(ctx13,myRipple);   // AnimLoop(context, animObj)
+      aLoop13.init(60,4);    // function(fps,someIndex)
+      aLoop13.startAn();
+    }
+  });
+  $('#pause13').click(function() {
+    if (aLoop13) {
+      console.log('loop13 pause toggle');
+      aLoop13.paused = (!aLoop13.paused);
+    }
+  });
+  $('#reset13').click(function() {
+    console.log('loop13 resest clicked');
+    if (aLoop13) {
+      console.log('loop13 reset');
+      cancelAnimationFrame(aLoop13.reqAnimFrame);
+      aLoop13 = undefined;
+      clearCanvas(ctx13);
+    }
+  });
+
 });
