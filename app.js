@@ -467,4 +467,34 @@ $(document).ready(function() {
     }
   });
 
+  /////
+  //// Group 14
+  ////
+  $('#start14').click(function() {
+    if (!aLoop14) {
+      console.log('loop14 started');
+      clearCanvas(ctx14);
+      myWave1 = new Wave1(ctx14);   // Obj(context, total)
+      myWave1.init();
+      aLoop14 = new AnimLoop(ctx14,myWave1);   // AnimLoop(context, animObj)
+      aLoop14.init(60,4);    // function(fps,someIndex)
+      aLoop14.startAn();
+    }
+  });
+  $('#pause14').click(function() {
+    if (aLoop14) {
+      console.log('loop14 pause toggle');
+      aLoop14.paused = (!aLoop14.paused);
+    }
+  });
+  $('#reset14').click(function() {
+    console.log('loop14 resest clicked');
+    if (aLoop14) {
+      console.log('loop14 reset');
+      cancelAnimationFrame(aLoop14.reqAnimFrame);
+      aLoop14 = undefined;
+      clearCanvas(ctx14);
+    }
+  });
+
 });

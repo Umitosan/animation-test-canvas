@@ -47,7 +47,7 @@ function Ripple(context) {
       }
       let newCircle = { x:    mouseData.x,
                         y:    mouseData.y,
-                        r:    (2*(i*1))+1,
+                        r:    (3*i)+1,
                         rVel: 1,
                         color: updatedColor
                       };
@@ -62,7 +62,7 @@ function Ripple(context) {
       for (let j = this.circleGroup[i].length-1; j > -1; j--) {
         let curCircle = this.circleGroup[i][j];
         this.ctx.beginPath();
-        this.ctx.lineWidth = 2;
+        this.ctx.lineWidth = 3+0.3;
         this.ctx.strokeStyle = curCircle.color;
         this.ctx.fillStyle = curCircle.color;
         this.ctx.arc(curCircle.x,curCircle.y,curCircle.r,0,(2*Math.PI));
