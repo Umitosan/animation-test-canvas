@@ -11,6 +11,7 @@ function Ripple(context) {
   this.ctx = context;
   this.circleGroup = undefined;
   this.lastClickEvent = undefined;
+  this.showTxt = undefined;
 
   this.init = function() {
     console.log('ripple init');
@@ -19,6 +20,7 @@ function Ripple(context) {
       this.clicked();
     }, false);
     this.circleGroup = [];
+    this.showTxt = true;
   };
 
   this.getMousePos = function() {
@@ -32,6 +34,9 @@ function Ripple(context) {
   };
 
   this.clicked = function() {
+    if (this.showTxt === true) {
+      this.showTxt = false;
+    }
     let mouseData = this.getMousePos();
     let newCircleArray = [];
     let newColor = randColor('rgba');
@@ -58,6 +63,16 @@ function Ripple(context) {
 
 
   this.draw = function() {
+    // Txt note
+    if (this.showTxt === true) {
+      this.ctx.textAlign = "center";
+      this.ctx.font = '20pt Calibri';
+      this.ctx.fillStyle = 'black';
+      this.ctx.fillText(  /* msg */ 'CLICK ME',
+                          /*  x  */  canvas12.width/2,
+                          /*  y  */  canvas12.width/2
+                        );
+    }
     for (let i = 0; i < this.circleGroup.length; i++) {
       for (let j = this.circleGroup[i].length-1; j > -1; j--) {
         let curCircle = this.circleGroup[i][j];
