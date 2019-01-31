@@ -135,4 +135,8 @@ another blue brown
 current color1 =  rgba(25,151,254,1)
 current color2 =  rgba(85,71,3,1)
 
+AWESOME blue purple
+color1: "rgba(147,15,125,1)"
+color2: "rgba(5,238,208,1)"
+
  */

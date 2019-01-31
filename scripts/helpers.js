@@ -34,22 +34,26 @@ function randSign() {
   }
 }
 
-function randColor(type, alphaSwitch = null) { // default alpha = 1
+function randColor(type, alpha = null) { // default alpha = 1
   // more muted colors example
       // return ( "#" + Math.round((getRandomIntInclusive(0,99999999) + 0x77000000)).toString(16) );
   // full spectum below
-  let endAlpha;
+  let finalAlpha;
   if (type === 'hex') {
     return ( "#" + Math.round((getRandomIntInclusive(0,0xffffff))).toString(16) );
   } else if (type === 'rgba') {
-      if (alphaSwitch === null) {
-        endAlpha = 1;
-      } else if (alphaSwitch === 'rand') {
-        endAlpha = getRandomIntInclusive(1,10) / 10;
+      if (alpha === null) {
+        finalAlpha = 1;
+      } else if (alpha === 'rand') {
+        finalAlpha = getRandomIntInclusive(1,10) / 10;
+      } else if ( (typeof alpha) === "number") {
+        finalAlpha = alpha;
+      } else if ( (typeof alpha) === "string") {
+        finalAlpha = parseFloat(alpha);
       } else {
-        endAlpha = alphaSwitch;
+        // nothing
       }
-      return ( 'rgba('+ getRandomIntInclusive(0,255) +','+ getRandomIntInclusive(0,255) +','+ getRandomIntInclusive(0,255) +','+endAlpha+')' );
+      return ( 'rgba('+ getRandomIntInclusive(0,255) +','+ getRandomIntInclusive(0,255) +','+ getRandomIntInclusive(0,255) +','+finalAlpha+')' );
   } else {
     console.log("Not valid option for randColor()");
     return undefined;
