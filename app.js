@@ -57,14 +57,11 @@ $(document).ready(function() {
   ////
   $('#start1').click(function() {
     if (!aLoop1) {
-      console.log('loop1 started');
       clearCanvas(ctx1);
       // GradAnim(barCount = 20, speed = 20, color1 = 'lightblue', color2 = 'green', rotation = 0)
       // myGradAnim = new GradAnim(20,10,'lightblue','yellow', 0);
       myGradAnim = new GradAnim(ctx1,20,10,randColor('rgba'),randColor('rgba'), 0);
       myGradAnim.init();
-      console.log('current color1 = ', myGradAnim.color1);
-      console.log('current color2 = ', myGradAnim.color2);
       aLoop1 = new AnimLoop(ctx1,myGradAnim);   // AnimLoop(context, animObj)
       aLoop1.init(50,1);    // this.init = function(fps,someIndex)
       aLoop1.startAn();
@@ -72,14 +69,11 @@ $(document).ready(function() {
   });
   $('#pause1').click(function() {
     if (aLoop1) {
-      console.log('loop1 pause toggle');
       aLoop1.paused = (!aLoop1.paused);
     }
   });
   $('#reset1').click(function() {
-    console.log('loop1 reset');
     if (aLoop1) {
-      console.log('loop1 reset');
       cancelAnimationFrame(aLoop1.reqAnimFrame);
       aLoop1 = undefined;
       clearCanvas(ctx1);
@@ -91,7 +85,6 @@ $(document).ready(function() {
   ////
   $('#start2').click(function() {
     if (!aLoop2) {
-      console.log('loop2 started');
       clearCanvas(ctx2);
       myDisco = new Disco(ctx2,5);
       myDisco.init();
@@ -102,13 +95,11 @@ $(document).ready(function() {
   });
   $('#pause2').click(function() {
     if (aLoop2) {
-      console.log('loop2 pause toggle');
       aLoop2.paused = (!aLoop2.paused);
     }
   });
   $('#reset2').click(function() {
     if (aLoop2) {
-      console.log('loop2 reset');
       cancelAnimationFrame(aLoop2.reqAnimFrame);
       aLoop2 = undefined;
       clearCanvas(ctx2);
@@ -120,7 +111,6 @@ $(document).ready(function() {
   ////
   $('#start3').click(function() {
     if (!aLoop3) {
-      console.log('loop3 started');
       clearCanvas(ctx3);
       myArcGroup = new ArcGroup(20,ctx3);  // ArcGroup(quantity)
       myArcGroup.init();
@@ -131,13 +121,11 @@ $(document).ready(function() {
   });
   $('#pause3').click(function() {
     if (aLoop3) {
-      console.log('loop3 pause toggle');
       aLoop3.paused = (!aLoop3.paused);
     }
   });
   $('#reset3').click(function() {
     if (aLoop3) {
-      console.log('loop3 reset');
       cancelAnimationFrame(aLoop3.reqAnimFrame);
       aLoop3 = undefined;
       clearCanvas(ctx3);
@@ -149,7 +137,6 @@ $(document).ready(function() {
   ////
   $('#start4').click(function() {
     if (!aLoop4) {
-      console.log('loop4 started');
       clearCanvas(ctx4);
       myMandala = new Mandala(ctx4);
       aLoop4 = new AnimLoop(ctx4,myMandala);   // AnimLoop(context, animObj)
@@ -159,13 +146,11 @@ $(document).ready(function() {
   });
   $('#pause4').click(function() {
     if (aLoop4) {
-      console.log('loop4 pause toggle');
       aLoop4.paused = (!aLoop4.paused);
     }
   });
   $('#reset4').click(function() {
     if (aLoop4) {
-      console.log('loop4 reset');
       cancelAnimationFrame(aLoop4.reqAnimFrame);
       aLoop4 = undefined;
       clearCanvas(ctx4);
@@ -177,7 +162,6 @@ $(document).ready(function() {
   ////
   $('#start5').click(function() {
     if (!aLoop5) {
-      console.log('loop5 started');
       clearCanvas(ctx5);
       // SpriteGroup(ctx,canvW,canvH,src,sWidth,sHeight,dWidth,dHeight,frameT,frame0,duration,tiled)
       mySpriteGroup = new SpriteGroup(/* ctx      */  ctx5,
@@ -201,13 +185,11 @@ $(document).ready(function() {
   });
   $('#pause5').click(function() {
     if (aLoop5) {
-      console.log('loop5 pause toggle');
       aLoop5.paused = (!aLoop5.paused );
     }
   });
   $('#reset5').click(function() {
     if (aLoop5) {
-      console.log('loop5 reset');
       cancelAnimationFrame(aLoop5.reqAnimFrame);
       aLoop5 = undefined;
       clearCanvas(ctx5);
@@ -219,7 +201,6 @@ $(document).ready(function() {
   ////
   $('#start6').click(function() {
     if (!aLoop6) {
-      console.log('loop6 started');
       clearCanvas(ctx6);
       // SpriteGroup(ctx,canvW,canvH,src,sWidth,sHeight,dWidth,dHeight,frameT,frame0,duration,tiled)
       marioWalk = new SpriteGroup(    /* ctx      */  ctx6,
@@ -243,13 +224,11 @@ $(document).ready(function() {
   });
   $('#pause6').click(function() {
     if (aLoop6) {
-      console.log('loop6 pause toggle');
       aLoop6.paused = (!aLoop6.paused );
     }
   });
   $('#reset6').click(function() {
     if (aLoop6) {
-      console.log('loop6 reset');
       cancelAnimationFrame(aLoop6.reqAnimFrame);
       aLoop6 = undefined;
       clearCanvas(ctx6);
@@ -261,7 +240,6 @@ $(document).ready(function() {
   ////
   $('#start7').click(function() {
     if (!aLoop7) {
-      console.log('loop7 started');
       clearCanvas(ctx7);
       myInterpolation = new InterAnim(40); // interAnim(dotsGridWidth)
       myInterpolation.init();
@@ -272,13 +250,11 @@ $(document).ready(function() {
   });
   $('#pause7').click(function() {
     if (aLoop7) {
-      console.log('loop7 pause toggle');
       aLoop7.paused = (!aLoop7.paused);
     }
   });
   $('#reset7').click(function() {
     if (aLoop7) {
-      console.log('loop7 reset');
       cancelAnimationFrame(aLoop7.reqAnimFrame);
       aLoop7 = undefined;
       clearCanvas(ctx7);
@@ -290,7 +266,6 @@ $(document).ready(function() {
   ////
   $('#start8').click(function() {
     if (!aLoop8) {
-      console.log('loop8 started');
       clearCanvas(ctx8);
       myMouseTrack = new MouseTrack(ctx8,40);
       myMouseTrack.init();
@@ -301,13 +276,11 @@ $(document).ready(function() {
   });
   $('#pause8').click(function() {
     if (aLoop8) {
-      console.log('loop8 pause toggle');
       aLoop8.paused = (!aLoop8.paused);
     }
   });
   $('#reset8').click(function() {
     if (aLoop8) {
-      console.log('loop8 reset');
       cancelAnimationFrame(aLoop8.reqAnimFrame);
       aLoop8 = undefined;
       clearCanvas(ctx8);
@@ -320,7 +293,6 @@ $(document).ready(function() {
   ////
   $('#start9').click(function() {
     if (!aLoop9) {
-      console.log('loop9 started');
       clearCanvas(ctx9);
       myMaze = new Maze(ctx9, 26); // Maze(context, spacing)
       myMaze.init();
@@ -331,13 +303,11 @@ $(document).ready(function() {
   });
   $('#pause9').click(function() {
     if (aLoop9) {
-      console.log('loop9 pause toggle');
       aLoop9.paused = (!aLoop9.paused);
     }
   });
   $('#reset9').click(function() {
     if (aLoop9) {
-      console.log('loop9 reset');
       cancelAnimationFrame(aLoop9.reqAnimFrame);
       aLoop9 = undefined;
       clearCanvas(ctx9);
@@ -361,15 +331,11 @@ $(document).ready(function() {
   });
   $('#pause10').click(function() {
     if (aLoop10) {
-      console.log('loop10 pause toggle');
-      // aLoop10.paused = (!aLoop10.paused );
       aLoop10.paused = (!aLoop10.paused);
     }
   });
   $('#reset10').click(function() {
-    console.log('loop10 resest clicked');
     if (aLoop10) {
-      console.log('loop10 reset');
       cancelAnimationFrame(aLoop10.reqAnimFrame);
       aLoop10 = undefined;
       clearCanvas(ctx10);
@@ -382,7 +348,6 @@ $(document).ready(function() {
   ////
   $('#start11').click(function() {
     if (!aLoop11) {
-      console.log('loop11 started');
       clearCanvas(ctx11);
       myMarbleSim = new MarbleSim(ctx11, 20);   // Obj(context, total)
       myMarbleSim.init();
@@ -393,14 +358,11 @@ $(document).ready(function() {
   });
   $('#pause11').click(function() {
     if (aLoop11) {
-      console.log('loop11 pause toggle');
       aLoop11.paused = (!aLoop11.paused);
     }
   });
   $('#reset11').click(function() {
-    console.log('loop11 resest clicked');
     if (aLoop11) {
-      console.log('loop11 reset');
       cancelAnimationFrame(aLoop11.reqAnimFrame);
       aLoop11 = undefined;
       clearCanvas(ctx11);
@@ -412,7 +374,6 @@ $(document).ready(function() {
   ////
   $('#start12').click(function() {
     if (!aLoop12) {
-      console.log('loop12 started');
       clearCanvas(ctx12);
       myWarp = new Warp(ctx12, 300);   // Obj(context, total)
       myWarp.init();
@@ -423,14 +384,11 @@ $(document).ready(function() {
   });
   $('#pause12').click(function() {
     if (aLoop12) {
-      console.log('loop12 pause toggle');
       aLoop12.paused = (!aLoop12.paused);
     }
   });
   $('#reset12').click(function() {
-    console.log('loop12 resest clicked');
     if (aLoop12) {
-      console.log('loop12 reset');
       cancelAnimationFrame(aLoop12.reqAnimFrame);
       aLoop12 = undefined;
       clearCanvas(ctx12);
@@ -442,7 +400,6 @@ $(document).ready(function() {
   ////
   $('#start13').click(function() {
     if (!aLoop13) {
-      console.log('loop13 started');
       clearCanvas(ctx13);
       myRipple = new Ripple(ctx13);   // Obj(context, total)
       myRipple.init();
@@ -453,14 +410,11 @@ $(document).ready(function() {
   });
   $('#pause13').click(function() {
     if (aLoop13) {
-      console.log('loop13 pause toggle');
       aLoop13.paused = (!aLoop13.paused);
     }
   });
   $('#reset13').click(function() {
-    console.log('loop13 resest clicked');
     if (aLoop13) {
-      console.log('loop13 reset');
       cancelAnimationFrame(aLoop13.reqAnimFrame);
       aLoop13 = undefined;
       clearCanvas(ctx13);
@@ -490,10 +444,39 @@ $(document).ready(function() {
   $('#reset14').click(function() {
     console.log('loop14 resest clicked');
     if (aLoop14) {
-      console.log('loop14 reset');
       cancelAnimationFrame(aLoop14.reqAnimFrame);
       aLoop14 = undefined;
       clearCanvas(ctx14);
+    }
+  });
+
+  /////
+  //// Group 15
+  ////
+  $('#start15').click(function() {
+    if (!aLoop15) {
+      console.log('loop15 started');
+      clearCanvas(ctx15);
+      myPulse1 = new Pulse1(ctx15);   // Obj(context, total)
+      myPulse1.init();
+      aLoop15 = new AnimLoop(ctx15,myPulse1);   // AnimLoop(context, animObj)
+      aLoop15.init(60,4);    // function(fps,someIndex)
+      aLoop15.startAn();
+    }
+  });
+  $('#pause15').click(function() {
+    if (aLoop15) {
+      console.log('loop15 pause toggle');
+      aLoop15.paused = (!aLoop15.paused);
+    }
+  });
+  $('#reset15').click(function() {
+    console.log('loop15 resest clicked');
+    if (aLoop15) {
+      console.log('loop15 reset');
+      cancelAnimationFrame(aLoop15.reqAnimFrame);
+      aLoop15 = undefined;
+      clearCanvas(ctx15);
     }
   });
 
