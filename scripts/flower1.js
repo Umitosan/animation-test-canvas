@@ -15,8 +15,8 @@ function Flower1(context) {
 
   this.init = function() {
     this.layers = [];
-    for (let i = 0; i < 20; i++) {
-      let randomTotal = getRandomIntInclusive(3,6);
+    for (let i = 0; i < 100; i++) {
+      let randomTotal = getRandomIntInclusive(3,8);
       let randomRotateSpeedRaidens = getRadianAngle( getRandomIntInclusive(4,10)/10 /* degrees */ );
       let newPetalLayer = new PetalLayer(this.ctx, this.x, this.y, randomTotal, randomRotateSpeedRaidens);
       this.layers.push(newPetalLayer);
@@ -47,15 +47,19 @@ function PetalLayer(context, x, y, total, rs) {
   this.ctx = context;
   this.x = x;
   this.y = y;
-  this.width = getRandomIntInclusive(10,20);
-  this.height = getRandomIntInclusive(5,10);
-  this.offsetFromCenter = getRandomIntInclusive(40,300);
+  this.width = getRandomIntInclusive(10,16);
+  this.height = getRandomIntInclusive(4,10);
+  // this.offsetFromCenter = getRandomIntInclusive(40,300);
+  this.offsetFromCenter = 0;
+  this.offsetFromCenterVel = getRandomIntInclusive(10,30)*0.1; // pixels per frame to expand the petal layer
   this.initOffsetRotation = getDegreeAngle( getRandomIntInclusive(1,45) ); // this randomizes the petal locations so they don't line up between layers
+  this.maxOffsetFromCenter = 260; // pixels away from center before turning back inwards
   this.totalPetals = total;
   this.rotateSpeed = rs;
   this.rotationOffset = 0;
   this.angleGap = null;
   this.color = randColor('rgba');
+  // this.color = randBlue();
 
   this.init = function() {
     this.angleGap = getRadianAngle( 360 / this.totalPetals );
@@ -81,6 +85,15 @@ function PetalLayer(context, x, y, total, rs) {
     // if ((performance.now() % 50) < 17) {
     //   this.rotationOffset += this.rotateSpeed;
     // }
+    if (this.offsetFromCenter > this.maxOffsetFromCenter) {
+      this.offsetFromCenterVel *= -1;
+      this.offsetFromCenter += this.offsetFromCenterVel;
+    } else if (this.offsetFromCenter < 0)  {
+      this.offsetFromCenterVel *= -1;
+      this.offsetFromCenter += this.offsetFromCenterVel;
+    } else {
+      this.offsetFromCenter += this.offsetFromCenterVel;
+    }
     this.rotationOffset += this.rotateSpeed;
   };
 
