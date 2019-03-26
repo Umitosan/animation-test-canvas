@@ -480,4 +480,34 @@ $(document).ready(function() {
     }
   });
 
+  /////
+  //// Group 16
+  ////
+  $('#start16').click(function() {
+    if (!aLoop16) {
+      console.log('loop16 started');
+      clearCanvas(ctx16);
+      myFlower1 = new Flower1(ctx16);   // Obj(context, total)
+      myFlower1.init();
+      aLoop16 = new AnimLoop(ctx16,myFlower1);   // AnimLoop(context, animObj)
+      aLoop16.init(60,4);    // function(fps,someIndex)
+      aLoop16.startAn();
+    }
+  });
+  $('#pause16').click(function() {
+    if (aLoop16) {
+      console.log('loop16 pause toggle');
+      aLoop16.paused = (!aLoop16.paused);
+    }
+  });
+  $('#reset16').click(function() {
+    console.log('loop16 resest clicked');
+    if (aLoop16) {
+      console.log('loop16 reset');
+      cancelAnimationFrame(aLoop16.reqAnimFrame);
+      aLoop16 = undefined;
+      clearCanvas(ctx16);
+    }
+  });
+
 });

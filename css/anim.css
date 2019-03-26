@@ -1,0 +1,70 @@
+{
+  
+/* Keyword values */
+transform: none;
+/*
+none | <transform-list>
+<transform-list> = <transform-function>+
+*/
+<transform-function> =  <matrix()> | <translate()> | <translateX()> |
+                        <translateY()> | <scale()> | <scaleX()> | <scaleY()> |
+                        <rotate()> | <skew()> | <skewX()> | <skewY()> | <matrix3d()> |
+                        <translate3d()> | <translateZ()> | <scale3d()> | <scaleZ()> |
+                        <rotate3d()> | <rotateX()> | <rotateY()> | <rotateZ()> |
+                        <perspective()>
+
+/* Function values */
+/* <matrix()> = matrix( <number> [, <number> ]{5,5} ) */
+transform: matrix(1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
+/* <matrix3d()> = matrix3d( <number> [, <number> ]{15,15} ) */
+transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+/* <translate()> = translate( <length-percentage> [, <length-percentage> ]? ) */
+transform: translate(12px, 50%);
+/* <translate3d()> = translate3d( <length-percentage> , <length-percentage> , <length> ) */
+transform: translate3d(12px, 50%, 3em);
+/* <translateX()> = translateX( <length-percentage> ) */
+transform: translateX(2em);
+/* <translateY()> = translateY( <length-percentage> ) */
+transform: translateY(3in);
+/* <translateZ()> = translateZ( <length> ) */
+transform: translateZ(2px);
+/* <scale()> = scale( <number> [, <number> ]? ) */
+transform: scale(2, 0.5);
+/* <scale3d()> = scale3d( <number> , <number> , <number> ) */
+transform: scale3d(2.5, 1.2, 0.3);
+/* <scaleX()> = scaleX( <number> ) */
+transform: scaleX(2);
+/* <scaleY()> = scaleY( <number> ) */
+transform: scaleY(0.5);
+/* <scaleZ()> = scaleZ( <number> ) */
+transform: scaleZ(0.3);
+/* <rotate()> = rotate( <angle> ) */
+transform: rotate(0.5turn);
+/* <rotate3d()> = rotate3d( <number> , <number> , <number> , <angle> ) */
+transform: rotate3d(1, 2.0, 3.0, 10deg);
+/* <rotateX()> = rotateX( <angle> ) */
+transform: rotateX(10deg);
+/* <rotateY()> = rotateY( <angle> ) */
+transform: rotateY(10deg);
+/* <rotateZ()> = rotateZ( <angle> ) */
+transform: rotateZ(10deg);
+/* <skew()> = skew( <angle> [, <angle> ]? ) */
+transform: skew(30deg, 20deg);
+/* <skewX()> = skewX( <angle> ) */
+transform: skewX(30deg);
+/* <skewY()> = skewY( <angle> ) */
+transform: skewY(1.07rad);
+/* <perspective()> = perspective( <length> ) */
+transform: perspective(17px);
+/* <length-percentage> = <length> | <percentage> */
+
+/* Multiple function values */
+transform: translateX(10px) rotate(10deg) translateY(5px);
+
+/* Global values */
+transform: inherit;
+transform: initial;
+transform: unset;
+
+
+}
