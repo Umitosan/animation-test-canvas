@@ -15,9 +15,9 @@ function Flower1(context) {
 
   this.init = function() {
     this.layers = [];
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 120; i++) {
       let randomTotal = getRandomIntInclusive(3,8);
-      let randomRotateSpeedRaidens = getRadianAngle( getRandomIntInclusive(4,10)/10 /* degrees */ );
+      let randomRotateSpeedRaidens = getRadianAngle( getRandomIntInclusive(4,12)/10 /* degrees */ );
       let newPetalLayer = new PetalLayer(this.ctx, this.x, this.y, randomTotal, randomRotateSpeedRaidens);
       this.layers.push(newPetalLayer);
     }
@@ -38,7 +38,7 @@ function Flower1(context) {
     }
   };
 
-}
+} // END Flower1
 
 
 
@@ -47,19 +47,20 @@ function PetalLayer(context, x, y, total, rs) {
   this.ctx = context;
   this.x = x;
   this.y = y;
-  this.width = getRandomIntInclusive(10,16);
-  this.height = getRandomIntInclusive(4,10);
-  // this.offsetFromCenter = getRandomIntInclusive(40,300);
-  this.offsetFromCenter = 0;
-  this.offsetFromCenterVel = getRandomIntInclusive(10,30)*0.1; // pixels per frame to expand the petal layer
+  this.baseWidth = getRandomIntInclusive(12,18);
+  this.baseHeight = getRandomIntInclusive(3,12);
+  this.curWidth = 0;
+  this.curHeight = 0;
+  this.maxOffsetFromCenter = 240; // pixels away from center before turning back inwards
+  this.offsetFromCenter = getRandomIntInclusive(1,20);
+  this.offsetFromCenterVel = getRandomIntInclusive(16,40)*0.1; // pixels per frame to expand the petal layer
   this.initOffsetRotation = getDegreeAngle( getRandomIntInclusive(1,45) ); // this randomizes the petal locations so they don't line up between layers
-  this.maxOffsetFromCenter = 260; // pixels away from center before turning back inwards
   this.totalPetals = total;
   this.rotateSpeed = rs;
   this.rotationOffset = 0;
   this.angleGap = null;
-  this.color = randColor('rgba');
-  // this.color = randBlue();
+  // this.color = randColor('rgba');
+  this.color = randRedGreen();
 
   this.init = function() {
     this.angleGap = getRadianAngle( 360 / this.totalPetals );
@@ -74,7 +75,7 @@ function PetalLayer(context, x, y, total, rs) {
       this.ctx.strokeStyle = this.color;
       this.ctx.fillStyle = this.color;
       // ctx.ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle [, anticlockwise]);
-      this.ctx.ellipse(this.offsetFromCenter, 0, this.width, this.height, 0, 0, 2 * Math.PI);
+      this.ctx.ellipse(this.offsetFromCenter, 0, this.curWidth, this.curHeight, 0, 0, 2 * Math.PI);
       // this.ctx.stroke();
       this.ctx.fill();
       this.ctx.restore();
@@ -85,6 +86,8 @@ function PetalLayer(context, x, y, total, rs) {
     // if ((performance.now() % 50) < 17) {
     //   this.rotationOffset += this.rotateSpeed;
     // }
+    this.curWidth = this.baseWidth * ( this.offsetFromCenter / this.maxOffsetFromCenter) + 1;
+    this.curHeight = this.baseHeight * ( this.offsetFromCenter / this.maxOffsetFromCenter) + 1;
     if (this.offsetFromCenter > this.maxOffsetFromCenter) {
       this.offsetFromCenterVel *= -1;
       this.offsetFromCenter += this.offsetFromCenterVel;

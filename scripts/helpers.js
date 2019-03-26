@@ -84,6 +84,21 @@ function randBlue() {
   let randVal = getRandomIntInclusive(0,255);
   return ( 'rgba(0,0,'+ randVal +',1'+')' );
 }
+function randBlueGreen() {
+  let randVal1 = getRandomIntInclusive(0,255);
+  let randVal2 = getRandomIntInclusive(0,255);
+  return ( 'rgba(0,'+ randVal1 +','+ randVal2 +',1'+')' );
+}
+function randRedGreen() {
+  let randVal1 = getRandomIntInclusive(0,255);
+  let randVal2 = getRandomIntInclusive(0,255);
+  return ( 'rgba('+ randVal1 +','+ randVal2 +',0,1'+')' );
+}
+function randRedBlue() {
+  let randVal1 = getRandomIntInclusive(0,255);
+  let randVal2 = getRandomIntInclusive(0,255);
+  return ( 'rgba('+ randVal1 +',0,'+ randVal2 +',1'+')' );
+}
 
 function invertRGBAstr(str) {
   let arr1 = str.slice(5,-1); // arr1 = "173,216,230,0.2"
